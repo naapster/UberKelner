@@ -15,13 +15,13 @@ FPS = 30 # frames per second setting
 fpsClock = pygame.time.Clock()
 
 # variable for size of sprites in px
-blocksize = 30
+blocksize = 50
 
 # var for number of blocks in row of simulation
-global N; N = 10
+global N; N = 20
 
 WINDOW_WIDTH = blocksize * N
-WINDOW_HEIGHT = blocksize * N
+WINDOW_HEIGHT = 640
 
 # set up the window
 DISPLAYSURF = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), 0, 32)

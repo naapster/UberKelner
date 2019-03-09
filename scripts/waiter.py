@@ -2,7 +2,7 @@
 
 from scripts.__init__ import *
 
-class Waiter():
+class Waiter(pygame.sprite.Sprite):
 
     def __init__(self, x, y):
 
@@ -11,8 +11,8 @@ class Waiter():
         self.readyDishes = {}
 
         # coordinates of kitchen - waiter always starts in kitchen
-        self.kitchen.x = self.x
-        self.kitchen.y = self.y
+        #self.kitchen.x = self.x
+        #self.kitchen.y = self.y
 
         # actual coordinates of waiter
         self.x = x
