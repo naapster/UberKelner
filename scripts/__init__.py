@@ -23,6 +23,9 @@ global N; N = 10
 WINDOW_WIDTH = blocksize * N
 WINDOW_HEIGHT = blocksize * N
 
+# kitchen coordinates in space
+kitchen = Kitchen(0,0)
+
 # set up the window
 DISPLAYSURF = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), 0, 32)
 pygame.display.set_caption('UberKelner')

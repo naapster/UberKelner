@@ -25,8 +25,10 @@ N,0 = N,N
 
 # scripts/waiter
 
-object serving as agent of simulation. Can change his own coordinates in matrix by move_[direction] procedures and states of dinner tables (receive orders and give dishes) 
+object serving as agent of simulation. 
+
+Can change his own coordinates in matrix by move_[direction] procedures and states of dinner tables (receive orders and give dishes). 
 
 # main
 
-main loop of simulation. Serves graphics window and simulation events.
+main loop of simulation. Serves graphics window and simulation events, draws sprites basing on matrix values.
