@@ -1,8 +1,8 @@
-# __init__
+# scripts/__init__
 
 all global variables used in project later + graphics init
 
-# matrix
+# scripts/matrix
 
 Cartesian space N x N dimensional:
 
@@ -23,7 +23,7 @@ N,0 = N,N
 
 3+  kind of dish ordered to this place
 
-# waiter
+# scripts/waiter
 
 object serving as agent of simulation. Can change his own coordinates in matrix by move_[direction] procedures and states of dinner tables (receive orders and give dishes) 
 
