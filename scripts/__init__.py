@@ -6,7 +6,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import pygame
+import pygame, sys
 from pygame.locals import *
 
 pygame.init()
@@ -17,6 +17,7 @@ fpsClock = pygame.time.Clock()
 # variable for size of field in graphics in px
 blocksize = 30
 # var for number of blocks in row of simulation
+global N
 N = 10
 
 WINDOW_WIDTH = blocksize * N

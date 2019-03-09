@@ -1,14 +1,6 @@
-
 # kelner object
 
-# coordinates x y global
-
-# dictionaries with
-
-# movement procedures stolen from Elsa
-
-import pygame, sys
-from pygame.locals import *
+from scripts.__init__ import *
 
 class Waiter(pygame.sprite.Sprite):
 
@@ -18,28 +10,26 @@ class Waiter(pygame.sprite.Sprite):
         self.window_width = window_width
         self.window_height = window_height
 
+        # lists with data
         self.orderedDishes = {}
         self.readyDishes = {}
 
         #self.image = pygame.image.load("images/elsa.png")
 
         self.rect = self.image.get_rect()
+
+        # coordinates x y global
         self.rect.x = x
         self.rect.y = y
-        #self.step = 50
 
+    # movement procedures stolen from Elsa
     def move_right(self):
-        '''
-        if self.rect.x + self.rect.width + self.step <= self.window_width:
-            self.rect.x += self.step
-        '''
-
+        if self.rect.x + 1 <= N:
+            self.rect.x += 1
 
     def move_left(self):
-        '''
-        if self.rect.x >= self.step:
-            self.rect.x -= self.step
-        '''
+        if self.rect.x - 1 >= 0:
+            self.rect.x -= 1
 
     def move_down(self):
         '''
