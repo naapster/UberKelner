@@ -21,56 +21,33 @@ if __name__ == '__main__':
     mat.print_matrix()
 
     # main game loop
-    gamestate = 0
 
-    pygame.mixer.init()
-    pygame.mixer.music.load('sounds/over.mp3')
+    # Restaurant - space of simulation, Uber - agent of simulation
+    Restaurant = Matrix(N, N)
+    Uber = Waiter(0,0)
 
-    olaf_sound = pygame.mixer.Sound('sounds/olaf.wav')
+    #gamestates: 1 - simulation running, 0 - simulation stopped, (-1) - simulation finished
+    gamestate = 1
 
-    while True:  # the main game loop
+    while gamestate:  # the main game loop
         for event in pygame.event.get():
             if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
+                gamestate = 1
             elif event.type == KEYUP:
+                #control check for development purpose only
                 print(pygame.key.name(event.key))
                 if event.key == K_RIGHT:
-                    elsa.move_right()
-                    hans.move()
+                    Uber.move_right()
                 elif event.key == K_LEFT:
-                    elsa.move_left()
-                    hans.move()
+                    Uber.move_left()
                 elif event.key == K_DOWN:
-                    elsa.move_down()
-                    hans.move()
+                    Uber.move_down()
                 elif event.key == K_UP:
-                    elsa.move_up()
-                    hans.move()
+                    Uber.move_up()
                 elif event.key == K_r:
                     gamestate = 0
-                    pygame.mixer.music.stop()
-
-                elif pygame.key.name(event.key) == "w":
-                    elsa.move_up()
 
         all_sprites_list.update()
-
-        if pygame.sprite.collide_rect(elsa, anna):
-            gamestate = 1
-            pygame.mixer.music.play(-1)
-            elsa.reset()
-
-        if pygame.sprite.collide_rect(elsa, hans):
-            gamestate = 2
-            elsa.reset()
-
-        for olaf in olafs:
-            if pygame.sprite.collide_rect(elsa, olaf):
-                all_sprites_list.remove(olaf)
-                olaf.rect.x = -1000
-                olaf.rect.y = -1000
-                olaf_sound.play()
 
         # game state control - win loose nothing
         if gamestate == 0:
@@ -84,3 +61,7 @@ if __name__ == '__main__':
         # Refresh Screen
         pygame.display.flip()
         fpsClock.tick(FPS)
+
+    # end of main loop: close simulation
+    pygame.quit()
+    sys.exit()
