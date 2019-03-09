@@ -1,3 +1,3 @@
 # UberKelner
 
-Moja zmiana na próbe
+uberkelner project for ai faculty
