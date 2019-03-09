@@ -1,6 +1,6 @@
 
 # matrix object class
-# comments to be added
+# comments to be added - Marcin halko
 
 class Matrix:
     def __init__(self, rows, columns, fill=0):

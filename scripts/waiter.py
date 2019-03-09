@@ -2,7 +2,7 @@
 
 from scripts.__init__ import *
 
-class Waiter(pygame.sprite.Sprite):
+class Waiter():
 
     def __init__(self, x, y):
 

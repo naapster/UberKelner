@@ -11,6 +11,8 @@ from scripts.matrix import Matrix
 from scripts.waiter import Waiter
 
 if __name__ == '__main__':
+
+    # example usage of matrix, for development purpose only
     mat = Matrix(N, N)
     mat.print_matrix()
     mat.insert_object('asdasd', 2, 4, debug=True)
@@ -26,13 +28,13 @@ if __name__ == '__main__':
     Restaurant = Matrix(N, N)
     Uber = Waiter(0,0)
 
-    #gamestates: 1 - simulation running, 0 - simulation stopped, (-1) - simulation finished
+    #gamestates: 1 - simulation running, 0 - simulation finished
     gamestate = 1
 
-    while gamestate:  # the main game loop
+    while gamestate != 0:  # the main game loop
         for event in pygame.event.get():
             if event.type == QUIT:
-                gamestate = 1
+                gamestate = 0
             elif event.type == KEYUP:
                 #control check for development purpose only
                 print(pygame.key.name(event.key))
@@ -45,18 +47,18 @@ if __name__ == '__main__':
                 elif event.key == K_UP:
                     Uber.move_up()
                 elif event.key == K_r:
-                    gamestate = 0
+                    gamestate = -1
+                    while gamestate == -1:
+                        for event in pygame.event.get():
+                            if event.type == QUIT:
+                                gamestate = 0
+                            elif event.type == KEYUP:
+                                if event.key == K_r:
+                                    gamestate = 1
 
-        all_sprites_list.update()
+        # simulation sprites control - to be added
 
-        # game state control - win loose nothing
-        if gamestate == 0:
-            DISPLAYSURF.blit(background_image, (0, 0))
-            all_sprites_list.draw(DISPLAYSURF)
-        elif gamestate == 1:
-            DISPLAYSURF.blit(gameover_image, (0, 0))
-        elif gamestate == 2:
-            DISPLAYSURF.blit(fail_image, (0, 0))
+
 
         # Refresh Screen
         pygame.display.flip()

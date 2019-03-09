@@ -13,7 +13,7 @@ Cartesian space N x N dimensional:
 N,0 = N,N
 
 
-, containing information about state of in-game blocks:
+containing information about state of in-game blocks:
 
 0 - empty space
 
