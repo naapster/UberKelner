@@ -1,3 +1,7 @@
+
+# matrix object class
+# comments to be added
+
 class Matrix:
     def __init__(self, rows, columns, fill=0):
         self.matrix = [[fill for x in range(columns)] for y in range(rows)]
@@ -44,14 +48,3 @@ class Matrix:
                     list_of_wanted_objects.append((self.matrix[i][j], (i, j)))
 
         return list_of_wanted_objects
-
-
-if __name__ == '__main__':
-    mat = Matrix(5, 5)
-    mat.print_matrix()
-    mat.insert_object('asdasd', 2, 4, debug=True)
-    mat.insert_object(Matrix(2, 2, fill=5), 1, 1)
-    mat.print_matrix()
-    print(mat.objects_to_list('asdasd'))
-    mat.delete_object(1, 1, debug=True)
-    mat.print_matrix()
