@@ -25,6 +25,7 @@ if __name__ == '__main__':
     for table in Uber.tables:
         all_sprites.add(table)
 
+    #all_sprites.add(Uber.kitchen)
     # main game loop
     while gamestate != 0:  # the main game loop
         for event in pygame.event.get():

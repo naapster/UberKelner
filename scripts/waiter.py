@@ -1,7 +1,9 @@
 # kelner object
 
 from scripts.dinning_table import *
+from scripts.furnace import Furnace
 from scripts.matrix import *
+from scripts.furnace import *
 
 class Waiter(pygame.sprite.Sprite):
 
@@ -32,10 +34,16 @@ class Waiter(pygame.sprite.Sprite):
         self.kitchen_x = self.x
         self.kitchen_y = self.y
 
+
+        #init kitchen - kitchen use kitchen_x and kichen_y because we have one kitchen now
+
+        self.kitchen = Furnace(self.x, self.y)
+
         # init tables: - need to update this to be more random!
         # tables have coordinates like in matrix (0..N, 0..N)
         self.tables = [Dinning_table(2, i) for i in range(N)]
 
+        #
         # init restaurant map for waiter
         self.space = Matrix(N, N)
 
