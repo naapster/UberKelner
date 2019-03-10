@@ -52,8 +52,9 @@ class Waiter(pygame.sprite.Sprite):
             self.update_coordinates()
 
     def reset(self):
+        # teleport waiter to the first kitchen
         self.x = self.furnaces[0].x
-        self.y = self.kitchen_y
+        self.y = self.furnaces[0].y
         self.update_coordinates()
 
     def update_coordinates(self):

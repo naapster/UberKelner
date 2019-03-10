@@ -17,7 +17,7 @@ class Dinning_table(pygame.sprite.Sprite):
 
         # what has it ordered?
         # integer numbers as dishes id's
-        self.ordKer = 0
+        self.order = 0
 
         # how long does this table wait?
         # for ai learning purpose - waiter has to minimize time in restaurant
