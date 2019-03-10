@@ -24,9 +24,10 @@ if __name__ == '__main__':
 
     # add sprites to draw to the list
     # waiter contains list of tables
+    all_sprites.add(Uber)
     for table in Uber.tables:
         all_sprites.add(table)
-    all_sprites.add(Uber)
+
 
     # main game loop
     while gamestate != 0:  # the main game loop
