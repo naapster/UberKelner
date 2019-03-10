@@ -1,6 +1,3 @@
-
-
-
 # main game script controller:
 
 # init
@@ -17,19 +14,8 @@ import sys
 
 if __name__ == '__main__':
 
-    # example usage of matrix, for development purpose only
-    """mat = Matrix(N, N)
-    mat.print_matrix()
-    mat.insert_object('asdasd', 2, 4, debug=True)
-    mat.insert_object(Matrix(2, 2, fill=5), 1, 1)
-    mat.print_matrix()
-    print(mat.objects_to_list('asdasd'))
-    mat.delete_object(1, 1, debug=True)
-    mat.print_matrix()"""
-
-    # Restaurant - space of simulation, Uber - agent of simulation
-    # = Matrix(N, N)
-    Uber = Waiter(20, 30)
+    # Uber - agent of simulation, starting in 0,0
+    Uber = Waiter(0, 0)
 
     #gamestates: 1 - simulation running, 0 - simulation finished
     gamestate = 1
@@ -71,7 +57,10 @@ if __name__ == '__main__':
                                     gamestate = 1
 
         # simulation sprites control - to be added
-
+        all_sprites.update()
+        # draw background
+        DISPLAYSURF.fill(WHITE)
+        # draw sprites
         all_sprites.draw(DISPLAYSURF)
         # Refresh Screen
         pygame.display.flip()

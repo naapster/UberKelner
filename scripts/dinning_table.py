@@ -19,7 +19,7 @@ class Dinning_table(pygame.sprite.Sprite):
         # 1 - table waiting for waiter
         self.state = 0
 
-        # what have it ordered?
+        # what has it ordered?
         # integer numbers as dishes id's
         self.order = 0
 
