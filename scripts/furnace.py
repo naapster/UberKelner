@@ -15,7 +15,9 @@ class Furnace(pygame.sprite.Sprite):
         self.orderedDishes = {}
         self.readyDishes = {}
 
+        self.time = 0
+
     def next_round(self):
         # change the environment:
-        print("furnace")
+        self.time += 1
 
