@@ -2,6 +2,10 @@
 
 all global variables used in project later + graphics init
 
+# scripts/dinning_table
+
+object containing information about tables in simulation - sprites, etc.
+
 # scripts/matrix
 
 Cartesian space N x N dimensional:

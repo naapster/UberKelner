@@ -1,10 +1,22 @@
 # kelner object
 
 from scripts.__init__ import *
+from scripts.dinning_table import *
 
 class Waiter(pygame.sprite.Sprite):
 
     def __init__(self, x, y):
+
+        # init graphics
+        pygame.sprite.Sprite.__init__(self)
+        # set image
+        self.image = pygame.image.load("images/waiter.png")
+        #resize image to blocksize
+        self.image = pygame.transform.scale(self.image, (blocksize, blocksize))
+        # set coordinates
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
 
         # lists with data
         self.orderedDishes = {}
@@ -18,7 +30,10 @@ class Waiter(pygame.sprite.Sprite):
         self.kitchen_x = self.x
         self.kitchen_y = self.y
 
-    # movement procedures stolen from Elsa
+        # init tables:
+        self.tables = [Dinning_table(300, i * 100) for i in range(3)]
+
+    # movement procedures
     def move_right(self):
         if self.x + 1 < N:
             self.x += 1

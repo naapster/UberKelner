@@ -24,3 +24,6 @@ fpsClock = pygame.time.Clock()
 DISPLAYSURF = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), 0, 32)
 pygame.display.set_caption('UberKelner')
 WHITE = (255, 255, 255)
+
+# change background color
+DISPLAYSURF.fill(WHITE)

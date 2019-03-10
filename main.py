@@ -27,8 +27,6 @@ if __name__ == '__main__':
     mat.delete_object(1, 1, debug=True)
     mat.print_matrix()"""
 
-    # main game loop
-
     # Restaurant - space of simulation, Uber - agent of simulation
     # = Matrix(N, N)
     Uber = Waiter(20, 30)
@@ -36,16 +34,15 @@ if __name__ == '__main__':
     #gamestates: 1 - simulation running, 0 - simulation finished
     gamestate = 1
 
-
     all_sprites = pygame.sprite.Group()
 
-    # init tables:
-    tables = [Dinning_table(300,i*100) for i in range(1)] + [Dinning_table(600,i*100+200) for i in range(1)]
-
-    for table in tables:
+    # add sprites to draw to the list
+    # waiter contains list of tables
+    for table in Uber.tables:
         all_sprites.add(table)
+    all_sprites.add(Uber)
 
-
+    # main game loop
     while gamestate != 0:  # the main game loop
         for event in pygame.event.get():
             if event.type == KEYUP:
