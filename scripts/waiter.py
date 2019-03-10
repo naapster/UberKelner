@@ -37,7 +37,7 @@ class Waiter(pygame.sprite.Sprite):
 
         #init kitchen - kitchen use kitchen_x and kichen_y because we have one kitchen now
 
-        self.kitchen = Furnace(self.x, self.y)
+        self.furnace = Furnace(self.x, self.y)
 
         # init tables: - need to update this to be more random!
         # tables have coordinates like in matrix (0..N, 0..N)

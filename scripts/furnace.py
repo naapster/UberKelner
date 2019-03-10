@@ -1,8 +1,9 @@
 from scripts.__init__ import *
 
 class Furnace(pygame.sprite.Sprite):
-    def __init__(self,x, y):
+    def __init__(self, x, y):
 
+        pygame.sprite.Sprite.__init__(self)
         #set image
         self.image = pygame.image.load("images/Furnace.png")
 
