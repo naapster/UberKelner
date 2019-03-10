@@ -10,13 +10,13 @@ class Waiter(pygame.sprite.Sprite):
         self.orderedDishes = {}
         self.readyDishes = {}
 
-        # coordinates of kitchen - waiter always starts in kitchen
-        #self.kitchen.x = self.x
-        #self.kitchen.y = self.y
-
         # actual coordinates of waiter
         self.x = x
         self.y = y
+
+        # coordinates of kitchen - waiter always starts in kitchen
+        self.kitchen_x = self.x
+        self.kitchen_y = self.y
 
     # movement procedures stolen from Elsa
     def move_right(self):
@@ -36,5 +36,5 @@ class Waiter(pygame.sprite.Sprite):
             self.y -= 1
 
     def reset(self):
-        self.x = self.kitchen.x
-        self.y = self.kitchen.y
+        self.x = self.kitchen_x
+        self.y = self.kitchen_y

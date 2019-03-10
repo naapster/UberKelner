@@ -1,6 +1,5 @@
 
 # matrix object class
-# comments to be added - Marcin halko
 
 class Matrix:
     #konstruktor, ustawia ilosc szeregow i kolumn, mozna rowniez ustawic co ma byc podstawowym zapelnieniem macierzy, jezeli nie zmienione to zero

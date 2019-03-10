@@ -1,5 +1,3 @@
-import pygame
-import sys
 from scripts.__init__ import *
 
 class Dinning_table(pygame.sprite.Sprite):
@@ -7,7 +5,6 @@ class Dinning_table(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         #set image
-
         self.image = pygame.image.load("images/dinner_table.png")
 
         self.rect = self.image.get_rect()
