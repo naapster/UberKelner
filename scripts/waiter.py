@@ -65,11 +65,20 @@ class Waiter(pygame.sprite.Sprite):
 
         # update statuses of furnaces
         for furnace in self.furnaces:
+            # update environment
             furnace.next_round()
+            # change environment in space
+            self.space.insert_object(furnace.time, furnace.y, furnace.x)
 
         # update statuses of tables
         for table in self.tables:
+            # update environment
             table.next_round()
+            # change environment in space
+            self.space.insert_object(table.time, table.y, table.x)
+
+        # show me status of simulation
+        self.space.print_matrix()
 
     def restaurant(self):
         # example usage of matrix, for development purpose only
