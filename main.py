@@ -22,16 +22,17 @@ if __name__ == '__main__':
     # add sprites to draw to the list
     # waiter contains list of tables
     all_sprites.add(Uber)
+    for furnace in Uber.furnaces:
+        all_sprites.add(furnace)
     for table in Uber.tables:
         all_sprites.add(table)
 
-    all_sprites.add(Uber.furnace)
     # main game loop
     while gamestate != 0:  # the main game loop
         for event in pygame.event.get():
             if event.type == KEYUP:
                 #control check for development purpose only
-                print(pygame.key.name(event.key))
+                #print(pygame.key.name(event.key))
 
                 # list of events on keys:
                 if event.key == K_RIGHT:

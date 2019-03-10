@@ -1,7 +1,6 @@
 # kelner object
 
 from scripts.dinning_table import *
-from scripts.furnace import Furnace
 from scripts.matrix import *
 from scripts.furnace import *
 
@@ -9,41 +8,25 @@ class Waiter(pygame.sprite.Sprite):
 
     def __init__(self, x, y):
 
-        #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         # init graphics - do not touch!
-        pygame.sprite.Sprite.__init__(self)
-        # set image
-        self.image = pygame.image.load("images/waiter.png")
-        #resize image to blocksize
-        self.image = pygame.transform.scale(self.image, (blocksize, blocksize))
-        # set coordinates
-        self.rect = self.image.get_rect()
-        self.rect.x = x * blocksize
-        self.rect.y = y * blocksize
-        #//////////////////////////////////////////////////
+        init_graphics(self, x, y, "waiter")
 
-        # lists with data
-        self.orderedDishes = {}
-        self.readyDishes = {}
-
-        # actual coordinates of waiter
+        # real coordinates of object
         self.x = x
         self.y = y
 
-        # coordinates of kitchen - waiter always starts in kitchen
-        self.kitchen_x = self.x
-        self.kitchen_y = self.y
+        # lists with data:
+        #dishes lists
+        self.orderedDishes = {}
+        self.readyDishes = {}
 
-
-        #init kitchen - kitchen use kitchen_x and kichen_y because we have one kitchen now
-
-        self.furnace = Furnace(self.x, self.y)
+        # objects have coordinates like in matrix (0..N, 0..N)
+        # list with furnaces
+        self.furnaces = [Furnace(0, 1), Furnace(0,2)]
 
         # init tables: - need to update this to be more random!
-        # tables have coordinates like in matrix (0..N, 0..N)
         self.tables = [Dinning_table(2, i) for i in range(N)]
 
-        #
         # init restaurant map for waiter
         self.space = Matrix(N, N)
 
@@ -69,7 +52,7 @@ class Waiter(pygame.sprite.Sprite):
             self.update_coordinates()
 
     def reset(self):
-        self.x = self.kitchen_x
+        self.x = self.furnaces[0].x
         self.y = self.kitchen_y
         self.update_coordinates()
 

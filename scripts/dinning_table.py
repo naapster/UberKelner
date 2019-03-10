@@ -3,18 +3,12 @@ from scripts.__init__ import *
 class Dinning_table(pygame.sprite.Sprite):
     def __init__(self, x, y):
 
-        # \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        #init graphics - do not touch!
-        pygame.sprite.Sprite.__init__(self)
-        #set image
-        self.image = pygame.image.load("images/dinner_table.png")
-        # resize image to blocksize
-        self.image = pygame.transform.scale(self.image, (blocksize, blocksize))
-        # set coordinates
-        self.rect = self.image.get_rect()
-        self.rect.x = x * blocksize
-        self.rect.y = y * blocksize
-        # //////////////////////////////////////////////////
+        # init graphics - do not touch!
+        init_graphics(self, x, y, "dinner_table")
+
+        # real coordinates of object
+        self.x = x
+        self.y = y
 
         # states of tables:
         # 0 - empty table,

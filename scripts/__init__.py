@@ -24,3 +24,18 @@ fpsClock = pygame.time.Clock()
 DISPLAYSURF = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), 0, 32)
 pygame.display.set_caption('UberKelner')
 WHITE = (255, 255, 255)
+
+
+def init_graphics(self, x, y, sprite_name):
+    # \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+    # init graphics - do not touch!
+    pygame.sprite.Sprite.__init__(self)
+    # set image
+    self.image = pygame.image.load("images/" + sprite_name + ".png")
+    # resize image to blocksize
+    self.image = pygame.transform.scale(self.image, (blocksize, blocksize))
+    # set coordinates
+    self.rect = self.image.get_rect()
+    self.rect.x = x * blocksize
+    self.rect.y = y * blocksize
+    # //////////////////////////////////////////////////

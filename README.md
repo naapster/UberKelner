@@ -6,6 +6,10 @@ all global variables used in project later + graphics init
 
 object containing information about tables in simulation - sprites, etc.
 
+# scripts/furnace
+
+object representing kitchen in simulation. Contains lists of ordered and ready dishes and coordinates of kitchen.
+
 # scripts/matrix
 
 Cartesian space N x N dimensional:
@@ -29,7 +33,7 @@ containing information about state of in-game blocks:
 
 # scripts/waiter
 
-object serving as agent of simulation. Owns all the tables and restaurant.
+object serving as agent of simulation. Owns all the tables, kitchens and restaurant.
 
 Can change his own coordinates in matrix by move_[direction] procedures and states of dinner tables (receive orders and give dishes). 
 
