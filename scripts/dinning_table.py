@@ -28,7 +28,3 @@ class Dinning_table(pygame.sprite.Sprite):
         # how long does this table wait?
         # for ai learning purpose - waiter has to minimize time in restaurant
         self.time_waiting = 0
-
-
-
-
