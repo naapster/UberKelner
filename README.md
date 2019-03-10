@@ -29,7 +29,7 @@ containing information about state of in-game blocks:
 
 # scripts/waiter
 
-object serving as agent of simulation. 
+object serving as agent of simulation. Owns all the tables and restaurant.
 
 Can change his own coordinates in matrix by move_[direction] procedures and states of dinner tables (receive orders and give dishes). 
 

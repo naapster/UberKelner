@@ -31,8 +31,8 @@ class Waiter(pygame.sprite.Sprite):
         self.kitchen_x = self.x
         self.kitchen_y = self.y
 
-        # init tables:
-        self.tables = [Dinning_table(2 * blocksize, i * blocksize) for i in range(3)]
+        # init tables: - need to update this to be more random!
+        self.tables = [Dinning_table(2 * blocksize, i * blocksize) for i in range(N)]
 
         # init restaurant map for waiter
         self.space = Matrix(N, N)
