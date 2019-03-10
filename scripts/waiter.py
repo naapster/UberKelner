@@ -34,32 +34,42 @@ class Waiter(pygame.sprite.Sprite):
     def move_right(self):
         if self.x + 1 < N:
             self.x += 1
-            self.update_coordinates()
+            self.next_round()
 
     def move_left(self):
         if self.x - 1 >= 0:
             self.x -= 1
-            self.update_coordinates()
+            self.next_round()
 
     def move_down(self):
         if self.y + 1 < N:
             self.y += 1
-            self.update_coordinates()
+            self.next_round()
 
     def move_up(self):
         if self.y - 1 >= 0:
             self.y -= 1
-            self.update_coordinates()
+            self.next_round()
 
     def reset(self):
         # teleport waiter to the first kitchen
         self.x = self.furnaces[0].x
         self.y = self.furnaces[0].y
-        self.update_coordinates()
+        self.next_round()
 
-    def update_coordinates(self):
+    def next_round(self):
+        # change the environment:
+        # update waiter sprite localization
         self.rect.x = self.x * blocksize
         self.rect.y = self.y * blocksize
+
+        # update statuses of furnaces
+        for furnace in self.furnaces:
+            furnace.next_round()
+
+        # update statuses of tables
+        for table in self.tables:
+            table.next_round()
 
     def restaurant(self):
         # example usage of matrix, for development purpose only

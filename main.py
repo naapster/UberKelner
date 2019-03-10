@@ -43,6 +43,8 @@ if __name__ == '__main__':
                     Uber.move_down()
                 elif event.key == K_UP:
                     Uber.move_up()
+                elif event.key == K_SPACE:
+                    Uber.next_round()
                 elif event.key == K_ESCAPE:
                     gamestate = 0
                 elif event.key == K_r:
