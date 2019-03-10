@@ -7,7 +7,7 @@ from pygame.locals import *
 # filename __init__ is required to treat scripts folder as resource
 
 # variable for size of sprites in px
-blocksize = 50
+blocksize = 70
 
 # var for number of blocks in row of simulation
 global N; N = 10

@@ -16,8 +16,8 @@ class Waiter(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (blocksize, blocksize))
         # set coordinates
         self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+        self.rect.x = x * blocksize
+        self.rect.y = y * blocksize
 
         # lists with data
         self.orderedDishes = {}
@@ -32,7 +32,8 @@ class Waiter(pygame.sprite.Sprite):
         self.kitchen_y = self.y
 
         # init tables: - need to update this to be more random!
-        self.tables = [Dinning_table(2 * blocksize, i * blocksize) for i in range(N)]
+        # tables have coordinates like in matrix (0..N, 0..N)
+        self.tables = [Dinning_table(2, i) for i in range(N)]
 
         # init restaurant map for waiter
         self.space = Matrix(N, N)

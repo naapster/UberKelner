@@ -11,8 +11,8 @@ class Dinning_table(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (blocksize, blocksize))
         # set coordinates
         self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+        self.rect.x = x * blocksize
+        self.rect.y = y * blocksize
 
         # states of tables:
         # 0 - empty table,
