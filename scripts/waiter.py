@@ -1,6 +1,5 @@
 # kelner object
 
-from scripts.__init__ import *
 from scripts.dinning_table import *
 from scripts.matrix import *
 
@@ -8,7 +7,8 @@ class Waiter(pygame.sprite.Sprite):
 
     def __init__(self, x, y):
 
-        # init graphics
+        #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        # init graphics - do not touch!
         pygame.sprite.Sprite.__init__(self)
         # set image
         self.image = pygame.image.load("images/waiter.png")
@@ -18,6 +18,7 @@ class Waiter(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x * blocksize
         self.rect.y = y * blocksize
+        #//////////////////////////////////////////////////
 
         # lists with data
         self.orderedDishes = {}

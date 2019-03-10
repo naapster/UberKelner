@@ -2,9 +2,6 @@
 
 # init
 from scripts.__init__ import *
-from scripts.dinning_table import *
-
-from scripts.matrix import Matrix
 
 # kelner
 from scripts.waiter import Waiter
@@ -27,7 +24,6 @@ if __name__ == '__main__':
     all_sprites.add(Uber)
     for table in Uber.tables:
         all_sprites.add(table)
-
 
     # main game loop
     while gamestate != 0:  # the main game loop
