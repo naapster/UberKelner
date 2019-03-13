@@ -22,6 +22,7 @@ class Matrix:
         fmt = '\t'.join('{{:{}}}'.format(x) for x in lens)
         table = [fmt.format(*row) for row in s]
         print('\n'.join(table))
+        print("------------------------------------")
 
     def insert_object(self, object_to_insert, row, column, debug=False):
         #wklada obiekt na podane miejsce do macierzy
