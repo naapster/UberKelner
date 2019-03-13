@@ -1,10 +1,12 @@
 
 # matrix object class
+import copy
 
 class Matrix:
     #konstruktor, ustawia ilosc szeregow i kolumn, mozna rowniez ustawic co ma byc podstawowym zapelnieniem macierzy, jezeli nie zmienione to zero
     def __init__(self, rows, columns, fill=0):
-        self.matrix = [[fill for x in range(columns)] for y in range(rows)]
+        self.fill = fill
+        self.matrix = [[self.fill for x in range(columns)] for y in range(rows)]
 
     def __repr__(self):
         #funkcja repr pozwala na ladne drukowanie macierzy, mozna zrobic print(Matrx) i zobaczymy ladna macierz
@@ -38,7 +40,7 @@ class Matrix:
         #usuwa obiekt i zastepuje go 0, do poprawy
         try:
             deleted_object = self.matrix[row][column]
-            self.matrix[row][column] = 0
+            self.matrix[row][column] = self.fill
 
             if debug:
                 print('Deleted {0} from matrix[{1}][{2}]'.format(deleted_object, row, column))
@@ -54,3 +56,12 @@ class Matrix:
                     list_of_wanted_objects.append((self.matrix[i][j], (i, j)))
 
         return list_of_wanted_objects
+
+    def get_matrix(self):
+        to_return = copy.deepcopy(self.matrix)
+        return to_return
+
+if __name__ == '__main__':
+    mat = Matrix(30, 30, fill='X')
+    print(mat)
+    print(mat.get_matrix())
