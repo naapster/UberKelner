@@ -61,6 +61,9 @@ class Matrix:
         to_return = copy.deepcopy(self.matrix)
         return to_return
 
+    def get_empty_space_type(self):
+        return self.fill
+
 if __name__ == '__main__':
     mat = Matrix(30, 30, fill='X')
     print(mat)
