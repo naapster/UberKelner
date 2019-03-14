@@ -10,7 +10,6 @@ class Furnace(pygame.sprite.Sprite):
         self.x = x
         self.y = y
 
-        #można dodać jeszcze zmienną trzymającą ilość posiłków ale chyba na razie nie jest to potrzebne
         # lists with data
         self.orderedDishes = {}
         self.readyDishes = {}

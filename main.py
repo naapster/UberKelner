@@ -10,7 +10,7 @@ import sys
 if __name__ == '__main__':
 
     # Restaurant - agent of simulation, starting with waiters, tables and furnaces
-    Ramen = Restaurant(8, 2)
+    Ramen = Restaurant(1, 8, 2)
 
     #gamestates: 1 - simulation running, 0 - simulation finished
     gamestate = 1
@@ -19,7 +19,11 @@ if __name__ == '__main__':
 
     # add sprites to draw to the list
     # Restaurant contains list of waiters, tables and furnaces
-    for object in Ramen.space:
+    for object in Ramen.space.objects_to_list(Waiter):
+        all_sprites.add(object)
+    for object in Ramen.space.objects_to_list(Dinning_table):
+        all_sprites.add(object)
+    for object in Ramen.space.objects_to_list(Furnace):
         all_sprites.add(object)
 
     # main game loop

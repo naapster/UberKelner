@@ -5,45 +5,43 @@ from scripts.waiter import *
 from random import shuffle
 
 class Restaurant(pygame.sprite.Sprite):
-    def __init__(self, num_tables, num_furnaces):
+    def __init__(self, num_waiters, num_tables, num_furnaces):
 
         # init restaurant map
         self.space = Matrix(N, N)
 
-        #init waiter
-        self.Uber = Waiter(0,0)
-
-        # objects have coordinates like in matrix (0..N, 0..N)
         ##################
-        # init tables and furnaces
-        # creates tables and furnaces based on random positions in the matrix
+        # generate random positions list
         positions = range(N)
         matrix_fields = [[posX, posY] for posX in positions for posY in positions]
         shuffle(matrix_fields)
 
-        #add tables to restaurant - REPAIR!
+        #add objects to restaurant - creates waiters, tables and furnaces basing on random positions in the matrix
+
+        # one special playable waiter
+        self.Uber = Waiter(matrix_fields[1][0], matrix_fields[1][1])
+
+        counter = 1
+        # objects have coordinates like in matrix (0..N, 0..N)
+        for i in range(num_waiters):
+            self.space.insert_object(Waiter(matrix_fields[i + counter][0], matrix_fields[i + counter][1]),
+                                     matrix_fields[i + counter][0], matrix_fields[i + counter][1])
+        counter += num_waiters
         for i in range(num_tables):
-            self.space.insert_object(Dinning_table(matrix_fields[i][0], matrix_fields[i][1]), matrix_fields[i][0], matrix_fields[i][1])
+            self.space.insert_object(Dinning_table(matrix_fields[i + counter][0], matrix_fields[i + counter][1]),
+                                     matrix_fields[i + counter][0], matrix_fields[i + counter][1])
+        counter += num_tables
         for i in range(num_furnaces):
-            self.space.insert_object(Furnace(matrix_fields[i + num_tables][0], matrix_fields[i + num_tables][1]), matrix_fields[i + num_tables][0], matrix_fields[i + num_tables][1])
+            self.space.insert_object(Furnace(matrix_fields[i + counter][0], matrix_fields[i + counter][1]),
+                                     matrix_fields[i + counter][0], matrix_fields[i + counter][1])
         ##################
 
     def next_round(self):
-
-        # change the environment:
+        # change the environment: - REPAIR!
         # update statuses of restaurant objects
-        for object in self.space:
+        #for object in self.space:
             # update environment
-            object.next_round()
-            # change environment in space
-            #self.space.insert_object(furnace.time, furnace.y, furnace.x)
-
-        # update statuses of tables
-        for table in self.tables:
-            # update environment
-            table.next_round()
-            # change environment in space
-            self.space.insert_object(table.time, table.y, table.x)
+            #object.next_round()
 
         # show me status of simulation
         self.space.print_matrix()

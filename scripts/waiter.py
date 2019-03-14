@@ -14,7 +14,6 @@ class Waiter(pygame.sprite.Sprite):
         self.y = y
 
         # lists with data:
-        # dishes lists
         self.orderedDishes = {}
         self.readyDishes = {}
 
