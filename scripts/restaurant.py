@@ -5,7 +5,7 @@ from scripts.waiter import *
 from random import shuffle
 
 class Restaurant(pygame.sprite.Sprite):
-    def __init__(self, num_waiters, num_tables, num_furnaces):
+    def __init__(self, num_tables, num_furnaces):
 
         # init restaurant map
         self.space = Matrix(N, N)
@@ -21,11 +21,11 @@ class Restaurant(pygame.sprite.Sprite):
         matrix_fields = [[posX, posY] for posX in positions for posY in positions]
         shuffle(matrix_fields)
 
-        self.tables = []
+        #add tables to restaurant - REPAIR!
         for i in range(num_tables):
-            self.tables.append(Dinning_table(matrix_fields[i][0], matrix_fields[i][1]))
+            self.space.insert_object(Dinning_table(matrix_fields[i][0], matrix_fields[i][1]), matrix_fields[i][0], matrix_fields[i][1])
         for i in range(num_furnaces):
-            self.furnaces.append(Furnace(matrix_fields[i + num_tables][0], matrix_fields[i + num_tables][1]))
+            self.space.insert_object(Furnace(matrix_fields[i + num_tables][0], matrix_fields[i + num_tables][1]), matrix_fields[i + num_tables][0], matrix_fields[i + num_tables][1])
         ##################
 
     def next_round(self):

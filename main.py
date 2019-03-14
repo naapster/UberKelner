@@ -10,7 +10,7 @@ import sys
 if __name__ == '__main__':
 
     # Restaurant - agent of simulation, starting with waiters, tables and furnaces
-    Ramen = Restaurant(1, 8, 2)
+    Ramen = Restaurant(8, 2)
 
     #gamestates: 1 - simulation running, 0 - simulation finished
     gamestate = 1
