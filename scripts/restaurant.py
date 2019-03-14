@@ -31,16 +31,12 @@ class Restaurant(pygame.sprite.Sprite):
     def next_round(self):
 
         # change the environment:
-        # update waiter sprite localization
-        self.rect.x = self.x * blocksize
-        self.rect.y = self.y * blocksize
-
-        # update statuses of furnaces
-        for furnace in self.furnaces:
+        # update statuses of restaurant objects
+        for object in self.space:
             # update environment
-            furnace.next_round()
+            object.next_round()
             # change environment in space
-            self.space.insert_object(furnace.time, furnace.y, furnace.x)
+            #self.space.insert_object(furnace.time, furnace.y, furnace.x)
 
         # update statuses of tables
         for table in self.tables:

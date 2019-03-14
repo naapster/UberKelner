@@ -18,7 +18,7 @@ if __name__ == '__main__':
     all_sprites = pygame.sprite.Group()
 
     # add sprites to draw to the list
-    # REstaurant contains list of waiters, tables and furnaces
+    # Restaurant contains list of waiters, tables and furnaces
     for object in Ramen.space:
         all_sprites.add(object)
 
@@ -31,15 +31,15 @@ if __name__ == '__main__':
 
                 # list of events on keys:
                 if event.key == K_RIGHT:
-                    Uber.move_right()
+                    Ramen.Uber.move_right()
                 elif event.key == K_LEFT:
-                    Uber.move_left()
+                    Ramen.Uber.move_left()
                 elif event.key == K_DOWN:
-                    Uber.move_down()
+                    Ramen.Uber.move_down()
                 elif event.key == K_UP:
-                    Uber.move_up()
+                    Ramen.Uber.move_up()
                 elif event.key == K_SPACE:
-                    Uber.next_round()
+                    Ramen.Uber.next_round()
                 elif event.key == K_ESCAPE:
                     gamestate = 0
                 elif event.key == K_r:

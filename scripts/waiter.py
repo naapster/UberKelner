@@ -22,15 +22,27 @@ class Waiter(pygame.sprite.Sprite):
     def move_right(self):
         if self.x + 1 < N:
             self.x += 1
+            self.update_position()
 
     def move_left(self):
         if self.x - 1 >= 0:
             self.x -= 1
+            self.update_position()
 
     def move_down(self):
         if self.y + 1 < N:
             self.y += 1
+            self.update_position()
 
     def move_up(self):
         if self.y - 1 >= 0:
             self.y -= 1
+            self.update_position()
+
+    def update_position(self):
+        # update waiter sprite localization
+        self.rect.x = self.x * blocksize
+        self.rect.y = self.y * blocksize
+
+    def next_round(self):
+        self.update_position()
