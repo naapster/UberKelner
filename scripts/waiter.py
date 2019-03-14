@@ -3,10 +3,11 @@
 from scripts.dinning_table import *
 from scripts.matrix import *
 from scripts.furnace import *
+from random import shuffle
 
 class Waiter(pygame.sprite.Sprite):
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, num_tables, num_furnaces):
 
         # init graphics - do not touch!
         init_graphics(self, x, y, "waiter")
@@ -16,17 +17,24 @@ class Waiter(pygame.sprite.Sprite):
         self.y = y
 
         # lists with data:
-        #dishes lists
+        # dishes lists
         self.orderedDishes = {}
         self.readyDishes = {}
 
         # objects have coordinates like in matrix (0..N, 0..N)
-        # list with furnaces
-        self.furnaces = [Furnace(0, 1), Furnace(0,2)]
+        ##################
+        # init tables and furnaces
+        # creates tables and furnaces based on random positions in the matrix
+        positions = range(N)
+        matrix_fields = [[posX, posY] for posX in positions for posY in positions]
+        shuffle(matrix_fields)
 
-        # init tables: - need to update this to be more random!
-        self.tables = [Dinning_table(2, i) for i in range(N)]
-
+        self.tables = []
+        for i in range(num_tables):
+            self.tables.append(Dinning_table(matrix_fields[i][0], matrix_fields[i][1]))
+        for i in range(num_furnaces):
+            self.furnaces.append(Furnace(matrix_fields[i + num_tables][0], matrix_fields[i + num_tables][1]))
+        ##################
         # init restaurant map for waiter
         self.space = Matrix(N, N)
 
