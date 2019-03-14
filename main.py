@@ -2,17 +2,15 @@
 
 # init
 from scripts.__init__ import *
-
-# kelner
-from scripts.waiter import Waiter
+from scripts.restaurant import *
 
 import pygame
 import sys
 
 if __name__ == '__main__':
 
-    # Uber - agent of simulation, starting in 0,0
-    Uber = Waiter(0, 0)
+    # Restaurant - agent of simulation, starting with waiters, tables and furnaces
+    Ramen = Restaurant(1, 8, 2)
 
     #gamestates: 1 - simulation running, 0 - simulation finished
     gamestate = 1
@@ -20,12 +18,9 @@ if __name__ == '__main__':
     all_sprites = pygame.sprite.Group()
 
     # add sprites to draw to the list
-    # waiter contains list of tables
-    all_sprites.add(Uber)
-    for furnace in Uber.furnaces:
-        all_sprites.add(furnace)
-    for table in Uber.tables:
-        all_sprites.add(table)
+    # REstaurant contains list of waiters, tables and furnaces
+    for object in Ramen.space:
+        all_sprites.add(object)
 
     # main game loop
     while gamestate != 0:  # the main game loop
