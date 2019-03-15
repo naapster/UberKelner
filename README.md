@@ -21,15 +21,7 @@ Cartesian space N x N dimensional:
 N,0 = N,N
 
 
-containing information about state of in-game blocks:
-
-0 - empty space
-
-1 - waiter stands here
-
-2 - empty dinner table
-
-3+  kind of dish ordered to this place
+containing objects of simulation
 
 # scripts/waiter
 

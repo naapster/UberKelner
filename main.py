@@ -2,24 +2,20 @@
 
 # init
 from scripts.waiter import *
-
-import pygame
 import sys
+import pygame
+from pygame.locals import *
 
 if __name__ == '__main__':
-
-    # Restaurant - agent of simulation, starting with waiters, tables and furnaces
-    #Ramen = Restaurant(1, 8, 2)
 
     # init random coordinates
     random_coordinates = create_random_coordinates()
 
+    # waiters - agents of simulation, owning matrices of restaurants
     # one special playable waiter
     Uber = Waiter(random_coordinates, 8, 2)
 
-    #gamestates: 1 - simulation running, 0 - simulation finished
-    gamestate = 1
-
+    # list of all sprites for graphics window to draw
     all_sprites = pygame.sprite.Group()
 
     # add sprites to draw to the list
@@ -30,36 +26,27 @@ if __name__ == '__main__':
         all_sprites.add(furnace)
 
     # main game loop
-    while gamestate != 0:  # the main game loop
+    pygame.event.clear()
+    while True:  # the main game loop
+        # wait for key pressed:
         for event in pygame.event.get():
-            if event.type == KEYUP:
-                #control check for development purpose only
-                #print(pygame.key.name(event.key))
+            # end of main loop: close simulation
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            # after key was pressed:
+            elif event.type == KEYUP:
+                # exit simulation:
+                if event.key == K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+                # or run new round for environment
+                Uber.next_round(event.key)
+                # WARNING
+                # in the future release, on key pressed no event key will be passed
+                # and the waiter will have to choose the action on his own
 
-                # list of events on keys:
-                if event.key == K_RIGHT:
-                    Uber.move_right()
-                elif event.key == K_LEFT:
-                    Uber.move_left()
-                elif event.key == K_DOWN:
-                    Uber.move_down()
-                elif event.key == K_UP:
-                    Uber.move_up()
-                elif event.key == K_SPACE:
-                    Uber.next_round()
-                elif event.key == K_ESCAPE:
-                    gamestate = 0
-                elif event.key == K_r:
-                    gamestate = -1
-                    while gamestate == -1:
-                        for event in pygame.event.get():
-                            if event.type == QUIT:
-                                gamestate = 0
-                            elif event.type == KEYUP:
-                                if event.key == K_r:
-                                    gamestate = 1
-
-        # simulation sprites control - to be added
+        # simulation sprites control
         all_sprites.update()
         # draw background
         DISPLAYSURF.fill(WHITE)
@@ -68,7 +55,3 @@ if __name__ == '__main__':
         # Refresh Screen
         pygame.display.flip()
         fpsClock.tick(FPS)
-
-    # end of main loop: close simulation
-    pygame.quit()
-    sys.exit()

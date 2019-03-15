@@ -4,31 +4,36 @@ from scripts.matrix import *
 from scripts.dinning_table import *
 from scripts.furnace import *
 from scripts.__init__ import *
+import pygame
+from pygame.locals import *
 
 class Waiter(pygame.sprite.Sprite):
 
     def __init__(self, matrix_fields, num_tables, num_furnaces):
 
+        if num_tables + num_furnaces + 1 > N:
+            print("Not enough space in restaurant for objects!")
+
         # init restaurant map - integer matrix with ids of objects
-        self.restaurant = [[0] * N] * N
+        self.restaurant = [[0] * N for _ in range(N)]
 
         # data lists containing objects of restaurant
         self.dining_tables = []
         self.furnaces = []
 
-        # real random coordinates of object
+        # set random coordinates of object
         self.x = matrix_fields[0][0]
         self.y = matrix_fields[0][1]
 
         # init graphics - do not touch!
         init_graphics(self, self.x, self.y, "waiter")
 
-        #add objects to restaurant - creates waiters, tables and furnaces basing on random positions in the matrix
-
+        # add objects to restaurant - creates waiters, tables and furnaces basing on random positions in the matrix
         # objects have coordinates like in matrix (0..N, 0..N)
 
         counter = 1
         for i in range(num_tables):
+            print(matrix_fields[i + counter][0], matrix_fields[i + counter][1])
             self.restaurant[matrix_fields[i + counter][0]][matrix_fields[i + counter][1]] = "dinner_table"
             self.dining_tables.append(Dinning_table(matrix_fields[i + counter][0], matrix_fields[i + counter][1]))
 
@@ -38,44 +43,44 @@ class Waiter(pygame.sprite.Sprite):
             self.restaurant[matrix_fields[i + counter][0]][matrix_fields[i + counter][1]] = "furnace"
             self.dining_tables.append(Furnace(matrix_fields[i + counter][0], matrix_fields[i + counter][1]))
 
-        '''
-        for i in range(num_furnaces):
-            self.restaurant.insert_object(Furnace(matrix_fields[i + counter][0], matrix_fields[i + counter][1]),
-                                     matrix_fields[i + counter][0], matrix_fields[i + counter][1])
-        ##################'''
-
     # movement procedures
     def move_right(self):
         if self.check_field(self.x + 1, self.y):
             self.x += 1
-            self.next_round()
 
     def move_left(self):
         if self.check_field(self.x - 1, self.y):
             self.x -= 1
-            self.next_round()
 
     def move_down(self):
         if self.check_field(self.x, self.y + 1):
             self.y += 1
-            self.next_round()
 
     def move_up(self):
         if self.check_field(self.x, self.y - 1):
             self.y -= 1
-            self.next_round()
 
     # check if restaurant field if not occupied
     def check_field(self, x, y):
         if x in range(0, N) and y in range(0, N):
             return self.restaurant[x][y] == 0
+        return False
 
     def update_position(self):
         # update waiter sprite localization
         self.rect.x = self.x * blocksize
         self.rect.y = self.y * blocksize
 
-    def next_round(self):
+    def next_round(self, key):
+        # list of events on keys:
+        if key == K_RIGHT:
+            self.move_right()
+        elif key == K_LEFT:
+            self.move_left()
+        elif key == K_DOWN:
+            self.move_down()
+        elif key == K_UP:
+            self.move_up()
 
         self.update_position()
 
@@ -87,12 +92,13 @@ class Waiter(pygame.sprite.Sprite):
             furnace.next_round()
 
         # show me status of simulation
-        #self.space.print_matrix()
+        self.print_restaurant()
 
     # print matrix of statuses in restaurant
     def print_restaurant(self):
         for i in self.restaurant:
             print(*i)
+        print("---------------------------")
 
     def example(self):
         # example usage of matrix, for development purpose only
