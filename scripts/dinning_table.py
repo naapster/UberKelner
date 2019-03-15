@@ -25,4 +25,5 @@ class Dinning_table(pygame.sprite.Sprite):
 
     def next_round(self):
         # change the environment:
+        # need to think about game goal - when does the table start waiting for waiter? REPAIR!
         self.time += 1

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import pygame, sys
+from random import shuffle
 from pygame.locals import *
 
 # filename __init__ is required to treat scripts folder as resource
@@ -39,3 +40,10 @@ def init_graphics(self, x, y, sprite_name):
     self.rect.x = x * blocksize
     self.rect.y = y * blocksize
     # //////////////////////////////////////////////////
+
+def create_random_coordinates():
+    # generate random positions list
+    positions = range(N)
+    matrix_fields = [[posX, posY] for posX in positions for posY in positions]
+    shuffle(matrix_fields)
+    return matrix_fields
