@@ -1,8 +1,7 @@
 # main game script controller:
 
 # init
-from scripts.__init__ import *
-from scripts.restaurant import *
+from scripts.waiter import *
 
 import pygame
 import sys
@@ -10,7 +9,10 @@ import sys
 if __name__ == '__main__':
 
     # Restaurant - agent of simulation, starting with waiters, tables and furnaces
-    Ramen = Restaurant(1, 8, 2)
+    #Ramen = Restaurant(1, 8, 2)
+
+    # one special playable waiter
+    Uber = Waiter(8, 2)
 
     #gamestates: 1 - simulation running, 0 - simulation finished
     gamestate = 1
@@ -18,13 +20,11 @@ if __name__ == '__main__':
     all_sprites = pygame.sprite.Group()
 
     # add sprites to draw to the list
-    # Restaurant contains list of waiters, tables and furnaces
-    for object in Ramen.space.objects_to_list(Waiter):
-        all_sprites.add(object)
-    for object in Ramen.space.objects_to_list(Dinning_table):
-        all_sprites.add(object)
-    for object in Ramen.space.objects_to_list(Furnace):
-        all_sprites.add(object)
+    all_sprites.add(Uber)
+    for table in Uber.dining_tables:
+        all_sprites.add(table)
+    for furnace in Uber.furnaces:
+        all_sprites.add(furnace)
 
     # main game loop
     while gamestate != 0:  # the main game loop
@@ -35,15 +35,15 @@ if __name__ == '__main__':
 
                 # list of events on keys:
                 if event.key == K_RIGHT:
-                    Ramen.Uber.move_right()
+                    Uber.move_right()
                 elif event.key == K_LEFT:
-                    Ramen.Uber.move_left()
+                    Uber.move_left()
                 elif event.key == K_DOWN:
-                    Ramen.Uber.move_down()
+                    Uber.move_down()
                 elif event.key == K_UP:
-                    Ramen.Uber.move_up()
+                    Uber.move_up()
                 elif event.key == K_SPACE:
-                    Ramen.Uber.next_round()
+                    Uber.next_round()
                 elif event.key == K_ESCAPE:
                     gamestate = 0
                 elif event.key == K_r:
