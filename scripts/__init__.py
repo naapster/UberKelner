@@ -11,7 +11,7 @@ from pygame.locals import *
 blocksize = 70
 
 # var for number of blocks in row of simulation
-global N; N = 5
+global N; N = 10
 
 # set window size
 WINDOW_WIDTH = blocksize * N

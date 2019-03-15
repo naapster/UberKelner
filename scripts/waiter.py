@@ -46,27 +46,29 @@ class Waiter(pygame.sprite.Sprite):
 
     # movement procedures
     def move_right(self):
-        if self.x + 1 < N:
+        if self.check_field(self.x + 1, self.y):
             self.x += 1
             self.next_round()
 
     def move_left(self):
-        if self.x - 1 >= 0:
+        if self.check_field(self.x - 1, self.y):
             self.x -= 1
             self.next_round()
 
     def move_down(self):
-        if self.y + 1 < N:
+        if self.check_field(self.x, self.y + 1):
             self.y += 1
             self.next_round()
 
     def move_up(self):
-        if self.y - 1 >= 0:
+        if self.check_field(self.x, self.y - 1):
             self.y -= 1
             self.next_round()
 
+    # check if restaurant field if not occupied
     def check_field(self, x, y):
-        return True if self.restaurant[x][y] != 0
+        if x in range(0, N) and y in range(0, N):
+            return self.restaurant[x][y] == 0
 
     def update_position(self):
         # update waiter sprite localization
@@ -86,6 +88,11 @@ class Waiter(pygame.sprite.Sprite):
 
         # show me status of simulation
         #self.space.print_matrix()
+
+    # print matrix of statuses in restaurant
+    def print_restaurant(self):
+        for i in self.restaurant:
+            print(*i)
 
     def example(self):
         # example usage of matrix, for development purpose only
