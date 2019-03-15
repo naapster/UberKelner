@@ -2,24 +2,19 @@
 
 from scripts.matrix import *
 from scripts.dinning_table import *
+from scripts.furnace import *
 from scripts.__init__ import *
-from random import shuffle
 
 class Waiter(pygame.sprite.Sprite):
 
-    def __init__(self, num_tables, num_furnaces):
+    def __init__(self, matrix_fields, num_tables, num_furnaces):
 
-        # init restaurant map
-        self.restaurant = []
+        # init restaurant map - integer matrix with ids of objects
+        self.restaurant = [[0] * N] * N
 
-        # data lists
+        # data lists containing objects of restaurant
         self.dining_tables = []
         self.furnaces = []
-
-        # generate random positions list
-        positions = range(N)
-        matrix_fields = [[posX, posY] for posX in positions for posY in positions]
-        shuffle(matrix_fields)
 
         # real random coordinates of object
         self.x = matrix_fields[0][0]
@@ -34,14 +29,14 @@ class Waiter(pygame.sprite.Sprite):
 
         counter = 1
         for i in range(num_tables):
-            self.restaurant.append(["dinner_table", matrix_fields[i + counter][0], matrix_fields[i + counter][1]])
+            self.restaurant[matrix_fields[i + counter][0]][matrix_fields[i + counter][1]] = "dinner_table"
             self.dining_tables.append(Dinning_table(matrix_fields[i + counter][0], matrix_fields[i + counter][1]))
 
         counter += num_tables
 
         for i in range(num_furnaces):
-            self.restaurant.append(["furnace", matrix_fields[i + counter][0], matrix_fields[i + counter][1]])
-            self.dining_tables.append(Dinning_table(matrix_fields[i + counter][0], matrix_fields[i + counter][1]))
+            self.restaurant[matrix_fields[i + counter][0]][matrix_fields[i + counter][1]] = "furnace"
+            self.dining_tables.append(Furnace(matrix_fields[i + counter][0], matrix_fields[i + counter][1]))
 
         '''
         for i in range(num_furnaces):
@@ -70,6 +65,9 @@ class Waiter(pygame.sprite.Sprite):
             self.y -= 1
             self.next_round()
 
+    def check_field(self, x, y):
+        return True if self.restaurant[x][y] != 0
+
     def update_position(self):
         # update waiter sprite localization
         self.rect.x = self.x * blocksize
@@ -81,9 +79,10 @@ class Waiter(pygame.sprite.Sprite):
 
         # change the environment: - REPAIR!
         # update statuses of restaurant objects
-        # for object in self.space:
-        # update environment
-        # object.next_round()
+        for table in self.dining_tables:
+            table.next_round()
+        for furnace in self.furnaces:
+            furnace.next_round()
 
         # show me status of simulation
         #self.space.print_matrix()

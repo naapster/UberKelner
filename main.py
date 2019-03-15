@@ -11,8 +11,11 @@ if __name__ == '__main__':
     # Restaurant - agent of simulation, starting with waiters, tables and furnaces
     #Ramen = Restaurant(1, 8, 2)
 
+    # init random coordinates
+    random_coordinates = create_random_coordinates()
+
     # one special playable waiter
-    Uber = Waiter(8, 2)
+    Uber = Waiter(random_coordinates, 8, 2)
 
     #gamestates: 1 - simulation running, 0 - simulation finished
     gamestate = 1
