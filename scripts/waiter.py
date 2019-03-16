@@ -11,7 +11,7 @@ class Waiter(pygame.sprite.Sprite):
 
     def __init__(self, matrix_fields, num_tables, num_furnaces):
 
-        if num_tables + num_furnaces + 1 > N:
+        if num_tables + num_furnaces + 1 > N*N:
             print("Not enough space in restaurant for objects!")
 
         # init restaurant map - integer matrix with ids of objects
@@ -33,7 +33,6 @@ class Waiter(pygame.sprite.Sprite):
 
         counter = 1
         for i in range(num_tables):
-            print(matrix_fields[i + counter][0], matrix_fields[i + counter][1])
             self.restaurant[matrix_fields[i + counter][0]][matrix_fields[i + counter][1]] = "dinner_table"
             self.dining_tables.append(Dinning_table(matrix_fields[i + counter][0], matrix_fields[i + counter][1]))
 
@@ -43,22 +42,11 @@ class Waiter(pygame.sprite.Sprite):
             self.restaurant[matrix_fields[i + counter][0]][matrix_fields[i + counter][1]] = "furnace"
             self.dining_tables.append(Furnace(matrix_fields[i + counter][0], matrix_fields[i + counter][1]))
 
-    # movement procedures
-    def move_right(self):
-        if self.check_field(self.x + 1, self.y):
-            self.x += 1
-
-    def move_left(self):
-        if self.check_field(self.x - 1, self.y):
-            self.x -= 1
-
-    def move_down(self):
-        if self.check_field(self.x, self.y + 1):
-            self.y += 1
-
-    def move_up(self):
-        if self.check_field(self.x, self.y - 1):
-            self.y -= 1
+    # movement procedure - change position on defined difference of coordinates
+    def move(self, delta_x, delta_y):
+        if self.check_field(self.x + delta_x, self.y + delta_y):
+            self.x  = self.x + delta_x
+            self.y = self.y + delta_y
 
     # check if restaurant field if not occupied
     def check_field(self, x, y):
@@ -74,13 +62,13 @@ class Waiter(pygame.sprite.Sprite):
     def next_round(self, key):
         # list of events on keys:
         if key == K_RIGHT:
-            self.move_right()
+            self.move(1, 0)
         elif key == K_LEFT:
-            self.move_left()
+            self.move(-1, 0)
         elif key == K_DOWN:
-            self.move_down()
+            self.move(0, 1)
         elif key == K_UP:
-            self.move_up()
+            self.move(0, -1)
 
         self.update_position()
 
@@ -92,7 +80,7 @@ class Waiter(pygame.sprite.Sprite):
             furnace.next_round()
 
         # show me status of simulation
-        self.print_restaurant()
+        #self.print_restaurant()
 
     # print matrix of statuses in restaurant
     def print_restaurant(self):

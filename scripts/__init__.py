@@ -3,7 +3,6 @@
 
 import pygame, sys
 from random import shuffle
-from pygame.locals import *
 
 # filename __init__ is required to treat scripts folder as resource
 
