@@ -44,20 +44,21 @@ class Waiter(pygame.sprite.Sprite):
 
     # movement procedure - change position on defined difference of coordinates
     def move(self, delta_x, delta_y):
-        if self.check_field(self.x + delta_x, self.y + delta_y):
-            self.x  = self.x + delta_x
-            self.y = self.y + delta_y
+        new_x = self.x + delta_x
+        new_y = self.y + delta_y
+        # if movement is within restaurant borders
+        if new_x in range(0, N) and new_y in range(0, N):
+            # and the field is empty
+            if self.restaurant[new_x][new_y] == 0:
+                # set new coordinates
+                self.x = new_x
+                self.y = new_y
+                # update waiter sprite localization after changes
+                self.rect.x = self.x * blocksize
+                self.rect.y = self.y * blocksize
 
-    # check if restaurant field if not occupied
-    def check_field(self, x, y):
-        if x in range(0, N) and y in range(0, N):
-            return self.restaurant[x][y] == 0
-        return False
-
-    def update_position(self):
-        # update waiter sprite localization
-        self.rect.x = self.x * blocksize
-        self.rect.y = self.y * blocksize
+            # if restaurant field is not empty, analize the environment - take dishes or order - REPAIR
+            # else:
 
     def next_round(self, key):
         # list of events on keys:
@@ -69,8 +70,6 @@ class Waiter(pygame.sprite.Sprite):
             self.move(0, 1)
         elif key == K_UP:
             self.move(0, -1)
-
-        self.update_position()
 
         # change the environment: - REPAIR!
         # update statuses of restaurant objects
