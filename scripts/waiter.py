@@ -16,7 +16,7 @@ class Waiter(pygame.sprite.Sprite):
         # init restaurant map - integer matrix with ids of objects
         self.restaurant = Matrix(N, N)
 
-        # data lists containing coordinates of restaurant, for collision purpose only
+        # data lists containing coordinates of restaurant, for learning purpose only
         self.dining_tables = []
         self.furnaces = []
 
