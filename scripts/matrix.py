@@ -64,7 +64,8 @@ class Matrix:
     # check if coordinates are empty
     def is_empty(self, x, y):
         try:
-            return self.matrix[x][y] == self.fill
+            return self.matrix[x][y] == self.fill \
+                   and x >= 0 and y >= 0
         except IndexError:
             return False
 
