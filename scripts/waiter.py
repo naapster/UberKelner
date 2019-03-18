@@ -74,10 +74,10 @@ class Waiter(pygame.sprite.Sprite):
 
         # change the environment: - REPAIR!
         # update statuses of restaurant objects
-        '''for table in self.restaurant.objects_to_list(Dinning_table(0, 0)):
-            table.next_round()
+        for table in self.restaurant.objects_to_list(Dinning_table(0, 0)):
+            table[0].next_round()
         for furnace in self.restaurant.objects_to_list(Furnace(0, 0)):
-            furnace.next_round()'''
+            furnace[0].next_round()
 
         # show me status of simulation
         #self.restaurant.print_matrix()
