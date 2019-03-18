@@ -26,13 +26,13 @@ class Matrix:
         print('\n'.join(table))
         print("------------------------------------")
 
-    def insert_object(self, object_to_insert, row, column, debug=False):
+    def insert_object(self, object_to_insert, debug=False):
         #wklada obiekt na podane miejsce do macierzy
         try:
-            self.matrix[column][row] = object_to_insert
+            self.matrix[object_to_insert.x][object_to_insert.y] = object_to_insert
 
             if debug:
-                print('Added {0} to matrix[{1}][{2}]'.format(object_to_insert, row, column))
+                print('Added {0} to matrix[{1}][{2}]'.format(object_to_insert, object_to_insert.x, object_to_insert.y))
         except IndexError:
             print("ERROR: Index out of bounds. Inserting object is not possible.")
 
@@ -53,8 +53,7 @@ class Matrix:
         for i in range(len(self.matrix)):
             for j in range(len(self.matrix)):
                 if type(self.matrix[i][j]) is type(wanted_object):
-                    #list_of_wanted_objects.append((self.matrix[i][j], (i, j)))
-                    list_of_wanted_objects.append((self.matrix[i][j]))
+                    list_of_wanted_objects.append((self.matrix[i][j], (i, j)))
 
         return list_of_wanted_objects
 

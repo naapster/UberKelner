@@ -35,15 +35,13 @@ class Waiter(pygame.sprite.Sprite):
 
         for i in range(num_tables):
             self.dining_tables.append([matrix_fields[i + counter][0], matrix_fields[i + counter][1]])
-            self.restaurant.insert_object(Dinning_table(matrix_fields[i + counter][0], matrix_fields[i + counter][1]),
-                                          matrix_fields[i + counter][0], matrix_fields[i + counter][1], debug=True)
+            self.restaurant.insert_object(Dinning_table(matrix_fields[i + counter][0], matrix_fields[i + counter][1]), debug=True)
 
         counter += num_tables
 
         for i in range(num_furnaces):
             self.furnaces.append([matrix_fields[i + counter][0], matrix_fields[i + counter][1]])
-            self.restaurant.insert_object(Furnace(matrix_fields[i + counter][0], matrix_fields[i + counter][1]),
-                                          matrix_fields[i + counter][0], matrix_fields[i + counter][1], debug=True)
+            self.restaurant.insert_object(Furnace(matrix_fields[i + counter][0], matrix_fields[i + counter][1]), debug=True)
 
     # movement procedure - change position on defined difference of coordinates
     def move(self, delta_x, delta_y):
@@ -76,13 +74,13 @@ class Waiter(pygame.sprite.Sprite):
 
         # change the environment: - REPAIR!
         # update statuses of restaurant objects
-        for table in self.restaurant.objects_to_list(Dinning_table):
+        '''for table in self.restaurant.objects_to_list(Dinning_table(0, 0)):
             table.next_round()
-        for furnace in self.restaurant.objects_to_list(Furnace):
-            furnace.next_round()
+        for furnace in self.restaurant.objects_to_list(Furnace(0, 0)):
+            furnace.next_round()'''
 
         # show me status of simulation
-        self.restaurant.print_matrix()
+        #self.restaurant.print_matrix()
 
     def example(self):
         # example usage of matrix, for development purpose only

@@ -18,15 +18,12 @@ if __name__ == '__main__':
     # list of all sprites for graphics window to draw
     all_sprites = pygame.sprite.Group()
 
-    # add sprites to draw to the list
+    # add sprites to draw to the list - REPAIR
     all_sprites.add(Uber)
-    for table in Uber.restaurant.objects_to_list(Dinning_table):
+    '''for table in Uber.restaurant.objects_to_list(Dinning_table(0, 0)):
         all_sprites.add(table)
-    for furnace in Uber.restaurant.objects_to_list(Furnace):
-        all_sprites.add(furnace)
-
-    # halko Marcin tutaj sprite'ów mi nie dodaje
-    print(all_sprites)
+    for furnace in Uber.restaurant.objects_to_list(Furnace(0, 0)):
+        all_sprites.add(table)'''
 
     # main game loop
     pygame.event.clear()
