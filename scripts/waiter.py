@@ -14,7 +14,7 @@ class Waiter(pygame.sprite.Sprite):
             print("Not enough space in restaurant for objects!")
 
         # init restaurant map - integer matrix with ids of objects
-        self.restaurant = Matrix(N,N)
+        self.restaurant = Matrix(N, N)
 
         # data lists containing coordinates of restaurant, for collision purpose only
         self.dining_tables = []
@@ -29,7 +29,7 @@ class Waiter(pygame.sprite.Sprite):
 
         # add objects to restaurant - creates waiters, tables and furnaces basing on random positions in the matrix
         # objects have coordinates like in matrix (0..N, 0..N):
-        # add waiter to restaurant
+        # add ghostwaiter to restaurant
         self.restaurant.insert('Waiter', self.x, self.y)
         counter = 1
         # add tables
@@ -46,20 +46,17 @@ class Waiter(pygame.sprite.Sprite):
     def move(self, delta_x, delta_y):
         new_x = self.x + delta_x
         new_y = self.y + delta_y
-        # if movement is within restaurant borders
-        if new_x in range(0, N) and new_y in range(0, N):
-            # if movement is allowed by matrix and the field is empty:
-            if self.restaurant.insert(self, new_x, new_y):
-                self.restaurant.delete_object(self.x, self.y)
-                # set new coordinates
-                self.x = new_x
-                self.y = new_y
-                # update waiter sprite localization after changes
-                self.rect.x = self.x * blocksize
-                self.rect.y = self.y * blocksize
+        # if movement is allowed by matrix, within restaurant borders and the field is empty:
+        if self.restaurant.move(self.x, self.y, new_x, new_y):
+            # set new coordinates
+            self.x = new_x
+            self.y = new_y
+            # update waiter sprite localization after changes
+            self.rect.x = self.x * blocksize
+            self.rect.y = self.y * blocksize
 
-            # if restaurant field is not empty, analize the environment - take dishes or order - REPAIR
-            # else:
+        # if restaurant field is not empty, analize the environment - take dishes or order - REPAIR
+        # else:
 
     def next_round(self, key):
         # list of events on keys:
@@ -75,9 +72,9 @@ class Waiter(pygame.sprite.Sprite):
         # change the environment: - REPAIR!
         # update statuses of restaurant objects
         for table in self.restaurant.objects_to_list(Dinning_table(0, 0)):
-            table[0].next_round()
+            table.next_round()
         for furnace in self.restaurant.objects_to_list(Furnace(0, 0)):
-            furnace[0].next_round()
+            furnace.next_round()
 
         # show me status of simulation
         self.restaurant.print_matrix()

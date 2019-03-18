@@ -43,7 +43,6 @@ class Matrix:
         else:
             return False
 
-
     # move object form coordinates to new one
     def move(self, x, y, new_x, new_y):
         if not self.is_empty(x,y) and self.is_empty(new_x,new_y):
@@ -59,7 +58,7 @@ class Matrix:
         for i in range(len(self.matrix)):
             for j in range(len(self.matrix)):
                 if type(self.matrix[i][j]) is type(wanted_object):
-                    list_of_wanted_objects.append((self.matrix[i][j], (i, j)))
+                    list_of_wanted_objects.append((self.matrix[i][j]))
         return list_of_wanted_objects
 
     # check if coordinates are empty
@@ -73,7 +72,3 @@ class Matrix:
     def get_matrix(self):
         to_return = copy.deepcopy(self.matrix)
         return to_return
-
-    # ?
-    def get_empty_space_type(self):
-        return self.fill
