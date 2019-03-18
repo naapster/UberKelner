@@ -20,10 +20,13 @@ if __name__ == '__main__':
 
     # add sprites to draw to the list
     all_sprites.add(Uber)
-    for table in Uber.dining_tables:
+    for table in Uber.restaurant.objects_to_list(Dinning_table):
         all_sprites.add(table)
-    for furnace in Uber.furnaces:
+    for furnace in Uber.restaurant.objects_to_list(Furnace):
         all_sprites.add(furnace)
+
+    # halko Marcin tutaj sprite'ów mi nie dodaje
+    print(all_sprites)
 
     # main game loop
     pygame.event.clear()

@@ -15,9 +15,9 @@ class Waiter(pygame.sprite.Sprite):
             print("Not enough space in restaurant for objects!")
 
         # init restaurant map - integer matrix with ids of objects
-        self.restaurant = [[0] * N for _ in range(N)]
+        self.restaurant = Matrix(N,N)
 
-        # data lists containing objects of restaurant
+        # data lists containing coordinates of restaurant, for collision purpose only
         self.dining_tables = []
         self.furnaces = []
 
@@ -32,15 +32,18 @@ class Waiter(pygame.sprite.Sprite):
         # objects have coordinates like in matrix (0..N, 0..N)
 
         counter = 1
+
         for i in range(num_tables):
-            self.restaurant[matrix_fields[i + counter][0]][matrix_fields[i + counter][1]] = "dinner_table"
-            self.dining_tables.append(Dinning_table(matrix_fields[i + counter][0], matrix_fields[i + counter][1]))
+            self.dining_tables.append([matrix_fields[i + counter][0], matrix_fields[i + counter][1]])
+            self.restaurant.insert_object(Dinning_table(matrix_fields[i + counter][0], matrix_fields[i + counter][1]),
+                                          matrix_fields[i + counter][0], matrix_fields[i + counter][1], debug=True)
 
         counter += num_tables
 
         for i in range(num_furnaces):
-            self.restaurant[matrix_fields[i + counter][0]][matrix_fields[i + counter][1]] = "furnace"
-            self.dining_tables.append(Furnace(matrix_fields[i + counter][0], matrix_fields[i + counter][1]))
+            self.furnaces.append([matrix_fields[i + counter][0], matrix_fields[i + counter][1]])
+            self.restaurant.insert_object(Furnace(matrix_fields[i + counter][0], matrix_fields[i + counter][1]),
+                                          matrix_fields[i + counter][0], matrix_fields[i + counter][1], debug=True)
 
     # movement procedure - change position on defined difference of coordinates
     def move(self, delta_x, delta_y):
@@ -49,7 +52,7 @@ class Waiter(pygame.sprite.Sprite):
         # if movement is within restaurant borders
         if new_x in range(0, N) and new_y in range(0, N):
             # and the field is empty
-            if self.restaurant[new_x][new_y] == 0:
+            if [new_x, new_y] not in self.dining_tables and [new_x, new_y] not in self.furnaces:
                 # set new coordinates
                 self.x = new_x
                 self.y = new_y
@@ -73,19 +76,13 @@ class Waiter(pygame.sprite.Sprite):
 
         # change the environment: - REPAIR!
         # update statuses of restaurant objects
-        for table in self.dining_tables:
+        for table in self.restaurant.objects_to_list(Dinning_table):
             table.next_round()
-        for furnace in self.furnaces:
+        for furnace in self.restaurant.objects_to_list(Furnace):
             furnace.next_round()
 
         # show me status of simulation
-        #self.print_restaurant()
-
-    # print matrix of statuses in restaurant
-    def print_restaurant(self):
-        for i in self.restaurant:
-            print(*i)
-        print("---------------------------")
+        self.restaurant.print_matrix()
 
     def example(self):
         # example usage of matrix, for development purpose only

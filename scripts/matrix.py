@@ -29,7 +29,7 @@ class Matrix:
     def insert_object(self, object_to_insert, row, column, debug=False):
         #wklada obiekt na podane miejsce do macierzy
         try:
-            self.matrix[row][column] = object_to_insert
+            self.matrix[column][row] = object_to_insert
 
             if debug:
                 print('Added {0} to matrix[{1}][{2}]'.format(object_to_insert, row, column))
@@ -53,7 +53,8 @@ class Matrix:
         for i in range(len(self.matrix)):
             for j in range(len(self.matrix)):
                 if type(self.matrix[i][j]) is type(wanted_object):
-                    list_of_wanted_objects.append((self.matrix[i][j], (i, j)))
+                    #list_of_wanted_objects.append((self.matrix[i][j], (i, j)))
+                    list_of_wanted_objects.append((self.matrix[i][j]))
 
         return list_of_wanted_objects
 
