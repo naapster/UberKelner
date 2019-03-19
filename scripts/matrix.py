@@ -10,6 +10,7 @@ class Matrix:
     # print matrix content
     def print_matrix(self):
         s = [[str(e).split(' ', 1)[0] for e in row] for row in self.matrix ]
+        s = list(map(list, zip(*s)))
         lens = [max(map(len, col)) for col in zip(*s)]
         fmt = '\t'.join('{{:{}}}'.format(x) for x in lens)
         table = [fmt.format(*row) for row in s]
