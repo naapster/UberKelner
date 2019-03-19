@@ -16,10 +16,6 @@ class Waiter(pygame.sprite.Sprite):
         # init restaurant map - integer matrix with ids of objects
         self.restaurant = Matrix(N, N)
 
-        # data lists containing coordinates of restaurant, for learning purpose only
-        self.dining_tables = []
-        self.furnaces = []
-
         # set random coordinates of object
         self.x = matrix_fields[0][0]
         self.y = matrix_fields[0][1]
@@ -30,16 +26,14 @@ class Waiter(pygame.sprite.Sprite):
         # add objects to restaurant - creates waiters, tables and furnaces basing on random positions in the matrix
         # objects have coordinates like in matrix (0..N, 0..N):
         # add ghostwaiter to restaurant
-        self.restaurant.insert('Waiter', self.x, self.y)
+        self.restaurant.insert('<Waiter', self.x, self.y)
         counter = 1
         # add tables
         for i in range(num_tables):
-            self.dining_tables.append([matrix_fields[i + counter][0], matrix_fields[i + counter][1]])
             self.restaurant.simple_insert(Dinning_table(matrix_fields[i + counter][0], matrix_fields[i + counter][1]))
         counter += num_tables
         # add furnaces
         for i in range(num_furnaces):
-            self.furnaces.append([matrix_fields[i + counter][0], matrix_fields[i + counter][1]])
             self.restaurant.simple_insert(Furnace(matrix_fields[i + counter][0], matrix_fields[i + counter][1]))
 
     # movement procedure - change position on defined difference of coordinates
