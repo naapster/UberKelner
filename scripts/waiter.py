@@ -6,12 +6,14 @@ from scripts.furnace import *
 import pygame
 from pygame.locals import *
 
-class Waiter(pygame.sprite.Sprite):
+
+class Waiter (pygame.sprite.Sprite):
 
     def __init__(self, matrix_fields, num_tables, num_furnaces):
 
         if num_tables + num_furnaces + 1 > N*N:
             print("Not enough space in restaurant for objects!")
+            sys.exit("N-space overflow")
 
         # init restaurant map - integer matrix with ids of objects
         self.restaurant = Matrix(N, N)
@@ -25,7 +27,7 @@ class Waiter(pygame.sprite.Sprite):
 
         # add objects to restaurant - creates waiters, tables and furnaces basing on random positions in the matrix
         # objects have coordinates like in matrix (0..N, 0..N):
-        # add ghostwaiter to restaurant
+        # add ghostwaiter to restaurant to mark waiters position
         self.restaurant.insert('<Waiter', self.x, self.y)
         counter = 1
         # add tables
@@ -65,10 +67,8 @@ class Waiter(pygame.sprite.Sprite):
 
         # change the environment: - REPAIR!
         # update statuses of restaurant objects
-        for table in self.restaurant.objects_to_list(Dinning_table(0, 0)):
-            table.next_round()
-        for furnace in self.restaurant.objects_to_list(Furnace(0, 0)):
-            furnace.next_round()
+        for object in self.restaurant.all_objects_to_list():
+            object.next_round()
 
         # show me status of simulation
         self.restaurant.print_matrix()

@@ -1,5 +1,6 @@
 from scripts.__init__ import *
 
+
 class Furnace(pygame.sprite.Sprite):
     def __init__(self, x, y):
 

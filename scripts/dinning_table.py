@@ -1,5 +1,6 @@
 from scripts.__init__ import *
 
+
 class Dinning_table(pygame.sprite.Sprite):
     def __init__(self, x, y):
 

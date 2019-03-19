@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import pygame, sys
+import pygame
 from random import shuffle
 
 # filename __init__ is required to treat scripts folder as resource
@@ -10,7 +10,8 @@ from random import shuffle
 blocksize = 60
 
 # var for number of blocks in row of simulation
-global N; N = 10
+global N
+N = 10
 
 # set window size
 WINDOW_WIDTH = blocksize * N
@@ -18,7 +19,7 @@ WINDOW_HEIGHT = blocksize * N
 
 # graphics init
 pygame.init()
-FPS = 30 # frames per second setting
+FPS = 30  # frames per second setting
 fpsClock = pygame.time.Clock()
 # set up the window
 DISPLAYSURF = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), 0, 32)
@@ -39,6 +40,7 @@ def init_graphics(self, x, y, sprite_name):
     self.rect.x = x * blocksize
     self.rect.y = y * blocksize
     # //////////////////////////////////////////////////
+
 
 def create_random_coordinates():
     # generate random positions list
