@@ -3,7 +3,7 @@
 from scripts.matrix import *
 from scripts.dinning_table import *
 from scripts.furnace import *
-import pygame
+import pygame, sys
 from pygame.locals import *
 
 
@@ -28,11 +28,11 @@ class Waiter (pygame.sprite.Sprite):
         # add objects to restaurant - creates waiters, tables and furnaces basing on random positions in the matrix
         # objects have coordinates like in matrix (0..N, 0..N):
         # add ghostwaiter to restaurant to mark waiters position
-        self.restaurant.insert('<Waiter', self.x, self.y)
+        self.restaurant.insert('Waiter', self.x, self.y)
         counter = 1
         # add tables
         for i in range(num_tables):
-            self.restaurant.simple_insert(Dinning_table(matrix_fields[i + counter][0], matrix_fields[i + counter][1]))
+            self.restaurant.simple_insert(DinningTable(matrix_fields[i + counter][0], matrix_fields[i + counter][1]))
         counter += num_tables
         # add furnaces
         for i in range(num_furnaces):
@@ -67,8 +67,8 @@ class Waiter (pygame.sprite.Sprite):
 
         # change the environment: - REPAIR!
         # update statuses of restaurant objects
-        for object in self.restaurant.all_objects_to_list():
-            object.next_round()
+        for _ in self.restaurant.all_objects_to_list():
+            _.next_round()
 
         # show me status of simulation
         self.restaurant.print_matrix()

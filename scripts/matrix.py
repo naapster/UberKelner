@@ -4,13 +4,13 @@ import copy
 
 class Matrix:
     # matrix init, set rows and columns, fill is optional - 0 by default
-    def __init__(self, rows, columns, fill=0):
+    def __init__(self, rows, columns, fill="0"):
         self.fill = fill
         self.matrix = [[self.fill for _ in range(columns)] for _ in range(rows)]
 
     # print matrix content
     def print_matrix(self):
-        s = [[str(e).split(' ', 1)[0] for e in row] for row in self.matrix]
+        s = [[str(e).split(' ')[0] for e in row] for row in self.matrix]
         # s = [[str(e.__class__.__name__).split(' ', 1)[0] for e in row] for row in self.matrix ] # get class names
         s = list(map(list, zip(*s)))
         lens = [max(map(len, col)) for col in zip(*s)]
@@ -20,7 +20,13 @@ class Matrix:
         print("------------------------------------")
 
     def __repr__(self):
-        self.print_matrix()
+        # funkcja repr pozwala na ladne drukowanie macierzy, mozna zrobic print(Matrx) i zobaczymy ladna macierz
+        s = [[str(e) for e in row] for row in self.matrix]
+        lens = [max(map(len, col)) for col in zip(*s)]
+        fmt = '\t'.join('{{:{}}}'.format(x) for x in lens)
+        table = [fmt.format(*row) for row in s]
+        represent = '\n'.join(table)
+        return represent
 
     def simple_insert(self, object_to_insert):
         if self.is_empty(object_to_insert.x, object_to_insert.y):
