@@ -27,6 +27,7 @@ pygame.display.set_caption('UberKelner')
 WHITE = (255, 255, 255)
 
 
+# init sprite sprite_name on coordinate x, y
 def init_graphics(self, x, y, sprite_name):
     # \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     # init graphics - do not touch!

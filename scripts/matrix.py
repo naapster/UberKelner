@@ -10,8 +10,7 @@ class Matrix:
 
     # print matrix content
     def print_matrix(self):
-        s = [[str(e).split(' ')[0] for e in row] for row in self.matrix]
-        # s = [[str(e.__class__.__name__).split(' ', 1)[0] for e in row] for row in self.matrix ] # get class names
+        s = [[str(e) for e in row] for row in self.matrix]
         s = list(map(list, zip(*s)))
         lens = [max(map(len, col)) for col in zip(*s)]
         fmt = '\t'.join('{{:{}}}'.format(x) for x in lens)
@@ -29,7 +28,9 @@ class Matrix:
         return represent
 
     def simple_insert(self, object_to_insert):
+        # if space in matrix is empty and new coordinates are empty
         if self.is_empty(object_to_insert.x, object_to_insert.y):
+            # insert object to matrix
             self.matrix[object_to_insert.x][object_to_insert.y] = object_to_insert
             return True
         else:

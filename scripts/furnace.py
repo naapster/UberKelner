@@ -2,6 +2,10 @@ from scripts.__init__ import *
 
 
 class Furnace(pygame.sprite.Sprite):
+
+    def __repr__(self):
+        return "Furnace"
+
     def __init__(self, x, y):
 
         # init graphics - do not touch!

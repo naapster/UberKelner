@@ -3,7 +3,8 @@
 from scripts.matrix import *
 from scripts.dinning_table import *
 from scripts.furnace import *
-import pygame, sys
+import pygame
+import sys
 from pygame.locals import *
 
 

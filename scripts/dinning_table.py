@@ -2,6 +2,10 @@ from scripts.__init__ import *
 
 
 class DinningTable(pygame.sprite.Sprite):
+
+    def __repr__(self):
+        return "Dinning Table"
+
     def __init__(self, x, y):
 
         # init graphics - do not touch!
