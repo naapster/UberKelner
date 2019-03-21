@@ -1,4 +1,5 @@
-# matrix object class
+# matrix object class:
+
 import copy
 
 

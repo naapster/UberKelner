@@ -9,7 +9,7 @@ from pygame.locals import *
 
 if __name__ == '__main__':
 
-    # init random coordinates
+    # init list of random coordinates, common for all simulations
     random_coordinates = create_random_coordinates()
 
     # waiters - agents of simulation, owning matrices of restaurants
@@ -19,23 +19,26 @@ if __name__ == '__main__':
     # list of all sprites for graphics window to draw
     all_sprites = pygame.sprite.Group()
 
-    # add sprites to draw to the list - REPAIR
+    # add waiter to sprites list
     all_sprites.add(Uber)
+    # add all tables and furnaces to sprites list
     for _ in Uber.restaurant.all_objects_to_list():
         all_sprites.add(_)
 
-    # main game loop
+    # main game loop:
+    # clear event log of game
     pygame.event.clear()
-    while True:  # the main game loop
+    # for eternity:
+    while True:
         # wait for key pressed:
         for event in pygame.event.get():
-            # end of main loop: close simulation
+            # if [x] in right upper corner was clicked, exit game
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
-            # after key was pressed:
+            # or after key was pressed:
             elif event.type == KEYUP:
-                # exit simulation:
+                # exit simulation anyway:
                 if event.key == K_ESCAPE:
                     pygame.quit()
                     sys.exit()
@@ -51,6 +54,6 @@ if __name__ == '__main__':
         DISPLAYSURF.fill(WHITE)
         # draw sprites
         all_sprites.draw(DISPLAYSURF)
-        # Refresh Screen
+        # refresh Screen
         pygame.display.flip()
         fpsClock.tick(FPS)
