@@ -9,25 +9,29 @@ class Matrix:
         self.fill = fill
         self.matrix = [[self.fill for _ in range(columns)] for _ in range(rows)]
 
-    # print matrix content
+    # print matrix content beautified when called matrix.print_matrix
     def print_matrix(self):
         s = [[str(e) for e in row] for row in self.matrix]
+        # transpose rows
         s = list(map(list, zip(*s)))
         lens = [max(map(len, col)) for col in zip(*s)]
         fmt = '\t'.join('{{:{}}}'.format(x) for x in lens)
         table = [fmt.format(*row) for row in s]
+        # print content
         print('\n'.join(table))
         print("------------------------------------")
 
+    # print matrix content beautified when called print(matrix)
     def __repr__(self):
-        # funkcja repr pozwala na ladne drukowanie macierzy, mozna zrobic print(Matrx) i zobaczymy ladna macierz
         s = [[str(e) for e in row] for row in self.matrix]
+        # transpose rows
+        s = list(map(list, zip(*s)))
         lens = [max(map(len, col)) for col in zip(*s)]
         fmt = '\t'.join('{{:{}}}'.format(x) for x in lens)
-        table = [fmt.format(*row) for row in s]
-        represent = '\n'.join(table)
-        return represent
+        # return content
+        return [fmt.format(*row) for row in s]
 
+    # insert object on its own coordinates
     def simple_insert(self, object_to_insert):
         # if space in matrix is empty and new coordinates are empty
         if self.is_empty(object_to_insert.x, object_to_insert.y):
@@ -37,7 +41,7 @@ class Matrix:
         else:
             return False
 
-    # put object on coordinates
+    # insert object on other coordinates than its own
     def insert(self, object_to_insert, x, y):
         if self.is_empty(x, y):
             self.matrix[x][y] = object_to_insert
@@ -45,7 +49,7 @@ class Matrix:
         else:
             return False
 
-    # remove object and set 0 instead - REPAIR
+    # remove object and set fill instead
     def delete_object(self, x, y):
         if not self.is_empty(x, y):
             self.matrix[x][y] = self.fill
@@ -55,14 +59,16 @@ class Matrix:
 
     # move object form coordinates to new one
     def move(self, x, y, new_x, new_y):
+        # if there is object to move and new space is not occupied
         if not self.is_empty(x, y) and self.is_empty(new_x, new_y):
+            # move object and fill its previous place
             self.matrix[new_x][new_y] = self.matrix[x][y]
             self.matrix[x][y] = self.fill
             return True
         else:
             return False
 
-    # returns list of objects and coordinates - checking object class type, not content
+    # returns list of objects by checking object class type, not content
     def objects_to_list(self, wanted_object):
         list_of_wanted_objects = list()
         for i in range(len(self.matrix)):

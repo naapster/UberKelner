@@ -11,7 +11,11 @@ from pygame.locals import *
 # init of object with sprite - pygames requirement
 class Waiter (pygame.sprite.Sprite):
 
-    # initialize waiter with list of coordinates for tables and furnaces and their number
+    # procedure of printing object properties when called by matrix
+    def __repr__(self):
+        return "Waiter"
+
+    # initialize agent with list of coordinates for tables and furnaces and their number
     def __init__(self, matrix_fields, num_tables, num_furnaces):
 
         # check if there is enough space for everyting in simulation
@@ -51,18 +55,23 @@ class Waiter (pygame.sprite.Sprite):
 
     # movement procedure - change position of agent on defined difference of coordinates
     def move(self, delta_x, delta_y):
+        # temporarily set new coordinates
         new_x = self.x + delta_x
         new_y = self.y + delta_y
+
         # if movement is allowed by matrix, within restaurant borders and the field is empty:
         if self.restaurant.move(self.x, self.y, new_x, new_y):
+
             # set new coordinates
             self.x = new_x
             self.y = new_y
+
             # update waiter sprite localization after changes
             self.rect.x = self.x * blocksize
             self.rect.y = self.y * blocksize
 
         # if restaurant field is not empty, analize the environment - take dishes or order - REPAIR
+        # add rules here!
         # else:
 
     def next_round(self, key):
@@ -77,9 +86,9 @@ class Waiter (pygame.sprite.Sprite):
             self.move(0, -1)
 
         # change the environment: - REPAIR!
-        # update statuses of restaurant objects
+        # update statuses of all restaurant objects
         for _ in self.restaurant.all_objects_to_list():
             _.next_round()
 
-        # show me status of simulation
-        self.restaurant.print_matrix()
+        # show me status of simulation - for development purpose only
+        # self.restaurant.print_matrix()

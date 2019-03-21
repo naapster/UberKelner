@@ -48,6 +48,7 @@ def init_graphics(self, x, y, sprite_name):
     self.rect.y = y * blocksize
     # //////////////////////////////////////////////////
 
+
 # generate random positions list for all objects
 def create_random_coordinates():
     # list of all possible numbers of coordinate
