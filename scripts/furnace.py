@@ -13,6 +13,9 @@ class Furnace(pygame.sprite.Sprite):
     # init of object with coordinates in simulation
     def __init__(self, x, y):
 
+        # call init of parent class
+        pygame.sprite.Sprite.__init__(self)
+
         # init graphics with object's sprite - do not touch!
         init_graphics(self, x, y, "furnace")
 

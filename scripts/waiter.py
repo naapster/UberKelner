@@ -18,6 +18,9 @@ class Waiter (pygame.sprite.Sprite):
     # initialize agent with list of coordinates for tables and furnaces and their number
     def __init__(self, matrix_fields, num_tables, num_furnaces):
 
+        # call init of parent class
+        pygame.sprite.Sprite.__init__(self)
+
         # check if there is enough space for everyting in simulation
         if num_tables + num_furnaces + 1 > N*N:
             print("Not enough space in restaurant for objects!")
@@ -91,4 +94,4 @@ class Waiter (pygame.sprite.Sprite):
             _.next_round()
 
         # show me status of simulation - for development purpose only
-        # self.restaurant.print_matrix()
+        print(self.restaurant)

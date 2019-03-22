@@ -9,27 +9,16 @@ class Matrix:
         self.fill = fill
         self.matrix = [[self.fill for _ in range(columns)] for _ in range(rows)]
 
-    # print matrix content beautified when called matrix.print_matrix
-    def print_matrix(self):
-        s = [[str(e) for e in row] for row in self.matrix]
-        # transpose rows
-        s = list(map(list, zip(*s)))
-        lens = [max(map(len, col)) for col in zip(*s)]
-        fmt = '\t'.join('{{:{}}}'.format(x) for x in lens)
-        table = [fmt.format(*row) for row in s]
-        # print content
-        print('\n'.join(table))
-        print("------------------------------------")
-
-    # print matrix content beautified when called print(matrix)
+    # print matrix content beautified when calling print(matrix)
     def __repr__(self):
         s = [[str(e) for e in row] for row in self.matrix]
         # transpose rows
         s = list(map(list, zip(*s)))
         lens = [max(map(len, col)) for col in zip(*s)]
         fmt = '\t'.join('{{:{}}}'.format(x) for x in lens)
+        table = [fmt.format(*row) for row in s]
         # return content
-        return [fmt.format(*row) for row in s]
+        return '\n'.join(table) + '\n' + "------------------------------------"
 
     # insert object on its own coordinates
     def simple_insert(self, object_to_insert):
