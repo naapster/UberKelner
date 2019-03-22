@@ -86,5 +86,4 @@ class Matrix:
 
     # return copy of matrix - regular '=' would just set reference to source, not copy the content
     def get_matrix(self):
-        to_return = copy.deepcopy(self.matrix)
-        return to_return
+        return copy.deepcopy(self.matrix)

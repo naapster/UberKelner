@@ -32,3 +32,8 @@ Can change his own coordinates in matrix by move_[direction] procedures and stat
 # main
 
 main loop of simulation. Serves graphics window and simulation events, draws sprites basing on matrix values.
+
+# simulation.log
+
+text file containing simulation initializing state, used to recreate simulations.
+Please note, that new logs are appending to the end of file.

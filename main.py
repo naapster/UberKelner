@@ -5,16 +5,27 @@ from scripts.waiter import *
 import sys
 import pygame
 from pygame.locals import *
+import datetime
 
 
 if __name__ == '__main__':
 
-    # init list of random coordinates, common for all simulations
+    # init list of variables, common for all simulations:
+    # random coordinates
     random_coordinates = create_random_coordinates()
+    # number of tables
+    num_tables = 8
+    # number of furnaces
+    num_furnaces = 2
+
+    # save state of simulation to file
+    with open("simulation_log.txt", "a") as myfile:
+        myfile.write(str(datetime.datetime.now()) + '\t' + str(num_tables) + '\t' +
+                     str(num_furnaces) + '\t' + str(random_coordinates) + '\n')
 
     # waiters - agents of simulation, owning matrices of restaurants
     # one special playable waiter
-    Uber = Waiter(random_coordinates, 8, 2)
+    Uber = Waiter(random_coordinates, num_tables, num_furnaces)
 
     # list of all sprites for graphics window to draw
     all_sprites = pygame.sprite.Group()

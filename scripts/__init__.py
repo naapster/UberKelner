@@ -14,7 +14,6 @@ from random import shuffle
 blocksize = 60
 
 # number of blocks in row of simulation
-global N
 N = 10
 
 # frames per second setting
@@ -52,9 +51,9 @@ def init_graphics(self, x, y, sprite_name):
 # generate random positions list for all objects
 def create_random_coordinates():
     # list of all possible numbers of coordinate
-    positions = range(N)
+    _ = range(N)
     # cartesian product of all possible numbers
-    matrix_fields = [[posX, posY] for posX in positions for posY in positions]
+    matrix_fields = [[posX, posY] for posX in _ for posY in _]
     # randomize order of coordinates
     shuffle(matrix_fields)
     return matrix_fields
