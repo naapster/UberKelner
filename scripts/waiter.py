@@ -88,6 +88,9 @@ class Waiter (pygame.sprite.Sprite):
         elif key == K_UP:
             self.move(0, -1)
 
+        # DIAGRAM SEQUENCE HERE! - ADD IN NEXT VERSION!
+        # if if if if
+
         # change the environment: - REPAIR!
         # update statuses of all restaurant objects
         for _ in self.restaurant.all_objects_to_list():
