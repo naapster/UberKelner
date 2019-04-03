@@ -4,9 +4,21 @@
 from scripts.waiter import *
 import sys
 import pygame
+import numpy as np
 from pygame.locals import *
 import datetime
 
+def change(log):
+    coordinates1 = []
+    coordinates2 = []
+    coordinates3 = []
+    for i in log[4]:
+        if i.isnumeric():
+            coordinates1.append(i)
+    coordinates3 = coordinates1[0::2]
+    coordinates2 = coordinates1[1::2]
+    result = np.array(list(zip(coordinates3,coordinates2)),dtype=np.int32)
+    return result
 
 if __name__ == '__main__':
 
@@ -27,12 +39,19 @@ if __name__ == '__main__':
         num_furnaces = int(log[2])
         # number of walls
         num_walls = int(log[3])
-
         # random coordinates - REPAIR! how to parse string from log[4], looking like list, to list?
-        coordinates = " ".join(map(str, log[4]))
-        coordinates = [[2, 0], [0, 4], [0, 0], [1, 0], [3, 0], [4, 0], [1, 2], [2, 2], [3, 2], [1, 3], [2, 3], [3, 3]]
+     #  coordinates = " ".join(map(str, log[4]))
+       # coordinates = [[2, 0], [0, 4], [0, 0], [1, 0], [3, 0], [4, 0], [1, 2], [2, 2], [3, 2], [1, 3], [2, 3], [3, 3]]
+      #  coordinates1 = np.loadtxt("simulation_log.txt", delimiter=',' , dtype=np.str)
+
+        coordinates = change(log)
+
+
+
+
 
     else:
+
         # generate random simulation:
         # size of simulation^2
         N = 5
