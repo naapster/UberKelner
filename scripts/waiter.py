@@ -65,16 +65,7 @@ class Waiter (pygame.sprite.Sprite):
             self.restaurant.simple_insert(Wall(matrix_fields[i + counter][0], matrix_fields[i + counter][1]))
 
         # get dfs path and parse it for movement control purpose
-        self.dfs_path = list(min(list(self.dfs_paths(self.restaurant.to_graph(), '2,0', '0,4')), key=len))
-        for i in range(len(self.dfs_path)):
-            self.dfs_path[i] = list(map(int, self.dfs_path[i].split(',')))
-
-        for i in range(len(self.dfs_path)-1):
-            self.dfs_path[i][0] = self.dfs_path[i+1][0] - self.dfs_path[i][0]
-            self.dfs_path[i][1] = self.dfs_path[i+1][1] - self.dfs_path[i][1]
-
-        self.dfs_path.pop(-1)
-
+        self.dfs_path = self.get_dfs_path('2,0', '0,4')
 
     # movement procedure - change position of agent on defined difference of coordinates
     def move(self, delta_x, delta_y):
@@ -108,6 +99,7 @@ class Waiter (pygame.sprite.Sprite):
         elif key == K_UP:
             self.move(0, -1)
         elif key == K_SPACE:
+            # on space pressed, move waiter with dfs method sequence
             try:
                 self.move(self.dfs_path[0][0], self.dfs_path[0][1])
                 self.dfs_path.pop(0)
@@ -125,12 +117,31 @@ class Waiter (pygame.sprite.Sprite):
         # show me status of simulation - for development purpose only
         print(self.restaurant)
 
-    def dfs_paths(self, graph, start, goal):
+    # //////////////////////////////////////////////////
+    # DFS section
+    @staticmethod
+    def dfs_paths(graph, start, goal):
         stack = [(start, [start])]
         while stack:
             (vertex, path) = stack.pop()
-            for next in graph[vertex] - set(path):
-                if next == goal:
-                    yield path + [next]
+            for next_ in graph[vertex] - set(path):
+                if next_ == goal:
+                    yield path + [next_]
                 else:
-                    stack.append((next, path + [next]))
+                    stack.append((next_, path + [next_]))
+
+    def get_dfs_path(self, start, goal):
+        # get dfs path and parse it for movement control purpose
+        dfs_path = list(min(list(self.dfs_paths(self.restaurant.to_graph(), start, goal)), key=len))
+        # parse list to get coordinates of next moves
+        for i in range(len(dfs_path)):
+            dfs_path[i] = list(map(int, dfs_path[i].split(',')))
+        # calculate movement vectors basing on coordinates
+        for i in range(len(dfs_path)-1):
+            dfs_path[i][0] = dfs_path[i+1][0] - dfs_path[i][0]
+            dfs_path[i][1] = dfs_path[i+1][1] - dfs_path[i][1]
+        # remove last move (it can't be executed)
+        dfs_path.pop(-1)
+        # return path for agent
+        return dfs_path
+    # //////////////////////////////////////////////////
