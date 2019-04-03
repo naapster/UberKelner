@@ -106,3 +106,15 @@ class Waiter (pygame.sprite.Sprite):
 
         # show me status of simulation - for development purpose only
         print(self.restaurant)
+        print(self.restaurant.to_graph())
+        print(list(self.dfs_paths(self.restaurant.to_graph(), '0,0', '2,4')))
+        
+    def dfs_paths(self, graph, start, goal):
+        stack = [(start, [start])]
+        while stack:
+            (vertex, path) = stack.pop()
+            for next in graph[vertex] - set(path):
+                if next == goal:
+                    yield path + [next]
+                else:
+                    stack.append((next, path + [next]))
