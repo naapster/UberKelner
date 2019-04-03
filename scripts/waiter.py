@@ -64,6 +64,18 @@ class Waiter (pygame.sprite.Sprite):
         for i in range(num_walls):
             self.restaurant.simple_insert(Wall(matrix_fields[i + counter][0], matrix_fields[i + counter][1]))
 
+        # get dfs path and parse it for movement control purpose
+        self.dfs_path = list(min(list(self.dfs_paths(self.restaurant.to_graph(), '2,0', '0,4')), key=len))
+        for i in range(len(self.dfs_path)):
+            self.dfs_path[i] = list(map(int, self.dfs_path[i].split(',')))
+
+        for i in range(len(self.dfs_path)-1):
+            self.dfs_path[i][0] = self.dfs_path[i+1][0] - self.dfs_path[i][0]
+            self.dfs_path[i][1] = self.dfs_path[i+1][1] - self.dfs_path[i][1]
+
+        self.dfs_path.pop(-1)
+
+
     # movement procedure - change position of agent on defined difference of coordinates
     def move(self, delta_x, delta_y):
         # temporarily set new coordinates
@@ -95,6 +107,12 @@ class Waiter (pygame.sprite.Sprite):
             self.move(0, 1)
         elif key == K_UP:
             self.move(0, -1)
+        elif key == K_SPACE:
+            try:
+                self.move(self.dfs_path[0][0], self.dfs_path[0][1])
+                self.dfs_path.pop(0)
+            except IndexError:
+                print("No calculated dfs moves left!\n")
 
         # DIAGRAM SEQUENCE HERE! - ADD IN NEXT VERSION!
         # if if if if
@@ -106,3 +124,13 @@ class Waiter (pygame.sprite.Sprite):
 
         # show me status of simulation - for development purpose only
         print(self.restaurant)
+
+    def dfs_paths(self, graph, start, goal):
+        stack = [(start, [start])]
+        while stack:
+            (vertex, path) = stack.pop()
+            for next in graph[vertex] - set(path):
+                if next == goal:
+                    yield path + [next]
+                else:
+                    stack.append((next, path + [next]))

@@ -1,6 +1,7 @@
 # matrix object class:
 
 import copy
+from scripts.wall import Wall
 
 
 class Matrix:
@@ -87,3 +88,32 @@ class Matrix:
     # return copy of matrix - regular '=' would just set reference to source, not copy the content
     def get_matrix(self):
         return copy.deepcopy(self.matrix)
+
+    def to_graph(self):
+        graph = dict()
+        for i in range(len(self.matrix)):
+            for j in range(len(self.matrix)):
+                key = "{0},{1}".format(i, j)
+                value_list = list()
+                try:
+                    if type(self.matrix[i - 1][j]) is not Wall and i - 1 >= 0:
+                        value_list.append("{0},{1}".format(i - 1, j))
+                except IndexError:
+                    pass
+                try:
+                    if type(self.matrix[i + 1][j]) is not Wall:
+                        value_list.append("{0},{1}".format(i + 1, j))
+                except IndexError:
+                    pass
+                try:
+                    if type(self.matrix[i][j - 1]) is not Wall and j - 1 >= 0:
+                        value_list.append("{0},{1}".format(i, j - 1))
+                except IndexError:
+                    pass
+                try:
+                    if type(self.matrix[i][j + 1]) is not Wall:
+                        value_list.append("{0},{1}".format(i, j + 1))
+                except IndexError:
+                    pass
+                graph[key] = set(value_list)
+        return graph
