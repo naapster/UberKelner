@@ -16,7 +16,7 @@ class Waiter (pygame.sprite.Sprite):
         return "Waiter"
 
     # initialize agent with list of coordinates for tables and furnaces and their number
-    def __init__(self, matrix_fields, num_tables, num_furnaces):
+    def __init__(self, matrix_fields, num_tables, num_furnaces, num_walls):
 
         # call init of parent class
         pygame.sprite.Sprite.__init__(self)
@@ -55,6 +55,13 @@ class Waiter (pygame.sprite.Sprite):
         # add furnaces
         for i in range(num_furnaces):
             self.restaurant.simple_insert(Furnace(matrix_fields[i + counter][0], matrix_fields[i + counter][1]))
+
+        # increase counter with number of used coordinates
+        counter += num_furnaces
+
+        # add furnaces
+        for i in range(num_walls):
+            self.restaurant.simple_insert(DinningTable(matrix_fields[i + counter][0], matrix_fields[i + counter][1]))
 
     # movement procedure - change position of agent on defined difference of coordinates
     def move(self, delta_x, delta_y):
