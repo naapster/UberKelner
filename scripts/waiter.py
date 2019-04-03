@@ -3,6 +3,7 @@
 from scripts.matrix import *
 from scripts.dinning_table import *
 from scripts.furnace import *
+from scripts.wall import *
 import pygame
 import sys
 from pygame.locals import *
@@ -61,7 +62,7 @@ class Waiter (pygame.sprite.Sprite):
 
         # add furnaces
         for i in range(num_walls):
-            self.restaurant.simple_insert(DinningTable(matrix_fields[i + counter][0], matrix_fields[i + counter][1]))
+            self.restaurant.simple_insert(Wall(matrix_fields[i + counter][0], matrix_fields[i + counter][1]))
 
     # movement procedure - change position of agent on defined difference of coordinates
     def move(self, delta_x, delta_y):

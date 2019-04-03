@@ -22,14 +22,15 @@ if __name__ == '__main__':
         # size of simulation^2
         N = 5
         # number of tables
-        num_tables = log[1]
+        num_tables = int(log[1])
         # number of furnaces
-        num_furnaces = log[2]
+        num_furnaces = int(log[2])
         # number of walls
-        num_walls = log[3]
-        # random coordinates
-        coordinates = list(log[4])
-        print(num_tables, num_furnaces, num_walls, coordinates)
+        num_walls = int(log[3])
+
+        # random coordinates - REPAIR! how to parse string from log[4], looking like list, to list?
+        coordinates = " ".join(map(str, log[4]))
+        coordinates = [[2, 0], [0, 4], [0, 0], [1, 0], [3, 0], [4, 0], [1, 2], [2, 2], [3, 2], [1, 3], [2, 3], [3, 3]]
 
     else:
         # generate random simulation:
