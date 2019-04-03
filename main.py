@@ -11,7 +11,7 @@ import datetime
 if __name__ == '__main__':
 
     # init list of variables, common for all simulations:
-    control = False
+    control = True
 
     if control:
         # reload simulation state from log:
@@ -28,7 +28,7 @@ if __name__ == '__main__':
         # number of walls
         num_walls = log[3]
         # random coordinates
-        coordinates = log[4]
+        coordinates = list(log[4])
         print(num_tables, num_furnaces, num_walls, coordinates)
 
     else:
