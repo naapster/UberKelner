@@ -14,23 +14,25 @@ if __name__ == '__main__':
     # init list of variables, common for all simulations:
     control = True
 
+    run_simulation = -1 # index of simulation to run in log list
+
     if control:
         # reload simulation state from log:
         # get last row in log
         with open("simulation_log.txt") as myfile:
-            log = list(myfile)[-1].split('\t')
+            log = list(myfile)[run_simulation].split('\t')
 
-        # size of simulation^2
-        N = 5
+        # size of simulation^2 - not currently active, change init
+        N = int(log[1])
         # number of tables
-        num_tables = int(log[1])
+        num_tables = int(log[2])
         # number of furnaces
-        num_furnaces = int(log[2])
+        num_furnaces = int(log[3])
         # number of walls
-        num_walls = int(log[3])
+        num_walls = int(log[4])
         # random coordinates
         # backup: [[2, 0], [0, 4], [0, 0], [1, 0], [3, 0], [4, 0], [1, 2], [2, 2], [3, 2], [1, 3], [2, 3], [3, 3]]
-        strs = log[4].replace('[', '').split('],')
+        strs = log[5].replace('[', '').split('],')
         coordinates = [list(map(int, s.replace(']', '').split(','))) for s in strs]
 
     else:
@@ -45,11 +47,11 @@ if __name__ == '__main__':
         # number of walls
         num_walls = 10
         # random coordinates
-        coordinates = create_random_coordinates()
+        coordinates = create_random_coordinates()[:(num_tables + num_furnaces + num_walls + 1)]
 
         # save state of simulation to file
         with open("simulation_log.txt", "a") as myfile:
-            myfile.write(str(datetime.datetime.now()) + '\t' + str(num_tables) + '\t' + str(num_furnaces) +
+            myfile.write(str(datetime.datetime.now()) + '\t' + str(N) + '\t' + str(num_tables) + '\t' + str(num_furnaces) +
                 '\t' + str(num_walls) + '\t' + str(coordinates[:(num_tables+num_furnaces+num_walls+1)]) + '\n')
 
     # waiters - agents of simulation, owning matrices of restaurants

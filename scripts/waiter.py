@@ -152,16 +152,21 @@ class Waiter (pygame.sprite.Sprite):
         start = ",".join(map(str, start))
         goal = ",".join(map(str, goal))
         # get dfs path and parse it for movement control purpose
-        dfs_path = list(min(list(self.dfs_paths(self.restaurant.to_graph(), start, goal)), key=len))
-        # parse list to get coordinates of next moves
-        for i in range(len(dfs_path)):
-            dfs_path[i] = list(map(int, dfs_path[i].split(',')))
-        # calculate movement vectors basing on coordinates
-        for i in range(len(dfs_path)-1):
-            dfs_path[i][0] = dfs_path[i+1][0] - dfs_path[i][0]
-            dfs_path[i][1] = dfs_path[i+1][1] - dfs_path[i][1]
-        # remove last move (it can't be executed)
-        dfs_path.pop(-1)
+        dfs_path = list(self.dfs_paths(self.restaurant.to_graph(), start, goal))
+        if len(dfs_path) > 0:
+            dfs_path = list(min(dfs_path, key=len))
+            # parse list to get coordinates of next moves
+            for i in range(len(dfs_path)):
+                dfs_path[i] = list(map(int, dfs_path[i].split(',')))
+            # calculate movement vectors basing on coordinates
+            for i in range(len(dfs_path)-1):
+                dfs_path[i][0] = dfs_path[i+1][0] - dfs_path[i][0]
+                dfs_path[i][1] = dfs_path[i+1][1] - dfs_path[i][1]
+            # remove last move (it can't be executed)
+            dfs_path.pop(-1)
+        else:
+            print("No dfs path found!")
+            dfs_path = [[0,0]]
         # return path for agent
         return dfs_path
     # //////////////////////////////////////////////////

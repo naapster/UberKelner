@@ -14,7 +14,7 @@ from random import shuffle
 blocksize = 60
 
 # number of blocks in row of simulation
-N = 5
+N = 6
 
 # frames per second setting
 FPS = 30
