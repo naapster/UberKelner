@@ -3,18 +3,41 @@
 # init
 from scripts.waiter import *
 from scripts.__init__ import *
+from random import shuffle
 import sys
 import pygame
 from pygame.locals import *
 import datetime
 
 
+# generate random positions list for all objects
+def create_random_coordinates():
+    # list of all possible numbers of coordinate
+    _ = range(N)
+    # cartesian product of all possible numbers
+    matrix_fields = [[posX, posY] for posX in _ for posY in _]
+    # randomize order of coordinates
+    shuffle(matrix_fields)
+    return matrix_fields
+
+
 if __name__ == '__main__':
 
     # init list of variables, common for all simulations:
-    control = True
 
-    run_simulation = -1 # index of simulation to run in log list
+    # frames per second setting
+    FPS = 30
+
+    # size of sprites in px
+    blocksize = 60
+
+    # number of blocks in row of simulation
+    N = 6
+
+    # choose whether to run simulation from log (True) or generate random (False)
+    control = False
+
+    run_simulation = -2  # index of simulation to run in log list
 
     if control:
         # reload simulation state from log:
@@ -51,8 +74,9 @@ if __name__ == '__main__':
 
         # save state of simulation to file
         with open("simulation_log.txt", "a") as myfile:
-            myfile.write(str(datetime.datetime.now()) + '\t' + str(N) + '\t' + str(num_tables) + '\t' + str(num_furnaces) +
-                '\t' + str(num_walls) + '\t' + str(coordinates[:(num_tables+num_furnaces+num_walls+1)]) + '\n')
+            myfile.write(str(datetime.datetime.now()) + '\t'
+                         + str(N) + '\t' + str(num_tables) + '\t' + str(num_furnaces) + '\t' + str(num_walls) + '\t'
+                         + str(coordinates[:(num_tables+num_furnaces+num_walls+1)]) + '\n')
 
     # waiters - agents of simulation, owning matrices of restaurants
     # one special playable waiter
@@ -68,6 +92,15 @@ if __name__ == '__main__':
         all_sprites.add(_)
 
     # main game loop:
+
+    # graphics init
+    pygame.init()
+    fpsClock = pygame.time.Clock()
+    # set up the window
+    DISPLAYSURF = pygame.display.set_mode((blocksize * N, blocksize * N), 0, 32)
+    pygame.display.set_caption('UberKelner')
+    WHITE = (255, 255, 255)
+
     # clear event log of game
     pygame.event.clear()
     # for eternity:
