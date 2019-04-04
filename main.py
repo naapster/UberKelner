@@ -1,6 +1,5 @@
-# main game script controller:
+# simulation controller:
 
-# init
 from scripts.waiter import *
 from scripts.__init__ import *
 from random import shuffle
@@ -31,11 +30,8 @@ if __name__ == '__main__':
     # size of sprites in px
     blocksize = 60
 
-    # number of blocks in row of simulation
-    N = 6
-
     # choose whether to run simulation from log (True) or generate random (False)
-    control = False
+    control = True
 
     run_simulation = -2  # index of simulation to run in log list
 
@@ -45,7 +41,7 @@ if __name__ == '__main__':
         with open("simulation_log.txt") as myfile:
             log = list(myfile)[run_simulation].split('\t')
 
-        # size of simulation^2 - not currently active, change init
+        # amount of blocks in row of simulation - not currently active, change init
         N = int(log[1])
         # number of tables
         num_tables = int(log[2])
@@ -55,13 +51,13 @@ if __name__ == '__main__':
         num_walls = int(log[4])
         # random coordinates
         # backup: [[2, 0], [0, 4], [0, 0], [1, 0], [3, 0], [4, 0], [1, 2], [2, 2], [3, 2], [1, 3], [2, 3], [3, 3]]
-        strs = log[5].replace('[', '').split('],')
-        coordinates = [list(map(int, s.replace(']', '').split(','))) for s in strs]
+        _ = log[5].replace('[', '').split('],')
+        coordinates = [list(map(int, s.replace(']', '').split(','))) for s in _]
 
     else:
 
         # generate random simulation:
-        # size of simulation^2
+        # amount of blocks in row of simulation - not currently active, change init
         N = 5
         # number of tables
         num_tables = 0

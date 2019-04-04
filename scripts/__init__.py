@@ -4,18 +4,13 @@
 # legacy init script with global variables:
 
 import pygame
-
-
 # filename __init__ is required to treat scripts folder as resource
-
 # variables:
-
 # size of sprites in px
 blocksize = 60
 
 # number of blocks in row of simulation
 N = 6
-
 
 # init sprite sprite_name on coordinate x, y
 def init_graphics(self, x, y, sprite_name):
@@ -31,6 +26,3 @@ def init_graphics(self, x, y, sprite_name):
     self.rect.x = x * blocksize
     self.rect.y = y * blocksize
     # //////////////////////////////////////////////////
-
-
-

@@ -23,7 +23,7 @@ class Waiter (pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         # check if there is enough space for everyting in simulation
-        if num_tables + num_furnaces + 1 > N*N:
+        if num_tables + num_furnaces + num_walls + 1 > N*N:
             print("Not enough space in restaurant for objects!")
             sys.exit("N-space overflow")
 
@@ -166,7 +166,7 @@ class Waiter (pygame.sprite.Sprite):
             dfs_path.pop(-1)
         else:
             print("No dfs path found!")
-            dfs_path = [[0,0]]
+            dfs_path = [[0, 0]]
         # return path for agent
         return dfs_path
     # //////////////////////////////////////////////////
