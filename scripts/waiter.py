@@ -65,7 +65,10 @@ class Waiter (pygame.sprite.Sprite):
             self.restaurant.simple_insert(Wall(matrix_fields[i + counter][0], matrix_fields[i + counter][1]))
 
         # get dfs path and parse it for movement control purpose
-        self.dfs_path = self.get_dfs_path('2,0', '0,4')
+        self.goal = [0, 4]
+        self.dfs_path = self.get_dfs_path([self.x, self.y], self.goal)
+        # set AI control variable - change to false when user changes path and the need of recalculation appears
+        self.path_control = True
 
     # movement procedure - change position of agent on defined difference of coordinates
     def move(self, delta_x, delta_y):
@@ -89,6 +92,11 @@ class Waiter (pygame.sprite.Sprite):
         # else:
 
     def next_round(self, key):
+
+        # check if agent was moved:
+        if key in [K_RIGHT, K_LEFT, K_DOWN, K_UP]:
+            self.path_control = False
+
         # list of events on keys:
         if key == K_RIGHT:
             self.move(1, 0)
@@ -98,8 +106,17 @@ class Waiter (pygame.sprite.Sprite):
             self.move(0, 1)
         elif key == K_UP:
             self.move(0, -1)
+
         elif key == K_SPACE:
             # on space pressed, move waiter with dfs method sequence
+            # check if waiter was moved out of path:
+            if not self.path_control:
+                # get dfs path and parse it for movement control purpose
+                self.dfs_path = self.get_dfs_path([self.x, self.y], self.goal)
+                # set AI control variable - change to false when user changes path and the need of recalculation appears
+                self.path_control = True
+
+            # move agent on dfs path
             try:
                 self.move(self.dfs_path[0][0], self.dfs_path[0][1])
                 self.dfs_path.pop(0)
@@ -111,11 +128,12 @@ class Waiter (pygame.sprite.Sprite):
 
         # change the environment: - REPAIR!
         # update statuses of all restaurant objects
-        for _ in self.restaurant.all_objects_to_list():
-            _.next_round()
+        # for _ in self.restaurant.all_objects_to_list():
+            # _.next_round()
+        # simulation probably won't require changes of environment
 
         # show me status of simulation - for development purpose only
-        print(self.restaurant)
+        # print(self.restaurant)
 
     # //////////////////////////////////////////////////
     # DFS section
@@ -131,6 +149,8 @@ class Waiter (pygame.sprite.Sprite):
                     stack.append((next_, path + [next_]))
 
     def get_dfs_path(self, start, goal):
+        start = ",".join(map(str, start))
+        goal = ",".join(map(str, goal))
         # get dfs path and parse it for movement control purpose
         dfs_path = list(min(list(self.dfs_paths(self.restaurant.to_graph(), start, goal)), key=len))
         # parse list to get coordinates of next moves

@@ -2,6 +2,7 @@
 
 # init
 from scripts.waiter import *
+from scripts.__init__ import *
 import sys
 import pygame
 from pygame.locals import *
@@ -48,8 +49,8 @@ if __name__ == '__main__':
 
         # save state of simulation to file
         with open("simulation_log.txt", "a") as myfile:
-            myfile.write(str(datetime.datetime.now()) + '\t' + str(num_tables) + '\t' + str(num_furnaces) + '\t' + str(num_walls)
-                         + '\t' + str(coordinates[:(num_tables+num_furnaces+num_walls+1)]) + '\n')
+            myfile.write(str(datetime.datetime.now()) + '\t' + str(num_tables) + '\t' + str(num_furnaces) +
+                '\t' + str(num_walls) + '\t' + str(coordinates[:(num_tables+num_furnaces+num_walls+1)]) + '\n')
 
     # waiters - agents of simulation, owning matrices of restaurants
     # one special playable waiter

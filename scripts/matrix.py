@@ -89,6 +89,7 @@ class Matrix:
     def get_matrix(self):
         return copy.deepcopy(self.matrix)
 
+    # parse matrix to graph understandable for DFS algorithm
     def to_graph(self):
         graph = dict()
         for i in range(len(self.matrix)):
