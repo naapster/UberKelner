@@ -1,7 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# legacy init script with global variables:
-
-import pygame
-
+# legacy file - shows compiler where sources are
+# do not remove.

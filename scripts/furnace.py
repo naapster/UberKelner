@@ -1,7 +1,7 @@
 # furnace object class:
 
-from scripts.__init__ import *
-from main import init_graphics, N, blocksize
+import pygame
+from main import init_graphics
 
 
 # init of object with sprite - pygames requirement

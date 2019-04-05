@@ -12,8 +12,6 @@ import datetime
 # size of sprites in px
 blocksize = 60
 
-# number of blocks in row of simulation
-N = 6
 
 # init sprite sprite_name on coordinate x, y
 def init_graphics(self, x, y, sprite_name):
@@ -48,9 +46,6 @@ if __name__ == '__main__':
 
     # frames per second setting
     FPS = 30
-
-    # size of sprites in px
-    # blocksize = 60
 
     # choose whether to run simulation from log (True) or generate random (False)
     control = True
@@ -98,7 +93,7 @@ if __name__ == '__main__':
 
     # waiters - agents of simulation, owning matrices of restaurants
     # one special playable waiter
-    Uber = Waiter(coordinates, num_tables, num_furnaces, num_walls)
+    Uber = Waiter(N, coordinates, num_tables, num_furnaces, num_walls)
 
     # list of all sprites for graphics window to draw
     all_sprites = pygame.sprite.Group()

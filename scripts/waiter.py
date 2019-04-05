@@ -7,6 +7,7 @@ from scripts.wall import *
 import pygame
 import sys
 from pygame.locals import *
+import main
 
 
 # init of object with sprite - pygames requirement
@@ -17,7 +18,7 @@ class Waiter (pygame.sprite.Sprite):
         return "Waiter"
 
     # initialize agent with list of coordinates for tables and furnaces and their number
-    def __init__(self, matrix_fields, num_tables, num_furnaces, num_walls):
+    def __init__(self, N, matrix_fields, num_tables, num_furnaces, num_walls):
 
         # call init of parent class
         pygame.sprite.Sprite.__init__(self)
@@ -84,8 +85,8 @@ class Waiter (pygame.sprite.Sprite):
             self.y = new_y
 
             # update waiter sprite localization after changes
-            self.rect.x = self.x * blocksize
-            self.rect.y = self.y * blocksize
+            self.rect.x = self.x * main.blocksize
+            self.rect.y = self.y * main.blocksize
 
         # if restaurant field is not empty, analize the environment - take dishes or order - REPAIR
         # add rules here!
