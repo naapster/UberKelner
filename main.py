@@ -1,12 +1,34 @@
 # simulation controller:
 
 from scripts.waiter import *
-from scripts.__init__ import *
 from random import shuffle
 import sys
 import pygame
 from pygame.locals import *
 import datetime
+
+# filename __init__ is required to treat scripts folder as resource
+# variables:
+# size of sprites in px
+blocksize = 60
+
+# number of blocks in row of simulation
+N = 6
+
+# init sprite sprite_name on coordinate x, y
+def init_graphics(self, x, y, sprite_name):
+    # \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+    # init graphics - do not touch!
+    pygame.sprite.Sprite.__init__(self)
+    # set image
+    self.image = pygame.image.load("images/" + sprite_name + ".png")
+    # resize image to blocksize
+    self.image = pygame.transform.scale(self.image, (blocksize, blocksize))
+    # set coordinates
+    self.rect = self.image.get_rect()
+    self.rect.x = x * blocksize
+    self.rect.y = y * blocksize
+    # //////////////////////////////////////////////////
 
 
 # generate random positions list for all objects
@@ -28,7 +50,7 @@ if __name__ == '__main__':
     FPS = 30
 
     # size of sprites in px
-    blocksize = 60
+    # blocksize = 60
 
     # choose whether to run simulation from log (True) or generate random (False)
     control = True

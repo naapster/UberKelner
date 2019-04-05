@@ -1,6 +1,6 @@
 # table object class:
-
 from scripts.__init__ import *
+from main import init_graphics, N, blocksize
 
 
 # init of object with sprite - pygames requirement
