@@ -3,6 +3,9 @@
 from scripts.waiter import *
 from random import shuffle
 import sys
+# solve pygame audio driver error
+import os
+os.environ['SDL_AUDIODRIVER'] = 'dsp'
 import pygame
 from pygame.locals import *
 import datetime

@@ -1,7 +1,6 @@
 # matrix object class:
 
 import copy
-from scripts.wall import Wall
 
 
 class Matrix:
@@ -90,31 +89,19 @@ class Matrix:
         return copy.deepcopy(self.matrix)
 
     # parse matrix to graph understandable for DFS algorithm
-    def to_graph(self):
+    def to_graph(self, goal):
         graph = dict()
+
         for i in range(len(self.matrix)):
             for j in range(len(self.matrix)):
                 key = "{0},{1}".format(i, j)
                 value_list = list()
-                try:
-                    if type(self.matrix[i - 1][j]) is not Wall and i - 1 >= 0:
-                        value_list.append("{0},{1}".format(i - 1, j))
-                except IndexError:
-                    pass
-                try:
-                    if type(self.matrix[i + 1][j]) is not Wall:
-                        value_list.append("{0},{1}".format(i + 1, j))
-                except IndexError:
-                    pass
-                try:
-                    if type(self.matrix[i][j - 1]) is not Wall and j - 1 >= 0:
-                        value_list.append("{0},{1}".format(i, j - 1))
-                except IndexError:
-                    pass
-                try:
-                    if type(self.matrix[i][j + 1]) is not Wall:
-                        value_list.append("{0},{1}".format(i, j + 1))
-                except IndexError:
-                    pass
+                for vec in [[-1, 0], [1, 0], [0, -1], [0, 1]]:
+                    try:
+                        if (isinstance(self.matrix[i + vec[0]][j + vec[1]], type(self.fill))
+                                and i + vec[0] >= 0 and j + vec[1] >= 0) or str(i) + ',' + str(j) == goal:
+                            value_list.append("{0},{1}".format(i + vec[0], j + vec[1]))
+                    except IndexError:
+                        pass
                 graph[key] = set(value_list)
         return graph
