@@ -7,7 +7,7 @@ from scripts.wall import *
 import pygame
 import sys
 from pygame.locals import *
-import main
+from main import init_graphics, blocksize
 
 
 # init of object with sprite - pygames requirement
@@ -85,8 +85,8 @@ class Waiter (pygame.sprite.Sprite):
             self.y = new_y
 
             # update waiter sprite localization after changes
-            self.rect.x = self.x * main.blocksize
-            self.rect.y = self.y * main.blocksize
+            self.rect.x = self.x * blocksize
+            self.rect.y = self.y * blocksize
 
         # if restaurant field is not empty, analize the environment - take dishes or order - REPAIR
         # add rules here!

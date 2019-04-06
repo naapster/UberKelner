@@ -50,7 +50,7 @@ if __name__ == '__main__':
     # choose whether to run simulation from log (True) or generate random (False)
     control = True
 
-    run_simulation = -2  # index of simulation to run in log list
+    run_simulation = -1  # index of simulation to run in log list
 
     if control:
         # reload simulation state from log:
