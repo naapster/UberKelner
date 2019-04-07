@@ -67,9 +67,8 @@ class Waiter (pygame.sprite.Sprite):
 
         # get dfs path and parse it for movement control purpose
         self.goal = [0, 4]
-        self.dfs_path = self.get_dfs_path([self.x, self.y], self.goal)
         # set AI control variable - change to false when user changes path and the need of recalculation appears
-        self.path_control = True
+        self.path_control = False
 
     # movement procedure - change position of agent on defined difference of coordinates
     def move(self, delta_x, delta_y):
@@ -122,7 +121,7 @@ class Waiter (pygame.sprite.Sprite):
                 self.move(self.dfs_path[0][0], self.dfs_path[0][1])
                 self.dfs_path.pop(0)
             except IndexError:
-                print("No calculated dfs moves left!\n")
+                print("No calculated dfs moves left!")
 
         # DIAGRAM SEQUENCE HERE! - ADD IN NEXT VERSION!
         # if if if if

@@ -30,9 +30,9 @@ class Furnace(pygame.sprite.Sprite):
 
         # how long does this furnace cook?
         # for ai learning purpose - waiter has to minimize time in restaurant
-        self.time = 0
+        self.time = 5
 
     def next_round(self):
         # change the environment:
-        self.time += 1
+        pass
 
