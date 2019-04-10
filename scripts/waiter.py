@@ -152,8 +152,9 @@ class Waiter (pygame.sprite.Sprite):
         start = ",".join(map(str, start))
         goal = ",".join(map(str, goal))
         # get dfs path and parse it for movement control purpose
-        dfs_path = list(self.dfs_paths(self.restaurant.to_graph(goal), start, goal))
+        dfs_path = list(self.dfs_paths(self.restaurant.to_graph(), start, goal))
         if len(dfs_path) > 0:
+            print(dfs_path)
             dfs_path = list(min(dfs_path, key=len))
             # parse list to get coordinates of next moves
             for i in range(len(dfs_path)):

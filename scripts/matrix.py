@@ -89,9 +89,8 @@ class Matrix:
         return copy.deepcopy(self.matrix)
 
     # parse matrix to graph understandable for DFS algorithm
-    def to_graph(self, goal):
+    def to_graph(self):
         graph = dict()
-
         for i in range(len(self.matrix)):
             for j in range(len(self.matrix)):
                 key = "{0},{1}".format(i, j)
@@ -99,7 +98,7 @@ class Matrix:
                 for vec in [[-1, 0], [1, 0], [0, -1], [0, 1]]:
                     try:
                         if (isinstance(self.matrix[i + vec[0]][j + vec[1]], type(self.fill))
-                                and i + vec[0] >= 0 and j + vec[1] >= 0) or str(i) + ',' + str(j) == goal:
+                                and i + vec[0] >= 0 and j + vec[1] >= 0):
                             value_list.append("{0},{1}".format(i + vec[0], j + vec[1]))
                     except IndexError:
                         pass
