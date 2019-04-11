@@ -1,11 +1,8 @@
 # Developer log - todo list:
 
-remake to_graph method: add furnaces and tables' coordinates to graph WITHOUT possibility of moving between two tables, two furnaces or furnace and table
+remake DFS - list of lists of every possible path in graph, containing all tables and furnaces' coordinates.
 
-remake DFS - list of lists of every possible path in graph, containing all tables and furnaces' coordinates
-Best path is in subset containing path through coordinates of all furnaces and tables and is the shortest one
-
-
+Best path is in subset containing path through coordinates of all furnaces and tables and is the shortest one.
 
 # Project structure and usage
 

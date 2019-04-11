@@ -1,14 +1,19 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # simulation controller:
 
 from scripts.waiter import *
 from random import shuffle
 import sys
-# solve pygame audio driver error
-import os
-os.environ['SDL_AUDIODRIVER'] = 'dsp'
+
 import pygame
 from pygame.locals import *
 import datetime
+
+# solve pygame audio driver error
+import os
+os.environ['SDL_AUDIODRIVER'] = 'dsp'
 
 # filename __init__ is required to treat scripts folder as resource
 # variables:
@@ -45,6 +50,8 @@ def create_random_coordinates():
 
 if __name__ == '__main__':
 
+    print("Main simulation controller executed...")
+
     # init list of variables, common for all simulations:
 
     # frames per second setting
@@ -53,7 +60,7 @@ if __name__ == '__main__':
     # choose whether to run simulation from log (True) or generate random (False)
     control = True
 
-    run_simulation = -1  # index of simulation to run in log list
+    run_simulation = -2  # index of simulation to run in log list
 
     if control:
         # reload simulation state from log:
@@ -120,19 +127,18 @@ if __name__ == '__main__':
     # clear event log of game
     pygame.event.clear()
     # for eternity:
-    while True:
+    control = True
+    while control:
         # wait for key pressed:
         for event in pygame.event.get():
             # if [x] in right upper corner was clicked, exit game
             if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
+                control = False
             # or after key was pressed:
             elif event.type == KEYUP:
                 # exit simulation anyway:
                 if event.key == K_ESCAPE:
-                    pygame.quit()
-                    sys.exit()
+                    control = False
                 # or run new round for environment
                 Uber.next_round(event.key)
                 # WARNING
@@ -148,3 +154,10 @@ if __name__ == '__main__':
         # refresh Screen
         pygame.display.flip()
         fpsClock.tick(FPS)
+
+    print("Main simulation controller execution complete.")
+    pygame.quit()
+    sys.exit()
+
+# blokada  w grafie dfs ścieżki cofającej ostatni ruch
+# obsługa kuchni i stołu nie jest 

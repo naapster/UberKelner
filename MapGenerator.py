@@ -5,6 +5,8 @@ import datetime
 
 if __name__ == '__main__':
 
+    print("Map generation executed...")
+
     # get map_template content
     lines = [line.rstrip('\n') for line in open('map_template.txt')]
 
@@ -45,3 +47,5 @@ if __name__ == '__main__':
     with open("simulation_log.txt", "a") as myfile:
         myfile.write(str(datetime.datetime.now()) + '\t' + str(N) + '\t' + str(len(tables))
                      + '\t' + str(len(furnaces)) + '\t' + str(len(walls)) + '\t' + str(all_lists) + '\n')
+
+    print("Map generation complete.")

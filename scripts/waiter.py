@@ -66,6 +66,7 @@ class Waiter (pygame.sprite.Sprite):
             self.restaurant.simple_insert(Wall(matrix_fields[i + counter][0], matrix_fields[i + counter][1]))
 
         # get dfs path and parse it for movement control purpose
+        self.dfs_path = []
         self.goal = [0, 4]
         # set AI control variable - change to false when user changes path and the need of recalculation appears
         self.path_control = False
@@ -149,6 +150,7 @@ class Waiter (pygame.sprite.Sprite):
                     stack.append((next_, path + [next_]))
 
     def get_dfs_path(self, start, goal):
+        print("Agent: DFS path calculation executed...")
         start = ",".join(map(str, start))
         goal = ",".join(map(str, goal))
         # get dfs path and parse it for movement control purpose
@@ -166,8 +168,9 @@ class Waiter (pygame.sprite.Sprite):
             # remove last move (it can't be executed)
             dfs_path.pop(-1)
         else:
-            print("No dfs path found!")
+            print("Agent: no dfs path found! Execution complete.")
             dfs_path = [[0, 0]]
+        print("Agent: DFS path calculation execution complete.")
         # return path for agent
         return dfs_path
     # //////////////////////////////////////////////////

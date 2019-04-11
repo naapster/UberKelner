@@ -1,6 +1,8 @@
 # matrix object class:
 
 import copy
+from scripts.dinning_table import *
+from scripts.furnace import *
 
 
 class Matrix:
@@ -91,13 +93,19 @@ class Matrix:
     # parse matrix to graph understandable for DFS algorithm
     def to_graph(self):
         graph = dict()
+        # list of available connections
+        connections = [[type(self.fill), type(self.fill)],
+                       [type(self.fill), type(Furnace(0, 0))], [type(self.fill), type(DinningTable(0, 0))]]
+        # parse matrix:
         for i in range(len(self.matrix)):
             for j in range(len(self.matrix)):
                 key = "{0},{1}".format(i, j)
                 value_list = list()
                 for vec in [[-1, 0], [1, 0], [0, -1], [0, 1]]:
                     try:
-                        if (isinstance(self.matrix[i + vec[0]][j + vec[1]], type(self.fill))
+                        # add connection between blanks, blank and table, blank and kitchen
+                        if (([type(self.matrix[i][j]), type(self.matrix[i + vec[0]][j + vec[1]])] in connections
+                                or [type(self.matrix[i + vec[0]][j + vec[1]]), type(self.matrix[i][j])] in connections)
                                 and i + vec[0] >= 0 and j + vec[1] >= 0):
                             value_list.append("{0},{1}".format(i + vec[0], j + vec[1]))
                     except IndexError:
