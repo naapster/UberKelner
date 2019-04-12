@@ -18,7 +18,7 @@ class Furnace(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         # init graphics with object's sprite - do not touch!
-        init_graphics(self, x, y, "furnace")
+        init_graphics(self, x, y, "furnace_active")
 
         # real coordinates of object
         self.x = x
@@ -38,4 +38,5 @@ class Furnace(pygame.sprite.Sprite):
 
     def activated(self):
         # serve object:
-        pass
+        # init graphics with object's sprite - do not touch!
+        init_graphics(self, self.x, self.y, "furnace")

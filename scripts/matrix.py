@@ -59,6 +59,11 @@ class Matrix:
         else:
             return False
 
+    # activate object
+    # noinspection PyUnresolvedReferences
+    def activate(self, x, y):
+        self.matrix[x][y].activated()
+
     # returns list of objects by checking object class type, not content
     def objects_to_list(self, wanted_object):
         list_of_wanted_objects = list()

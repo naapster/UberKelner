@@ -34,4 +34,4 @@ class DinningTable(pygame.sprite.Sprite):
     def activated(self):
         # serve object:
         # init graphics with object's sprite - do not touch!
-        init_graphics(self, x, y, "dinner_table")
+        init_graphics(self, self.x, self.y, "dinner_table")

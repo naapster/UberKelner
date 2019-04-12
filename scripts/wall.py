@@ -27,6 +27,7 @@ class Wall(pygame.sprite.Sprite):
     def next_round(self):
         pass
 
-    def activated(self):
+    @staticmethod
+    def activated():
         # serve object:
         print("Walking on the walls is prohibited, punk.")
