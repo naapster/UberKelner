@@ -89,6 +89,9 @@ class Waiter (pygame.sprite.Sprite):
             self.rect.x = self.x * blocksize
             self.rect.y = self.y * blocksize
 
+        else:
+            self.restaurant[new_x][new_y].activated
+
         # if restaurant field is not empty, analize the environment - take dishes or order - REPAIR
         # add rules here!
         # else:

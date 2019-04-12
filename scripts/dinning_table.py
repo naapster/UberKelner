@@ -18,7 +18,7 @@ class DinningTable(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         # init graphics with object's sprite - do not touch!
-        init_graphics(self, x, y, "dinner_table")
+        init_graphics(self, x, y, "dinner_table_active")
 
         # real coordinates of object
         self.x = x
@@ -30,3 +30,8 @@ class DinningTable(pygame.sprite.Sprite):
     def next_round(self):
         # change the environment:
         pass
+
+    def activated(self):
+        # serve object:
+        # init graphics with object's sprite - do not touch!
+        init_graphics(self, x, y, "dinner_table")

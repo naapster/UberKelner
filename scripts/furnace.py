@@ -36,3 +36,6 @@ class Furnace(pygame.sprite.Sprite):
         # change the environment:
         pass
 
+    def activated(self):
+        # serve object:
+        pass
