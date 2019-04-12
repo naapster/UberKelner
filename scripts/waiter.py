@@ -8,6 +8,7 @@ import pygame
 import sys
 from pygame.locals import *
 from main import init_graphics, blocksize
+import time
 
 
 # init of object with sprite - pygames requirement
@@ -18,18 +19,18 @@ class Waiter (pygame.sprite.Sprite):
         return "Waiter"
 
     # initialize agent with list of coordinates for tables and furnaces and their number
-    def __init__(self, N, matrix_fields, num_tables, num_furnaces, num_walls):
+    def __init__(self, n, matrix_fields, num_tables, num_furnaces, num_walls):
 
         # call init of parent class
         pygame.sprite.Sprite.__init__(self)
 
         # check if there is enough space for everyting in simulation
-        if num_tables + num_furnaces + num_walls + 1 > N*N:
+        if num_tables + num_furnaces + num_walls + 1 > n*n:
             print("Not enough space in restaurant for objects!")
             sys.exit("N-space overflow")
 
         # init restaurant - matrix of objects
-        self.restaurant = Matrix(N, N)
+        self.restaurant = Matrix(n, n)
 
         # set random coordinates of agent
         self.x = matrix_fields[0][0]
@@ -39,7 +40,7 @@ class Waiter (pygame.sprite.Sprite):
         init_graphics(self, self.x, self.y, "waiter")
 
         # add objects to restaurant - creates tables and furnaces basing on random positions in the matrix
-        # objects have coordinates like in matrix (0..N, 0..N):
+        # objects have coordinates like in matrix (0..n, 0..n):
 
         # add ghostwaiter to restaurant to mark waiters position
         self.restaurant.insert('Waiter', self.x, self.y)
@@ -67,7 +68,7 @@ class Waiter (pygame.sprite.Sprite):
 
         # get dfs path and parse it for movement control purpose
         self.dfs_path = []
-        self.goal = [0, 4]
+        self.goals = matrix_fields[1:counter]
         # set AI control variable - change to false when user changes path and the need of recalculation appears
         self.path_control = False
 
@@ -113,16 +114,23 @@ class Waiter (pygame.sprite.Sprite):
             # check if waiter was moved out of path:
             if not self.path_control:
                 # get dfs path and parse it for movement control purpose
-                self.dfs_path = self.get_dfs_path([self.x, self.y], self.goal)
+                self.dfs_path = self.get_dfs_path([self.x, self.y], self.goals[0])
                 # set AI control variable - change to false when user changes path and the need of recalculation appears
                 self.path_control = True
 
             # move agent on dfs path
             try:
-                self.move(self.dfs_path[0][0], self.dfs_path[0][1])
-                self.dfs_path.pop(0)
+                if self.dfs_path:
+                    self.move(self.dfs_path[0][0], self.dfs_path[0][1])
+                    self.dfs_path.pop(0)
+                else:
+                    if self.goals:
+                        self.goals.pop(0)
+                        self.dfs_path = self.get_dfs_path([self.x, self.y], self.goals[0])
+                    else:
+                        print("No goals left!")
             except IndexError:
-                print("No calculated dfs moves left!")
+                print("No moves left!")
 
         # DIAGRAM SEQUENCE HERE! - ADD IN NEXT VERSION!
         # if if if if
@@ -150,13 +158,15 @@ class Waiter (pygame.sprite.Sprite):
                     stack.append((next_, path + [next_]))
 
     def get_dfs_path(self, start, goal):
+        # measure time
+        starttime = time.time()
         print("Agent: DFS path calculation executed...")
+        # calculate dfs
         start = ",".join(map(str, start))
         goal = ",".join(map(str, goal))
         # get dfs path and parse it for movement control purpose
         dfs_path = list(self.dfs_paths(self.restaurant.to_graph(), start, goal))
         if len(dfs_path) > 0:
-            print(dfs_path)
             dfs_path = list(min(dfs_path, key=len))
             # parse list to get coordinates of next moves
             for i in range(len(dfs_path)):
@@ -168,9 +178,9 @@ class Waiter (pygame.sprite.Sprite):
             # remove last move (it can't be executed)
             dfs_path.pop(-1)
         else:
-            print("Agent: no dfs path found! Execution complete.")
+            print("Agent: no dfs path found!")
             dfs_path = [[0, 0]]
-        print("Agent: DFS path calculation execution complete.")
+        print("Agent: DFS path calculation execution complete after {0:.2f} seconds.".format(time.time() - starttime))
         # return path for agent
         return dfs_path
     # //////////////////////////////////////////////////
