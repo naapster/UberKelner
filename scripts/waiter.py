@@ -66,6 +66,8 @@ class Waiter (pygame.sprite.Sprite):
         for i in range(num_walls):
             self.restaurant.simple_insert(Wall(matrix_fields[i + counter][0], matrix_fields[i + counter][1]))
 
+        # calculate graph
+        self.graph = self.restaurant.to_graph()
         # get dfs path and parse it for movement control purpose
         self.dfs_path = []
         self.goals = matrix_fields[1:counter]
@@ -117,22 +119,15 @@ class Waiter (pygame.sprite.Sprite):
             # check if waiter was moved out of path:
             if not self.path_control:
                 # get dfs path and parse it for movement control purpose
-                self.dfs_path = self.get_dfs_path([self.x, self.y], self.goals[0])
+                self.get_dfs_path()  # self.goals are empty after one iteration of get_dfs_path! REPAIR
                 # set AI control variable - change to false when user changes path and the need of recalculation appears
                 self.path_control = True
 
             # move agent on dfs path
-            try:
-                if self.dfs_path:
-                    self.move(self.dfs_path[0][0], self.dfs_path[0][1])
-                    self.dfs_path.pop(0)
-                else:
-                    if self.goals:
-                        self.goals.pop(0)
-                        self.dfs_path = self.get_dfs_path([self.x, self.y], self.goals[0])
-                    else:
-                        print("No goals left!")
-            except IndexError:
+            if self.dfs_path:
+                self.move(self.dfs_path[0][0], self.dfs_path[0][1])
+                self.dfs_path.pop(0)
+            else:
                 print("No moves left!")
 
         # DIAGRAM SEQUENCE HERE! - ADD IN NEXT VERSION!
@@ -149,41 +144,46 @@ class Waiter (pygame.sprite.Sprite):
 
     # //////////////////////////////////////////////////
     # DFS section
-    @staticmethod
-    def dfs_paths(graph, start, goal):
+    def caluclate_dfs_path(self, graph, start, goal):
         stack = [(start, [start])]
         while stack:
             (vertex, path) = stack.pop()
             for next_ in graph[vertex] - set(path):
                 if next_ == goal:
-                    yield path + [next_]
+                    print(path + [next_])
+                    # remove goal and calculate next path
+                    self.goals.pop(0)
+                    if self.goals:
+                        self.dfs_path = self.dfs_path + path + list(self.caluclate_dfs_path(self.graph, next_, str(
+                            self.goals[0][0]) + "," + str(self.goals[0][1])))
+                    # return path to previous recursion
+                    return path + [next_]
                 else:
                     stack.append((next_, path + [next_]))
 
-    def get_dfs_path(self, start, goal):
+    def get_dfs_path(self):
         # measure time
         starttime = time.time()
         print("Agent: DFS path calculation executed...")
         # calculate dfs
-        start = ",".join(map(str, start))
-        goal = ",".join(map(str, goal))
+        start = str(self.x) + "," + str(self.y)
+        goal = str(self.goals[0][0]) + "," + str(self.goals[0][1])
         # get dfs path and parse it for movement control purpose
-        dfs_path = list(self.dfs_paths(self.restaurant.to_graph(), start, goal))
-        if len(dfs_path) > 0:
-            dfs_path = list(min(dfs_path, key=len))
+        self.caluclate_dfs_path(self.graph, start, goal)
+        print(self.dfs_path)
+        if len(self.dfs_path) > 0:
+            # self.dfs_path = list(min(self.dfs_path, key=len))
             # parse list to get coordinates of next moves
-            for i in range(len(dfs_path)):
-                dfs_path[i] = list(map(int, dfs_path[i].split(',')))
+            for i in range(len(self.dfs_path)):
+                self.dfs_path[i] = list(map(int, self.dfs_path[i].split(',')))
             # calculate movement vectors basing on coordinates
-            for i in range(len(dfs_path)-1):
-                dfs_path[i][0] = dfs_path[i+1][0] - dfs_path[i][0]
-                dfs_path[i][1] = dfs_path[i+1][1] - dfs_path[i][1]
+            for i in range(len(self.dfs_path) - 1):
+                self.dfs_path[i][0] = self.dfs_path[i + 1][0] - self.dfs_path[i][0]
+                self.dfs_path[i][1] = self.dfs_path[i + 1][1] - self.dfs_path[i][1]
             # remove last move (it can't be executed)
-            dfs_path.pop(-1)
+            self.dfs_path.pop(-1)
         else:
             print("Agent: no dfs path found!")
-            dfs_path = [[0, 0]]
+
         print("Agent: DFS path calculation execution complete after {0:.2f} seconds.".format(time.time() - starttime))
-        # return path for agent
-        return dfs_path
     # //////////////////////////////////////////////////
