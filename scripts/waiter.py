@@ -10,6 +10,9 @@ from pygame.locals import *
 from main import init_graphics, blocksize
 import time
 
+# set recursion limit:
+sys.setrecursionlimit(1500)
+
 
 # init of object with sprite - pygames requirement
 class Waiter (pygame.sprite.Sprite):
@@ -144,6 +147,16 @@ class Waiter (pygame.sprite.Sprite):
 
     # //////////////////////////////////////////////////
     # DFS section
+    @staticmethod
+    def parse_dfs_list(list_):
+        # parse list to get coordinates of next moves
+        for e in list_:
+            for i in range(len(e)):
+                e[i] = list(map(int, e[i].split(',')))
+        # make list from list of lists
+        list_ = [item for sublist in list_ for item in sublist]
+        return list_
+
     def caluclate_dfs_path(self, graph, start, goal):
         stack = [(start, [start])]
         while stack:
@@ -154,8 +167,10 @@ class Waiter (pygame.sprite.Sprite):
                     # remove goal and calculate next path
                     self.goals.pop(0)
                     if self.goals:
-                        self.dfs_path = self.dfs_path + path + list(self.caluclate_dfs_path(self.graph, next_, str(
-                            self.goals[0][0]) + "," + str(self.goals[0][1])))
+                        # add path
+                        self.dfs_path.append(path)
+                        # call next goal
+                        self.caluclate_dfs_path(self.graph, next_, str(self.goals[0][0]) + "," + str(self.goals[0][1]))
                     # return path to previous recursion
                     return path + [next_]
                 else:
@@ -165,25 +180,27 @@ class Waiter (pygame.sprite.Sprite):
         # measure time
         starttime = time.time()
         print("Agent: DFS path calculation executed...")
-        # calculate dfs
-        start = str(self.x) + "," + str(self.y)
-        goal = str(self.goals[0][0]) + "," + str(self.goals[0][1])
-        # get dfs path and parse it for movement control purpose
-        self.caluclate_dfs_path(self.graph, start, goal)
-        print(self.dfs_path)
-        if len(self.dfs_path) > 0:
-            # self.dfs_path = list(min(self.dfs_path, key=len))
-            # parse list to get coordinates of next moves
-            for i in range(len(self.dfs_path)):
-                self.dfs_path[i] = list(map(int, self.dfs_path[i].split(',')))
-            # calculate movement vectors basing on coordinates
-            for i in range(len(self.dfs_path) - 1):
-                self.dfs_path[i][0] = self.dfs_path[i + 1][0] - self.dfs_path[i][0]
-                self.dfs_path[i][1] = self.dfs_path[i + 1][1] - self.dfs_path[i][1]
-            # remove last move (it can't be executed)
-            self.dfs_path.pop(-1)
+        if self.goals:
+            # calculate dfs
+            start = str(self.x) + "," + str(self.y)
+            goal = str(self.goals[0][0]) + "," + str(self.goals[0][1])
+            # get dfs path and parse it for movement control purpose
+            self.caluclate_dfs_path(self.graph, start, goal)
+            if len(self.dfs_path) > 0:
+                # self.dfs_path = list(min(self.dfs_path, key=len))
+                # parse list to get coordinates of next moves
+                self.dfs_path = self.parse_dfs_list(self.dfs_path)
+                print(self.dfs_path)
+                # calculate movement vectors basing on coordinates
+                for i in range(len(self.dfs_path) - 1):
+                    self.dfs_path[i][0] = self.dfs_path[i + 1][0] - self.dfs_path[i][0]
+                    self.dfs_path[i][1] = self.dfs_path[i + 1][1] - self.dfs_path[i][1]
+                # remove last move (it can't be executed)
+                self.dfs_path.pop(-1)
+            else:
+                print("Agent: no dfs path found!")
         else:
-            print("Agent: no dfs path found!")
+            print("Agent: no goals found!")
 
         print("Agent: DFS path calculation execution complete after {0:.2f} seconds.".format(time.time() - starttime))
     # //////////////////////////////////////////////////

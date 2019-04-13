@@ -14,8 +14,6 @@ import datetime
 # solve pygame audio driver error
 import os
 os.environ['SDL_AUDIODRIVER'] = 'dsp'
-# set recursion limit:
-sys.setrecursionlimit(1500)
 
 # filename __init__ is required to treat scripts folder as resource
 # variables:
