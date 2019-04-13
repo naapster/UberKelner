@@ -177,11 +177,6 @@ class Waiter (pygame.sprite.Sprite):
         list_ = [item for sublist in list_ for item in sublist]
         return list_
 
-    ''' REPAIR RECURSION APPEND TO PATHLIST
-        https://stackoverflow.com/questions/47482405/using-recursion-to-append-to-a-list-python
-        https://docs.python-guide.org/writing/gotchas/        
-    '''
-
     def caluclate_dfs_path(self, graph, start, goal):
         stack = [(start, [start])]
         while stack:
@@ -196,8 +191,6 @@ class Waiter (pygame.sprite.Sprite):
                     if self.goals:
                         # call next goal
                         self.caluclate_dfs_path(self.graph, next_, str(self.goals[0][0]) + "," + str(self.goals[0][1]))
-                    # return path to previous recursion
-                    return path + [next_]
                 else:
                     stack.append((next_, path + [next_]))
 
