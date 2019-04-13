@@ -189,11 +189,11 @@ class Waiter (pygame.sprite.Sprite):
             for next_ in graph[vertex] - set(path):
                 if next_ == goal:
                     print(path + [next_])
+                    # add path - REPAIR
+                    self.dfs_path.append(path)
                     # remove goal and calculate next path
                     self.goals.pop(0)
                     if self.goals:
-                        # add path - REPAIR
-                        self.dfs_path.append(path)
                         # call next goal
                         self.caluclate_dfs_path(self.graph, next_, str(self.goals[0][0]) + "," + str(self.goals[0][1]))
                     # return path to previous recursion
@@ -225,4 +225,3 @@ class Waiter (pygame.sprite.Sprite):
 
         print("Agent: DFS path calculation execution complete after {0:.2f} seconds.".format(time.time() - starttime))
     # //////////////////////////////////////////////////
-
