@@ -36,8 +36,7 @@ class Waiter (pygame.sprite.Sprite):
         self.restaurant = Matrix(n, n)
 
         # set random coordinates of agent
-        self.x = matrix_fields[0][0]
-        self.y = matrix_fields[0][1]
+        self.x, self.y = matrix_fields[0][0], matrix_fields[0][1]
 
         # init graphics with object's sprite - do not touch!
         init_graphics(self, self.x, self.y, "waiter")
@@ -71,9 +70,16 @@ class Waiter (pygame.sprite.Sprite):
 
         # calculate graph
         self.graph = self.restaurant.to_graph()
-        # get dfs path and parse it for movement control purpose
-        self.dfs_path = []
+
+        # set list of goals
         self.goals = matrix_fields[1:counter]
+
+        # set list of solutions
+        self.solution = []
+
+        # set dfs solution
+        self.dfs_path = []
+
         # set AI control variable - change to false when user changes path and the need of recalculation appears
         self.path_control = False
 
@@ -145,8 +151,22 @@ class Waiter (pygame.sprite.Sprite):
         # show me status of simulation - for development purpose only
         # print(self.restaurant)
 
+    # parser of list of lists of coordinates to list of lists of moves
+    @staticmethod
+    def calculate_vector_movement(list_):
+        # calculate movement vectors basing on coordinates
+        for i in range(len(list_) - 1):
+            list_[i][0] = list_[i + 1][0] - list_[i][0]
+            list_[i][1] = list_[i + 1][1] - list_[i][1]
+        # remove last move (it can't be executed)
+        list_.pop(-1)
+        return list_
+
     # //////////////////////////////////////////////////
-    # DFS section
+    #           S O L U T I O N S
+    # //////////////////////////////////////////////////
+
+    # DFS
     @staticmethod
     def parse_dfs_list(list_):
         # parse list to get coordinates of next moves
@@ -156,6 +176,11 @@ class Waiter (pygame.sprite.Sprite):
         # make list from list of lists
         list_ = [item for sublist in list_ for item in sublist]
         return list_
+
+    ''' REPAIR RECURSION APPEND TO PATHLIST
+        https://stackoverflow.com/questions/47482405/using-recursion-to-append-to-a-list-python
+        https://docs.python-guide.org/writing/gotchas/        
+    '''
 
     def caluclate_dfs_path(self, graph, start, goal):
         stack = [(start, [start])]
@@ -167,7 +192,7 @@ class Waiter (pygame.sprite.Sprite):
                     # remove goal and calculate next path
                     self.goals.pop(0)
                     if self.goals:
-                        # add path
+                        # add path - REPAIR
                         self.dfs_path.append(path)
                         # call next goal
                         self.caluclate_dfs_path(self.graph, next_, str(self.goals[0][0]) + "," + str(self.goals[0][1]))
@@ -187,16 +212,12 @@ class Waiter (pygame.sprite.Sprite):
             # get dfs path and parse it for movement control purpose
             self.caluclate_dfs_path(self.graph, start, goal)
             if len(self.dfs_path) > 0:
+                # choose the shortest solution of restaurant
                 # self.dfs_path = list(min(self.dfs_path, key=len))
                 # parse list to get coordinates of next moves
                 self.dfs_path = self.parse_dfs_list(self.dfs_path)
                 print(self.dfs_path)
-                # calculate movement vectors basing on coordinates
-                for i in range(len(self.dfs_path) - 1):
-                    self.dfs_path[i][0] = self.dfs_path[i + 1][0] - self.dfs_path[i][0]
-                    self.dfs_path[i][1] = self.dfs_path[i + 1][1] - self.dfs_path[i][1]
-                # remove last move (it can't be executed)
-                self.dfs_path.pop(-1)
+                self.dfs_path = self.calculate_vector_movement(self.dfs_path)
             else:
                 print("Agent: no dfs path found!")
         else:
@@ -204,3 +225,4 @@ class Waiter (pygame.sprite.Sprite):
 
         print("Agent: DFS path calculation execution complete after {0:.2f} seconds.".format(time.time() - starttime))
     # //////////////////////////////////////////////////
+
