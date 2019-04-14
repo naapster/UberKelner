@@ -65,7 +65,7 @@ class Matrix:
         try:
             self.matrix[x][y].activated()
         except AttributeError:
-            print("Trying to activate non-operateable object at: " + str(new_x) + ", " + str(new_y))
+            print("Trying to activate non-operateable object at: " + str(x) + ", " + str(y))
 
     # returns list of objects by checking object class type, not content
     def objects_to_list(self, wanted_object):

@@ -1,9 +1,3 @@
-# Developer log - todo list:
-
-remake DFS - list of lists of every possible path in graph, containing all tables and furnaces' coordinates.
-
-Best path is in subset containing path through coordinates of all furnaces and tables and is the shortest one.
-
 # Project structure and usage
 
 ## Project desription
@@ -120,7 +114,13 @@ Text file containing simulation initializing state, used to recreate simulations
 Please note, that new logs are appending to the end of file.
 
 All entries in this file have to obey the standard of simulation log:
-> two fields for data \t number of elements in row (N) \t number of tables \t number of furnaces \t number of walls \t list of their coordinates
+1. two fields for data \t 
+2. number of elements in row (N) \t 
+3. number of tables \t 
+4. number of furnaces \t 
+5. number of walls \t 
+6. list of their coordinates:
+    
 
 New logs can be added through:
 * random generation of simulation in Main;
