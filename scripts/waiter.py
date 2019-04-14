@@ -77,8 +77,12 @@ class Waiter (pygame.sprite.Sprite):
         print("goals")
         print(self.goals)
         print("permutacje")
-        goalsPer = list(itertools.permutations(self.goals))
-        print(goalsPer)
+        self.goalsPer = list(itertools.permutations(self.goals))
+        print(self.goalsPer)
+        #tuple convert to list of list
+        self.goalsPer = map(list, self.goalsPer)
+        self.goalsPer = list(self.goalsPer)
+        print(self.goalsPer)
 
         # set list of solutions
         self.solution = []
@@ -135,15 +139,18 @@ class Waiter (pygame.sprite.Sprite):
             if not self.path_control:
                 # get dfs path and parse it for movement control purpose
                 self.get_dfs_path()  # self.goals are empty after one iteration of get_dfs_path! REPAIR
+                print("Solution results")
+                print(self.solution)
+
                 # set AI control variable - change to false when user changes path and the need of recalculation appears
-                self.path_control = True
+                #self.path_control = True
 
             # move agent on dfs path
-            if self.dfs_path:
-                self.move(self.dfs_path[0][0], self.dfs_path[0][1])
-                self.dfs_path.pop(0)
-            else:
-                print("No moves left!")
+           # if self.dfs_path:
+               # self.move(self.dfs_path[0][0], self.dfs_path[0][1])
+               #self.dfs_path.pop(0)
+           # else:
+               # print("No moves left!")
 
         # DIAGRAM SEQUENCE HERE! - ADD IN NEXT VERSION!
         # if if if if
@@ -204,23 +211,28 @@ class Waiter (pygame.sprite.Sprite):
         # measure time
         starttime = time.time()
         print("Agent: DFS path calculation executed...")
-        if self.goals:
-            # calculate dfs
-            start = str(self.x) + "," + str(self.y)
-            goal = str(self.goals[0][0]) + "," + str(self.goals[0][1])
-            # get dfs path and parse it for movement control purpose
-            self.caluclate_dfs_path(self.graph, start, goal)
-            if len(self.dfs_path) > 0:
-                # choose the shortest solution of restaurant
-                # self.dfs_path = list(min(self.dfs_path, key=len))
-                # parse list to get coordinates of next moves
-                self.dfs_path = self.parse_dfs_list(self.dfs_path)
-                print(self.dfs_path)
-                self.dfs_path = self.calculate_vector_movement(self.dfs_path)
+        for goals in self.goalsPer:
+            self.goals = goals
+            print("self.goals")
+            print(self.goals)
+            if goals:
+                # calculate dfs
+                start = str(self.x) + "," + str(self.y)
+                goal = str(self.goals[0][0]) + "," + str(self.goals[0][1])
+                # get dfs path and parse it for movement control purpose
+                self.caluclate_dfs_path(self.graph, start, goal)
+                if len(self.dfs_path) > 0:
+                    # choose the shortest solution of restaurant
+                    # self.dfs_path = list(min(self.dfs_path, key=len))
+                    # parse list to get coordinates of next moves
+                    self.dfs_path = self.parse_dfs_list(self.dfs_path)
+                    print(self.dfs_path)
+                    self.dfs_path = self.calculate_vector_movement(self.dfs_path)
+                    self.solution.append(self.dfs_path)
+                else:
+                    print("Agent: no dfs path found!")
             else:
-                print("Agent: no dfs path found!")
-        else:
-            print("Agent: no goals found!")
+                print("Agent: no goals found!")
 
-        print("Agent: DFS path calculation execution complete after {0:.2f} seconds.".format(time.time() - starttime))
+            print("Agent: DFS path calculation execution complete after {0:.2f} seconds.".format(time.time() - starttime))
     # //////////////////////////////////////////////////
