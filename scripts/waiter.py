@@ -9,6 +9,7 @@ import sys
 from pygame.locals import *
 from main import init_graphics, blocksize
 import time
+import itertools
 
 # set recursion limit:
 sys.setrecursionlimit(1500)
@@ -73,6 +74,11 @@ class Waiter (pygame.sprite.Sprite):
 
         # set list of goals
         self.goals = matrix_fields[1:counter]
+        print("goals")
+        print(self.goals)
+        print("permutacje")
+        goalsPer = list(itertools.permutations(self.goals))
+        print(goalsPer)
 
         # set list of solutions
         self.solution = []
@@ -183,7 +189,7 @@ class Waiter (pygame.sprite.Sprite):
             (vertex, path) = stack.pop()
             for next_ in graph[vertex] - set(path):
                 if next_ == goal:
-                    print(path + [next_])
+                    #print(path + [next_])
                     # add path - REPAIR
                     self.dfs_path.append(path)
                     # remove goal and calculate next path
