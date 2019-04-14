@@ -85,9 +85,6 @@ class Waiter (pygame.sprite.Sprite):
         # set dfs solution
         self.path = []
 
-        # set AI control variable - change to false when user changes path and the need of recalculation appears
-        self.path_control = False
-
         # get dfs path and add results to self.solutions
         self.get_dfs_path()
 
@@ -130,19 +127,15 @@ class Waiter (pygame.sprite.Sprite):
     # noinspection PyTypeChecker
     def next_round(self, key):
 
-        # check if agent was moved:
-        if key in [K_RIGHT, K_LEFT, K_DOWN, K_UP]:
-            self.path_control = False
-
-        '''# list of events on keys:
-        if key == K_RIGHT:
-            self.move(1, 0)
-        elif key == K_LEFT:
-            self.move(-1, 0)
-        elif key == K_DOWN:
-            self.move(0, 1)
-        elif key == K_UP:
-            self.move(0, -1)'''
+        # list of events on keys:
+        # if key == K_RIGHT:
+        #    self.move(1, 0)
+        # elif key == K_LEFT:
+        #    self.move(-1, 0)
+        # elif key == K_DOWN:
+        #    self.move(0, 1)
+        # elif key == K_UP:
+        #     self.move(0, -1)'''
 
         # activate AI agent on key SPACE:
         if key == K_SPACE:
