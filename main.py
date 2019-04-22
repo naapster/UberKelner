@@ -3,22 +3,27 @@
 
 # simulation controller:
 
-from scripts.waiter import *
-from random import shuffle
+import datetime
+# solve pygame audio driver error
+import os
 import sys
+from os import path
+from random import shuffle
 
 import pygame
 from pygame.locals import *
-import datetime
 
-# solve pygame audio driver error
-import os
+from scripts.waiter import *
+
 os.environ['SDL_AUDIODRIVER'] = 'dsp'
 
 # filename __init__ is required to treat scripts folder as resource
 # variables:
 # size of sprites in px
 blocksize = 60
+# sprite constants
+SPRITE_FOLDER = 'images'
+SPRITE_EXTENSION = '.png'
 
 
 # init sprite sprite_name on coordinate x, y
@@ -27,7 +32,7 @@ def init_graphics(self, x, y, sprite_name):
     # init graphics - do not touch!
     pygame.sprite.Sprite.__init__(self)
     # set image
-    self.image = pygame.image.load("images/" + sprite_name + ".png")
+    self.image = pygame.image.load(path.join(SPRITE_FOLDER, sprite_name + SPRITE_EXTENSION))
     # resize image to blocksize
     self.image = pygame.transform.scale(self.image, (blocksize, blocksize))
     # set coordinates

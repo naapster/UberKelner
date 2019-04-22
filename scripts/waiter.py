@@ -1,15 +1,17 @@
 # agent object class:
 
-from scripts.matrix import *
+import itertools
+import sys
+import time
+
+import pygame
+from pygame.locals import *
+
+from main import init_graphics, blocksize
 from scripts.dinning_table import *
 from scripts.furnace import *
+from scripts.matrix import *
 from scripts.wall import *
-import pygame
-import sys
-from pygame.locals import *
-from main import init_graphics, blocksize
-import time
-import itertools
 
 # set recursion limit:
 sys.setrecursionlimit(1500)
@@ -214,6 +216,6 @@ class Waiter (pygame.sprite.Sprite):
             # add parsed dfs_path to solutions
             self.solutions.append(self.parse_dfs_list(self.path))
         # now self.solutions contains all solutions of dfs
-        print("Agent: DFS path calculation execution complete "
-              "after {0:.2f} seconds.".format(time.time() - starttime))
+        print(f'Agent: DFS path calculation execution complete '\
+              f'after {time.time() - starttime:.2f} seconds.')
     # //////////////////////////////////////////////////
