@@ -1,5 +1,9 @@
-XWXXX
-X___X
-X_X_X
-X_X_T
-F_T_X
+T_______W
+XX_X_XXX_
+T__X_XXX_
+XX_X_XT__
+T__X_XXX_
+TX_X_XT__
+_X_X_XTX_
+_X_X_X_X_
+___XFX___
