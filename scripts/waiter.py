@@ -216,6 +216,6 @@ class Waiter (pygame.sprite.Sprite):
             # add parsed dfs_path to solutions
             self.solutions.append(self.parse_dfs_list(self.path))
         # now self.solutions contains all solutions of dfs
-        print(f'Agent: DFS path calculation execution complete '\
-              f'after {time.time() - starttime:.2f} seconds.')
+        print('Agent: DFS path calculation execution complete '
+              'after {time.time() - starttime:.2f} seconds.')
     # //////////////////////////////////////////////////

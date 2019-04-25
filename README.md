@@ -2,9 +2,9 @@
 
 ## Project desription
 
-Project code name: UberKelner
+**Project code name:** UberKelner
 
-Project goal: to create a static discrete environment (hereinafter referred to as simulation) corresponding to
+**Project goal:** to create a static discrete environment (hereinafter referred to as simulation) corresponding to
 the real restaurant and the artificial intelligence agent serving as a waiter in the restaurant.
 
 Agent, basing on available information about the simulation (we assume that the simulation is known and the agent has access
@@ -16,7 +16,7 @@ When one starts the game, part of the tables will be waiting for placing orders 
 The waiter's task will be to set a strategy zeroing table states in the shortest possible time. 
 The simulation ends when all tables are served and they will not have dishes to give, orders to place, or meals to receive.
 
-PEAS specification:
+**PEAS specification:**
 
 • performance: the inverse of the time needed to zero the simulation
 
@@ -78,10 +78,15 @@ The only action available is changing the position of the waiter in the matrix.
 Trying to enter table or kitchen causes automatic service of the object according to the priorities of the actions 
 (taking the dishes, providing a meal, collecting the order). Priorities are available in the appendix to the project.
 
+**Solution seeking**
+
 Waiter can calculate shortest path to the given destination point. 
 Currently, the following methods of artificial learning are available:
 
-* DFS
+* Depth-First Search
+* Breath-First Search
+
+[Helpful materials here](https://eddmann.com/posts/depth-first-search-and-breadth-first-search-in-python/)
 
 Calculation of path occures after pressing spacebar for the first time or after manual change of waiter coordinates through pressing arrows.
 Pressing spacebar causes waiter to move to the next point of path. 
