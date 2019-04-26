@@ -76,7 +76,7 @@ class Waiter (pygame.sprite.Sprite):
         self.goals = matrix_fields[1:counter]
 
         # set permutations of goals
-        self.goalsPer = list(map(list, list(itertools.permutations(self.goals))))
+        self.goalsPer = list(map(list, list(itertools.permutations(self.goals[:]))))
 
         # set list of solutions
         self.solutions = []
@@ -85,7 +85,9 @@ class Waiter (pygame.sprite.Sprite):
         self.path = []
 
         # get dfs path and add results to self.solutions
-        self.get_dfs_path()
+        # self.get_dfs_path()
+        # get bfs path and add results to self.solutions
+        self.get_bfs_path()
 
         # choose the shortest solution of restaurant and parse it to movement vector
         self.path = list(min(self.solutions, key=len))
@@ -164,7 +166,7 @@ class Waiter (pygame.sprite.Sprite):
     #           S O L U T I O N S
     # //////////////////////////////////////////////////
 
-    # DFS
+    # Depth-First Search
     @staticmethod
     def parse_dfs_list(list_):
         # parse list to get coordinates of next moves
@@ -176,7 +178,7 @@ class Waiter (pygame.sprite.Sprite):
         return list_
 
     # recursive calculation of dfs path saved temporarly in self.path
-    def caluclate_dfs_path(self, graph, start, goal):
+    def calculate_dfs_path(self, graph, start, goal):
         stack = [(start, [start])]
         while stack:
             (vertex, path) = stack.pop()
@@ -188,7 +190,7 @@ class Waiter (pygame.sprite.Sprite):
                     temp = self.goals.pop(0)
                     if self.goals:
                         # call next goal
-                        self.caluclate_dfs_path(self.graph, next_, str(self.goals[0][0]) + "," + str(self.goals[0][1]))
+                        self.calculate_dfs_path(self.graph, next_, str(self.goals[0][0]) + "," + str(self.goals[0][1]))
                         # free memory
                         del temp
                     else:
@@ -201,7 +203,7 @@ class Waiter (pygame.sprite.Sprite):
     def get_dfs_path(self):
         # measure time
         starttime = time.time()
-        print("Agent: DFS path calculation executed...")
+        print("Agent: Depth-First Search path calculation executed...")
         # for all permutations of goals list:
         for self.goals in copy.deepcopy(self.goalsPer):
             # clear dfs_path and run next permutation
@@ -209,10 +211,55 @@ class Waiter (pygame.sprite.Sprite):
             # calculate dfs
             start = str(self.x) + "," + str(self.y)
             goal = str(self.goals[0][0]) + "," + str(self.goals[0][1])
-            self.caluclate_dfs_path(self.graph, start, goal)
+            self.calculate_dfs_path(self.graph, start, goal)
+            # add parsed dfs_path to solutions
+            self.solutions.append(self.parse_dfs_list(self.path[:]))
+        # now self.solutions contains all solutions of dfs
+        print("Agent: Depth-First Search path calculation execution complete "
+              "after {0:.2f} seconds.".format(time.time() - starttime))
+    # //////////////////////////////////////////////////
+
+    # Breadth-First Search
+
+    # recursive calculation of dfs path saved temporarly in self.path
+    def calculate_bfs_path(self, graph, start, goal):
+        queue = [(start, [start])]
+        while queue:
+            (vertex, path) = queue.pop()
+            for next_ in graph[vertex] - set(path):
+                if next_ == goal:
+                    # add path
+                    self.path.append(path)
+                    # remove goal and calculate next path
+                    temp = self.goals.pop(0)
+                    if self.goals:
+                        # call next goal
+                        self.calculate_bfs_path(self.graph, next_,
+                                                str(self.goals[0][0]) + "," + str(self.goals[0][1]))
+                        # free memory
+                        del temp
+                    else:
+                        # add last goal to path
+                        self.path.append([str(temp[0]) + "," + str(temp[1])])
+                else:
+                    queue.append((next_, path + [next_]))
+
+    # procedure responsible of calculating all possible dfs paths
+    def get_bfs_path(self):
+        # measure time
+        starttime = time.time()
+        print("Agent: Breadth-First Search path calculation executed...")
+        # for all permutations of goals list:
+        for self.goals in copy.deepcopy(self.goalsPer):
+            # clear dfs_path and run next permutation
+            self.path = []
+            # calculate dfs
+            start = str(self.x) + "," + str(self.y)
+            goal = str(self.goals[0][0]) + "," + str(self.goals[0][1])
+            self.calculate_bfs_path(self.graph, start, goal)
             # add parsed dfs_path to solutions
             self.solutions.append(self.parse_dfs_list(self.path))
         # now self.solutions contains all solutions of dfs
-        print("Agent: DFS path calculation execution complete "
+        print("Agent: Breadth-First Search path calculation execution complete "
               "after {0:.2f} seconds.".format(time.time() - starttime))
     # //////////////////////////////////////////////////
