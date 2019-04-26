@@ -66,7 +66,7 @@ class Matrix:
         try:
             self.matrix[x][y].activated()
         except AttributeError:
-            print(f"Trying to activate non-operateable object at: {str(x)}, {str(y)}")
+            print("Trying to activate non-operateable object at: " + str(x) + ", " + str(y))
 
     # returns list of objects by checking object class type, not content
     def objects_to_list(self, wanted_object):
@@ -108,7 +108,7 @@ class Matrix:
         # parse matrix:
         for i in range(len(self.matrix)):
             for j in range(len(self.matrix)):
-                key = f"{i},{j}"
+                key = "{0},{1}".format(i, j)
                 value_list = list()
                 for vec in [[-1, 0], [1, 0], [0, -1], [0, 1]]:
                     try:
@@ -116,7 +116,7 @@ class Matrix:
                         if (([type(self.matrix[i][j]), type(self.matrix[i + vec[0]][j + vec[1]])] in connections
                                 or [type(self.matrix[i + vec[0]][j + vec[1]]), type(self.matrix[i][j])] in connections)
                                 and i + vec[0] >= 0 and j + vec[1] >= 0):
-                            value_list.append(f"{i + vec[0]},{j + vec[1]}")
+                            value_list.append("{0},{1}".format(i + vec[0], j + vec[1]))
                     except IndexError:
                         pass
                 graph[key] = set(value_list)
