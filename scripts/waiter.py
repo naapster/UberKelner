@@ -72,8 +72,10 @@ class Waiter (pygame.sprite.Sprite):
         # calculate graph
         self.graph = self.restaurant.to_graph()
 
+        # set list of objects
+        self.objects_coordinates = matrix_fields[1:counter]
         # set list of goals
-        self.goals = matrix_fields[1:counter]
+        self.goals = self.objects_coordinates[:]
 
         # set permutations of goals
         self.goalsPer = list(map(list, list(itertools.permutations(self.goals[:]))))
@@ -84,18 +86,11 @@ class Waiter (pygame.sprite.Sprite):
         # set dfs solution
         self.path = []
 
-        # get dfs path and add results to self.solutions
-        # self.get_dfs_path()
-        # get bfs path and add results to self.solutions
-        self.get_bfs_path()
+        # set control to recalculate path after movement
+        self.control = True
 
-        # choose the shortest solution of restaurant and parse it to movement vector
-        self.path = list(min(self.solutions, key=len))
-        if len(self.path) > 0:
-            # parse list to get coordinates of next moves
-            self.path = self.calculate_vector_movement(self.path)
-        else:
-            print("Agent: no dfs path found!")
+        # set solving method
+        self.solving_method = "dfs"
 
     # movement procedure - change position of agent on defined difference of coordinates
     def move(self, delta_x, delta_y):
@@ -129,17 +124,27 @@ class Waiter (pygame.sprite.Sprite):
     def next_round(self, key):
 
         # list of events on keys:
-        # if key == K_RIGHT:
-        #    self.move(1, 0)
-        # elif key == K_LEFT:
-        #    self.move(-1, 0)
-        # elif key == K_DOWN:
-        #    self.move(0, 1)
-        # elif key == K_UP:
-        #     self.move(0, -1)'''
+        if key == K_RIGHT:
+            self.control = False
+            self.move(1, 0)
+        elif key == K_LEFT:
+            self.control = False
+            self.move(-1, 0)
+        elif key == K_DOWN:
+            self.control = False
+            self.move(0, 1)
+        elif key == K_UP:
+            self.control = False
+            self.move(0, -1)
 
         # activate AI agent on key SPACE:
         if key == K_SPACE:
+
+            # check if agent left his path:
+            if not self.control:
+                self.solve(self.solving_method)
+                self.control = True
+
             # move agent on path
             if self.path:
                 self.move(self.path[0][0], self.path[0][1])
@@ -165,6 +170,48 @@ class Waiter (pygame.sprite.Sprite):
     # //////////////////////////////////////////////////
     #           S O L U T I O N S
     # //////////////////////////////////////////////////
+
+    # Serve multiple solutions choice
+    def solve(self, method):
+        if method == "dfs":
+            # set solving method
+            self.solving_method = "dfs"
+            # reload lists
+            self.goals = self.objects_coordinates[:]
+            self.path = []
+            self.solutions = []
+            # get dfs path and add results to self.solutions
+            self.get_dfs_path()
+
+            # choose the shortest solution of restaurant and parse it to movement vector
+            self.path = list(min(self.solutions, key=len))
+            if len(self.path) > 0:
+                # parse list to get coordinates of next moves
+                self.path = self.calculate_vector_movement(self.path)
+            else:
+                print("Agent: no dfs path found!")
+        elif method == "breadthfs":
+            # set solving method
+            self.solving_method = "breadthfs"
+            # reload lists
+            self.goals = self.objects_coordinates[:]
+            self.path = []
+            self.solutions = []
+            # get bfs path and add results to self.solutions
+            self.get_bfs_path()
+
+            # choose the shortest solution of restaurant and parse it to movement vector
+            self.path = list(min(self.solutions, key=len))
+            if len(self.path) > 0:
+                # parse list to get coordinates of next moves
+                self.path = self.calculate_vector_movement(self.path)
+            else:
+                print("Agent: no bfs path found!")
+
+        else:
+            print("Agent: Unknown method of solving")
+
+    #           S E A R C H E S
 
     # Depth-First Search
     @staticmethod

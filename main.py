@@ -129,6 +129,11 @@ if __name__ == '__main__':
     pygame.display.set_caption('UberKelner')
     WHITE = (255, 255, 255)
 
+    # run solution seeking
+    Uber.solve("dfs")
+    Uber.solve("breadthfs")
+
+
     # clear event log of game
     pygame.event.clear()
     # for eternity:
@@ -146,9 +151,6 @@ if __name__ == '__main__':
                     control = False
                 # or run new round for environment
                 Uber.next_round(event.key)
-                # WARNING
-                # in the future release, on key pressed no event key will be passed
-                # and the waiter will have to choose the action on his own
 
         # simulation sprites control
         all_sprites.update()
