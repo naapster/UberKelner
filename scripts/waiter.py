@@ -30,7 +30,7 @@ class Waiter (pygame.sprite.Sprite):
 
         # check if there is enough space for everyting in simulation
         if num_tables + num_furnaces + num_walls + 1 > n*n:
-            print("Not enough space in restaurant for objects!")
+            print("Agent: Not enough space in restaurant for objects!")
             sys.exit("N-space overflow")
 
         # init restaurant - matrix of objects
@@ -149,7 +149,7 @@ class Waiter (pygame.sprite.Sprite):
             if self.path:
                 self.move(self.path[0][0], self.path[0][1])
             else:
-                print("No moves left!")
+                print("Agent: No moves left!")
 
         # DIAGRAM SEQUENCE HERE! - ADD IN NEXT VERSION!
         # if if if if
@@ -162,7 +162,7 @@ class Waiter (pygame.sprite.Sprite):
             list_[i][0] = list_[i + 1][0] - list_[i][0]
             list_[i][1] = list_[i + 1][1] - list_[i][1]
             if list_[i] is [0, 0]:
-                print("Error - zero movement detected!")
+                print("Agent: Error - zero movement detected!")
         # remove last move (it can't be executed)
         list_.pop(-1)
         return list_

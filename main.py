@@ -9,6 +9,7 @@ import os
 import sys
 from os import path
 from random import shuffle
+from argparse import ArgumentParser
 
 import pygame
 from pygame.locals import *
@@ -55,17 +56,94 @@ def create_random_coordinates():
 
 if __name__ == '__main__':
 
-    print("Main simulation controller executed...")
+    print("Main: simulation controller executed...")
 
     # init list of variables, common for all simulations:
-
-    # frames per second setting
+    # default settings
+    control = True
+    run_simulation = 0
+    solution = "dfs"
     FPS = 30
 
-    # choose whether to run simulation from log (True) or generate random (False)
-    control = True
+    # parse arguments
+    '''
+    print("Main: Parsing arguments")
+    parser = ArgumentParser()
+    
+    # REPAIR - PROSZĘ NAPISAĆ OBSŁUGĘ ARGUMENTÓW ŻEBY APLIKACJA BYŁA OBSŁUGIWANA
+    # TAK JAK W PRZYKŁADOWYM KOMENTARZU NAD ARGUMENTEM
+    
+    # --size 10
+    parser.add_argument("-n", "--size", dest="filename",
+                        help="set size of simulation", metavar="INT+")
+    # --fps 30
+    parser.add_argument("-f", "--fps",
+                        action="store_false", dest="verbose", default=True,
+                        help="set frames per second of simulation")
+                        
+    # --random N num_tables num_furnaces num_walls       
+    parser.add_argument("-r", "--random",
+                        action="store_false", dest="verbose", default=True,
+                        help="create random simulation")
+                        
+    # --log -1
+    parser.add_argument("-l", "--log",
+                        action="store_false", dest="verbose", default=True,
+                        help="run simulation from log")
+                        
+    # --solution dfs
+    parser.add_argument("-s", "--solution",
+                        action="store_false", dest="verbose", default=True,
+                        help="choose solving method. Deep-first search is the default choice.")
+                        
+    # --blocksize 60
+    parser.add_argument("-b", "--blocksize",
+                        action="store_false", dest="verbose", default=True,
+                        help="set size of sprites (in px)")
 
-    run_simulation = 0  # index of simulation to run in log list
+    args = parser.parse_args()
+
+    # run arguments
+    if args.size:
+        print("Args: Set size to %s" % args.size)
+        N = args.size
+    else:
+        print("Main: Set size to ")
+
+    # frames per second setting
+    if args.fps:
+        print("Args: Set fps to %s" % args.size)
+        FPS = args.fps
+    else:
+        print("Main: Set fps to 30")
+        FPS = 30
+
+    # choose whether to run simulation from log (True) or generate random (False)
+    if args.random:
+        print("Args: Generating random simulation")
+        control = False
+    else:
+        if args.log:
+            print("Args: Generating simulation from %s log" % args.log)
+            control = True
+            run_simulation = args.log  # index of simulation to run in log list
+        else:
+            print("Main: log loig")
+
+    if args.solution:
+        print("Args: Set solution to %s" % args.solution)
+        solution = args.solution
+    else:
+        print("Main: set solution method to dfs")
+        solution = "dfs"
+        
+    if args.blocksize:
+        print("Args: Set blocksize to %s" % args.blocksize)
+        blocksize = args.blocksize
+    else:
+        print("Main: set blocksize to 60")
+        blocksize = 60
+    '''
 
     if control:
         # reload simulation state from log:
@@ -82,7 +160,6 @@ if __name__ == '__main__':
         # number of walls
         num_walls = int(log[4])
         # random coordinates
-        # backup: [[2, 0], [0, 4], [0, 0], [1, 0], [3, 0], [4, 0], [1, 2], [2, 2], [3, 2], [1, 3], [2, 3], [3, 3]]
         _ = log[5].replace('[', '').split('],')
         coordinates = [list(map(int, s.replace(']', '').split(','))) for s in _]
 
@@ -133,7 +210,6 @@ if __name__ == '__main__':
     Uber.solve("dfs")
     Uber.solve("breadthfs")
 
-
     # clear event log of game
     pygame.event.clear()
     # for eternity:
@@ -162,9 +238,6 @@ if __name__ == '__main__':
         pygame.display.flip()
         fpsClock.tick(FPS)
 
-    print("Main simulation controller execution complete.")
+    print("Main: simulation controller execution complete.")
     pygame.quit()
     sys.exit()
-
-# blokada  w grafie dfs ścieżki cofającej ostatni ruch
-# obsługa kuchni i stołu nie jest 

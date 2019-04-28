@@ -66,7 +66,7 @@ class Matrix:
         try:
             self.matrix[x][y].activated()
         except AttributeError:
-            print("Trying to activate non-operateable object at: " + str(x) + ", " + str(y))
+            print("Matrix: Trying to activate non-operateable object at: " + str(x) + ", " + str(y))
 
     # returns list of objects by checking object class type, not content
     def objects_to_list(self, wanted_object):
@@ -101,6 +101,7 @@ class Matrix:
 
     # parse matrix to graph understandable for DFS algorithm
     def to_graph(self):
+        print("Matrix: converting matrix to graph")
         graph = dict()
         # list of available connections
         connections = [[type(self.fill), type(self.fill)],

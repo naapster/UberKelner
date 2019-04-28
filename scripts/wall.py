@@ -29,4 +29,4 @@ class Wall(pygame.sprite.Sprite):
 
     def activated(self):
         # serve object:
-        print("Walking on the walls is prohibited, punk.\nGet out of " + str(self.x) + "," + str(self.y))
+        print("Wall: Walking on the walls is prohibited, punk.\nGet out of " + str(self.x) + "," + str(self.y))
