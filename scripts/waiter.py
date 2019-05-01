@@ -5,7 +5,6 @@ import sys
 import time
 import math
 import heapq
-import re
 
 from pygame.locals import *
 
@@ -333,10 +332,12 @@ class Waiter (pygame.sprite.Sprite):
     # Best-First Search
 
     # procedure responsible for calculating distance heuristics for bestfs
-    def calculate_bestfs_distance(self, field, goal):
+    @staticmethod
+    def calculate_bestfs_distance(field, goal):
         fieldCoord = field.split(",")
         goalCoord = goal.split(",")
-        dist = math.sqrt(pow(int(fieldCoord[0]) - int(goalCoord[0]), 2) + pow(int(fieldCoord[1]) - int(goalCoord[1]), 2))
+        dist = math.sqrt(pow(int(fieldCoord[0]) - int(goalCoord[0]), 2)
+                         + pow(int(fieldCoord[1]) - int(goalCoord[1]), 2))
         return int(dist)
 
     # recursive calculation of bestfs path saved temporarly in self.path
@@ -354,7 +355,8 @@ class Waiter (pygame.sprite.Sprite):
                     temp = self.goals.pop(0)
                     if self.goals:
                         # call next goal
-                        self.calculate_bestfs_path(self.graph, next_, str(self.goals[0][0]) + "," + str(self.goals[0][1]))
+                        self.calculate_bestfs_path(self.graph, next_,
+                                                   str(self.goals[0][0]) + "," + str(self.goals[0][1]))
                         # free memory
                         del temp
                     else:
@@ -380,6 +382,7 @@ class Waiter (pygame.sprite.Sprite):
             # add parsed bestfs_path to solutions
             self.solutions.append(self.parse_dfs_list(self.path))
         # now self.solutions contains all solutions of bestfs
-        print("Agent: Best-First Search path calculation execution complete after {0:.2f} seconds.".format(time.time() - starttime))
+        print("Agent: Best-First Search path calculation execution complete "
+              "after {0:.2f} seconds.".format(time.time() - starttime))
 
     # //////////////////////////////////////////////////////

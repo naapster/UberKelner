@@ -64,6 +64,14 @@ if __name__ == '__main__':
     run_simulation = 0
     solution = "dfs"
     FPS = 30
+    # amount of blocks in row of simulation - not currently active, change init
+    N = 5
+    # number of tables
+    num_tables = 0
+    # number of furnaces
+    num_furnaces = 1
+    # number of walls
+    num_walls = 10
 
     # parse arguments
     '''
@@ -166,16 +174,9 @@ if __name__ == '__main__':
     else:
 
         # generate random simulation:
-        # amount of blocks in row of simulation - not currently active, change init
-        N = 5
-        # number of tables
-        num_tables = 0
-        # number of furnaces
-        num_furnaces = 1
-        # number of walls
-        num_walls = 10
         # random coordinates
         coordinates = create_random_coordinates()[:(num_tables + num_furnaces + num_walls + 1)]
+        # rest of values are default
 
         # save state of simulation to file
         with open("simulation_log.txt", "a") as myfile:
