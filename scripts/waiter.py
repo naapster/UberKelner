@@ -175,9 +175,9 @@ class Waiter (pygame.sprite.Sprite):
 
     # Serve multiple solutions choice
     def solve(self, method):
-        if method == "dfs":
+        if method == "depthfs":
             # set solving method
-            self.solving_method = "dfs"
+            self.solving_method = "depthfs"
             # reload lists
             self.goals = self.objects_coordinates[:]
             self.path = []
@@ -191,7 +191,7 @@ class Waiter (pygame.sprite.Sprite):
                 # parse list to get coordinates of next moves
                 self.path = self.calculate_vector_movement(self.path)
             else:
-                print("Agent: no dfs path found!")
+                print("Agent: no depthfs path found!")
         elif method == "breadthfs":
             # set solving method
             self.solving_method = "breadthfs"
@@ -227,7 +227,7 @@ class Waiter (pygame.sprite.Sprite):
             else:
                 print("Agent: no bestfs path found!")
         else:
-            print("Agent: Unknown method of solving")
+            print("Agent: Unknown method of solving (" + method + ")")
 
     #           S E A R C H E S
 

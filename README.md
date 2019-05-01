@@ -83,8 +83,9 @@ Trying to enter table or kitchen causes automatic service of the object accordin
 Waiter can calculate shortest path to the given destination point. 
 Currently, the following methods of artificial learning are available:
 
-* Depth-First Search
-* Breath-First Search
+* Depth-First Search (depthfs)
+* Breath-First Search (breadthfs)
+* Best-First Search (bestfs)
 
 [Helpful materials here](https://eddmann.com/posts/depth-first-search-and-breadth-first-search-in-python/)
 

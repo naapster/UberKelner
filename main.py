@@ -61,8 +61,8 @@ if __name__ == '__main__':
     # init list of variables, common for all simulations:
     # default settings
     control = True
-    run_simulation = 0
-    solution = "dfs"
+    run_simulation = -1
+    solution = "depthfs"
     FPS = 30
     # amount of blocks in row of simulation - not currently active, change init
     N = 5
@@ -208,7 +208,7 @@ if __name__ == '__main__':
     WHITE = (255, 255, 255)
 
     # run solution seeking
-    Uber.solve("dfs")
+    Uber.solve("depthfs")
     Uber.solve("breadthfs")
     Uber.solve("bestfs")
 
