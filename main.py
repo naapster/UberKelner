@@ -209,6 +209,7 @@ if __name__ == '__main__':
     # run solution seeking
     Uber.solve("dfs")
     Uber.solve("breadthfs")
+    Uber.solve("bestfs")
 
     # clear event log of game
     pygame.event.clear()
