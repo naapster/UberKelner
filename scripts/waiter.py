@@ -3,6 +3,9 @@
 import itertools
 import sys
 import time
+import math
+import heapq
+import re
 
 from pygame.locals import *
 
@@ -207,7 +210,23 @@ class Waiter (pygame.sprite.Sprite):
                 self.path = self.calculate_vector_movement(self.path)
             else:
                 print("Agent: no bfs path found!")
+        elif method == "bestfs":
+            # set solving method
+            self.solving_method = "bestfs"
+            # reload lists
+            self.goals = self.objects_coordinates[:]
+            self.path = []
+            self.solutions = []
+            # get bestfs path and add results to self.solutions
+            self.get_bestfs_path()
 
+            # choose the shortest solution of restaurant and parse it to movement vector
+            self.path = list(min(self.solutions, key=len))
+            if len(self.path) > 0:
+                # parse list to get coordinates of next moves
+                self.path = self.calculate_vector_movement(self.path)
+            else:
+                print("Agent: no bestfs path found!")
         else:
             print("Agent: Unknown method of solving")
 
@@ -310,3 +329,57 @@ class Waiter (pygame.sprite.Sprite):
         print("Agent: Breadth-First Search path calculation execution complete "
               "after {0:.2f} seconds.".format(time.time() - starttime))
     # //////////////////////////////////////////////////
+
+    # Best-First Search
+
+    # procedure responsible for calculating distance heuristics for bestfs
+    def calculate_bestfs_distance(self, field, goal):
+        fieldCoord = field.split(",")
+        goalCoord = goal.split(",")
+        dist = math.sqrt(pow(int(fieldCoord[0]) - int(goalCoord[0]), 2) + pow(int(fieldCoord[1]) - int(goalCoord[1]), 2))
+        return int(dist)
+
+    # recursive calculation of bestfs path saved temporarly in self.path
+    def calculate_bestfs_path(self, graph, start, goal):
+        queue = [(self.calculate_bestfs_distance(start, goal), start, [start])]
+        heapq.heapify(queue)
+        while queue:
+            (cost, vertex, path) = heapq.heappop(queue)
+            heapq.heapify(queue)
+            for next_ in graph[vertex] - set(path):
+                if next_ == goal:
+                    # add path
+                    self.path.append(path)
+                    # remove goal and calculate next path
+                    temp = self.goals.pop(0)
+                    if self.goals:
+                        # call next goal
+                        self.calculate_bestfs_path(self.graph, next_, str(self.goals[0][0]) + "," + str(self.goals[0][1]))
+                        # free memory
+                        del temp
+                    else:
+                        # add last goal to path
+                        self.path.append([str(temp[0]) + "," + str(temp[1])])
+                else:
+                    heapq.heappush(queue, (self.calculate_bestfs_distance(next_, goal), next_, path + [next_]))
+                    heapq.heapify(queue)
+
+    # procedure responsible of calculating all possible bestfs paths
+    def get_bestfs_path(self):
+        # measure time
+        starttime = time.time()
+        print("Agent: Best-First Search path calculation executed...")
+        # for all permutations of goals list:
+        for self.goals in copy.deepcopy(self.goalsPer):
+            # clear bestfs_path and run next permutation
+            self.path = []
+            # calculate bestfs
+            start = str(self.x) + "," + str(self.y)
+            goal = str(self.goals[0][0]) + "," + str(self.goals[0][1])
+            self.calculate_bestfs_path(self.graph, start, goal)
+            # add parsed bestfs_path to solutions
+            self.solutions.append(self.parse_dfs_list(self.path))
+        # now self.solutions contains all solutions of bestfs
+        print("Agent: Best-First Search path calculation execution complete after {0:.2f} seconds.".format(time.time() - starttime))
+
+    # //////////////////////////////////////////////////////
