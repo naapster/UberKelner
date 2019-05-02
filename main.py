@@ -6,13 +6,8 @@
 import datetime
 # solve pygame audio driver error
 import os
-import sys
 from os import path
 from random import shuffle
-from argparse import ArgumentParser
-
-import pygame
-from pygame.locals import *
 
 from scripts.waiter import *
 
@@ -54,7 +49,21 @@ def create_random_coordinates():
     return matrix_fields
 
 
+def luncher():
+    possible_arguments = ['depthfs', 'breadthfs', 'bestfs']
+    for index, arg in enumerate(possible_arguments):
+        print('{0}. {1}'.format(index, arg))
+    choice = input('----------\nPlese choose path finding algorithm. Use index of algorithm: ')
+    try:
+        return possible_arguments[int(choice)]
+    except IndexError:
+        print('Algorithm with this index doesn\'t exist')
+        input()
+        quit(410)
+
+
 if __name__ == '__main__':
+    alg_choice = luncher()
 
     print("Main: simulation controller executed...")
 
@@ -208,9 +217,7 @@ if __name__ == '__main__':
     WHITE = (255, 255, 255)
 
     # run solution seeking
-    Uber.solve("depthfs")
-    Uber.solve("breadthfs")
-    Uber.solve("bestfs")
+    Uber.solve(alg_choice)
 
     # clear event log of game
     pygame.event.clear()
