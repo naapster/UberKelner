@@ -72,8 +72,6 @@ if __name__ == '__main__':
     # --blocksize 60
     parser.add_argument("-b", "--blocksize", help="set size of sprites (in px)", required=False, default=60)
 
-    # args = parser.parse_args()
-
     # args will be a dictionary containing the arguments
     args = vars(parser.parse_args())
 
