@@ -4,18 +4,15 @@
 # simulation controller:
 
 import datetime
-# solve pygame audio driver error
 import os
 import sys
 from os import path
 from random import shuffle
 from argparse import ArgumentParser
-
 import pygame
 from pygame.locals import *
-
 from scripts.waiter import *
-
+# solve pygame audio driver error
 os.environ['SDL_AUDIODRIVER'] = 'dsp'
 
 # filename __init__ is required to treat scripts folder as resource
@@ -55,17 +52,47 @@ def create_random_coordinates():
 
 
 if __name__ == '__main__':
-
     print("Main: simulation controller executed...")
 
+    # parse arguments
+    print("Main: Parsing arguments")
+    parser = ArgumentParser(description='Uberkelner description here')
+    
+    # --size 10
+    parser.add_argument("-n", "--size", help="set size of simulation", required=False, default=10)
+    # --fps 30
+    parser.add_argument("-f", "--fps", help="set frames per second of simulation", required=False, default=30)
+    # --random N num_tables num_furnaces num_walls       
+    parser.add_argument("-r", "--random", help="create random simulation", required=False, default=False) 
+    # --log -1
+    parser.add_argument("-l", "--log", help="run simulation from log", required=False, default=-1)
+    # --solution depthfs
+    parser.add_argument("-s", "--solution", help="choose solving method. Deep-first search is the default choice.",
+                        required=False, default="depthfs")
+    # --blocksize 60
+    parser.add_argument("-b", "--blocksize", help="set size of sprites (in px)", required=False, default=60)
+
+    # args = parser.parse_args()
+    
+    # args will be a dictionary containing the arguments
+    args = vars(parser.parse_args())
+
     # init list of variables, common for all simulations:
+    # amount of blocks in row of simulation
+    N = args['size']
+    FPS = args['fps']
+    solution = args['solution']
+    blocksize = args['blocksize']
+
+    print("Args: Set size to %s" % N)
+    print("Args: Set FPS to %s" % FPS)
+    print("Args: Set solution to %s" % args['solution'])
+    print("Args: Set blocksize to %s" % args['blocksize'])
+
     # default settings
     control = True
+    # row in simulation log to load - coordinates like in list, negative numbers mean positipon from the back of list
     run_simulation = -1
-    solution = "depthfs"
-    FPS = 30
-    # amount of blocks in row of simulation - not currently active, change init
-    N = 5
     # number of tables
     num_tables = 0
     # number of furnaces
@@ -73,59 +100,7 @@ if __name__ == '__main__':
     # number of walls
     num_walls = 10
 
-    # parse arguments
     '''
-    print("Main: Parsing arguments")
-    parser = ArgumentParser()
-    
-    # REPAIR - PROSZĘ NAPISAĆ OBSŁUGĘ ARGUMENTÓW ŻEBY APLIKACJA BYŁA OBSŁUGIWANA
-    # TAK JAK W PRZYKŁADOWYM KOMENTARZU NAD ARGUMENTEM
-    
-    # --size 10
-    parser.add_argument("-n", "--size", dest="filename",
-                        help="set size of simulation", metavar="INT+")
-    # --fps 30
-    parser.add_argument("-f", "--fps",
-                        action="store_false", dest="verbose", default=True,
-                        help="set frames per second of simulation")
-                        
-    # --random N num_tables num_furnaces num_walls       
-    parser.add_argument("-r", "--random",
-                        action="store_false", dest="verbose", default=True,
-                        help="create random simulation")
-                        
-    # --log -1
-    parser.add_argument("-l", "--log",
-                        action="store_false", dest="verbose", default=True,
-                        help="run simulation from log")
-                        
-    # --solution dfs
-    parser.add_argument("-s", "--solution",
-                        action="store_false", dest="verbose", default=True,
-                        help="choose solving method. Deep-first search is the default choice.")
-                        
-    # --blocksize 60
-    parser.add_argument("-b", "--blocksize",
-                        action="store_false", dest="verbose", default=True,
-                        help="set size of sprites (in px)")
-
-    args = parser.parse_args()
-
-    # run arguments
-    if args.size:
-        print("Args: Set size to %s" % args.size)
-        N = args.size
-    else:
-        print("Main: Set size to ")
-
-    # frames per second setting
-    if args.fps:
-        print("Args: Set fps to %s" % args.size)
-        FPS = args.fps
-    else:
-        print("Main: Set fps to 30")
-        FPS = 30
-
     # choose whether to run simulation from log (True) or generate random (False)
     if args.random:
         print("Args: Generating random simulation")
@@ -137,20 +112,6 @@ if __name__ == '__main__':
             run_simulation = args.log  # index of simulation to run in log list
         else:
             print("Main: log loig")
-
-    if args.solution:
-        print("Args: Set solution to %s" % args.solution)
-        solution = args.solution
-    else:
-        print("Main: set solution method to dfs")
-        solution = "dfs"
-        
-    if args.blocksize:
-        print("Args: Set blocksize to %s" % args.blocksize)
-        blocksize = args.blocksize
-    else:
-        print("Main: set blocksize to 60")
-        blocksize = 60
     '''
 
     if control:
