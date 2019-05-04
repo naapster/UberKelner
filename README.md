@@ -1,6 +1,4 @@
-# Project structure and usage
-
-## Project desription
+# Project description
 
 **Project code name:** UberKelner
 
@@ -26,6 +24,34 @@ containing blank tiles, tables, furnaces, walls and waiter.
 • actuators: waiter movement by one field vertically or horizontally, table service, kitchen service
 
 • sensors: the agent has a tablet with the state of the restaurant.
+
+# Project structure and usage
+
+## Arguments
+```
+usage: main.py [-h] [-n SIZE] [-f FPS] [-c CONTROL] [-r RANDOM] [-l LOG]
+               [-s SOLUTION] [-b BLOCKSIZE]
+
+optional arguments:
+
+  -h, --help            show this help message and exit
+  -n SIZE, --size SIZE  set size of simulation
+  -f FPS, --fps FPS     set frames per second of simulation
+  -c CONTROL, --control CONTROL
+                        choose whether to run simulation from log or random      
+  -r RANDOM, --random RANDOM
+                        create random simulation with parameters:
+                        N num_tables num_furnaces num_walls  
+  -l LOG, --log LOG     run simulation from log
+  -s SOLUTION, --solution SOLUTION
+                        choose solving method. Methods available: 
+                        depthfs, breathfs, bestfs, all.
+                        Deep-first search is the default choice.
+  -b BLOCKSIZE, --blocksize BLOCKSIZE
+                        set size of sprites (in px)
+```
+
+## Structure
 
 The project consists of the following elements:
 

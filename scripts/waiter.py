@@ -25,7 +25,7 @@ class Waiter (pygame.sprite.Sprite):
         return "Waiter"
 
     # initialize agent with list of coordinates for tables and furnaces and their number
-    def __init__(self, n, matrix_fields, num_tables, num_furnaces, num_walls):
+    def __init__(self, n, matrix_fields, num_tables, num_furnaces, num_walls, solving_method):
 
         # call init of parent class
         pygame.sprite.Sprite.__init__(self)
@@ -85,14 +85,18 @@ class Waiter (pygame.sprite.Sprite):
         # set list of solutions
         self.solutions = []
 
-        # set dfs solution
+        # set path
         self.path = []
 
-        # set control to recalculate path after movement
-        self.control = True
+        # set all available solving methods names
+        self.available_methods = ['depthfs', 'breadthfs', 'bestfs']
 
         # set solving method
-        self.solving_method = "dfs"
+        self.solving_method = solving_method
+
+        # run solution seeking
+        self.solve(self.solving_method)
+        self.control = True
 
     # movement procedure - change position of agent on defined difference of coordinates
     def move(self, delta_x, delta_y):
@@ -101,22 +105,25 @@ class Waiter (pygame.sprite.Sprite):
         new_y = self.y + delta_y
 
         # if movement is allowed by matrix, within restaurant borders and the field is empty:
-        if self.restaurant.move(self.x, self.y, new_x, new_y):
+        if new_x in range(self.restaurant.size()) and new_y in range(self.restaurant.size()):
+            if self.restaurant.move(self.x, self.y, new_x, new_y):
 
-            # set new coordinates
-            self.x = new_x
-            self.y = new_y
+                # set new coordinates
+                self.x = new_x
+                self.y = new_y
 
-            # update waiter sprite localization after changes
-            self.rect.x = self.x * blocksize
-            self.rect.y = self.y * blocksize
+                # update waiter sprite localization after changes
+                self.rect.x = self.x * blocksize
+                self.rect.y = self.y * blocksize
 
+            else:
+                # activate object you tried to move on
+                self.restaurant.activate(new_x, new_y)
+                # remove next coordinate from path (it tries to come back from object when no move was made)
+                if self.path:
+                    self.path.pop(0)
         else:
-            # activate object you tried to move on
-            self.restaurant.activate(new_x, new_y)
-            # remove next coordinate from path (it tries to come back from object when no move was made)
-            if self.path:
-                self.path.pop(0)
+            print("Agent: movement outside of simulation is prohibited (%s, %s)" % (new_x, new_y))
 
         # remove used move
         if self.path:
@@ -144,6 +151,8 @@ class Waiter (pygame.sprite.Sprite):
 
             # check if agent left his path:
             if not self.control:
+
+                # run solution seeking
                 self.solve(self.solving_method)
                 self.control = True
 
@@ -175,15 +184,32 @@ class Waiter (pygame.sprite.Sprite):
 
     # Serve multiple solutions choice
     def solve(self, method):
-        if method == "depthfs":
+        if method in self.available_methods:
             # set solving method
-            self.solving_method = "depthfs"
+            self.solving_method = method
+
             # reload lists
             self.goals = self.objects_coordinates[:]
             self.path = []
             self.solutions = []
-            # get dfs path and add results to self.solutions
-            self.get_dfs_path()
+
+            # measure time
+            starttime = time.time()
+            print("Agent: %s path calculation executed..." % self.solving_method)
+
+            if self.solving_method == "depthfs":
+                # get dfs path and add results to self.solutions
+                self.get_dfs_path()
+            elif self.solving_method == "breadthfs":
+                # get bfs path and add results to self.solutions
+                self.get_bfs_path()
+            elif self.solving_method == "bestfs":
+                # get bestfs path and add results to self.solutions
+                self.get_bestfs_path()
+
+            # print execution time
+            print("Agent: %s path calculation execution complete "
+                  "after {0:.2f} seconds.".format(time.time() - starttime) % self.solving_method)
 
             # choose the shortest solution of restaurant and parse it to movement vector
             self.path = list(min(self.solutions, key=len))
@@ -191,43 +217,13 @@ class Waiter (pygame.sprite.Sprite):
                 # parse list to get coordinates of next moves
                 self.path = self.calculate_vector_movement(self.path)
             else:
-                print("Agent: no depthfs path found!")
-        elif method == "breadthfs":
-            # set solving method
-            self.solving_method = "breadthfs"
-            # reload lists
-            self.goals = self.objects_coordinates[:]
-            self.path = []
-            self.solutions = []
-            # get bfs path and add results to self.solutions
-            self.get_bfs_path()
+                print("Agent: no %s path found!" % self.solving_method)
 
-            # choose the shortest solution of restaurant and parse it to movement vector
-            self.path = list(min(self.solutions, key=len))
-            if len(self.path) > 0:
-                # parse list to get coordinates of next moves
-                self.path = self.calculate_vector_movement(self.path)
-            else:
-                print("Agent: no bfs path found!")
-        elif method == "bestfs":
-            # set solving method
-            self.solving_method = "bestfs"
-            # reload lists
-            self.goals = self.objects_coordinates[:]
-            self.path = []
-            self.solutions = []
-            # get bestfs path and add results to self.solutions
-            self.get_bestfs_path()
-
-            # choose the shortest solution of restaurant and parse it to movement vector
-            self.path = list(min(self.solutions, key=len))
-            if len(self.path) > 0:
-                # parse list to get coordinates of next moves
-                self.path = self.calculate_vector_movement(self.path)
-            else:
-                print("Agent: no bestfs path found!")
+        elif method == "all":
+            for method in self.available_methods:
+                self.solve(method)
         else:
-            print("Agent: Unknown method of solving (" + method + ")")
+            print("Agent: Unknown method of solving (%s)" % method)
 
     #           S E A R C H E S
 
@@ -266,9 +262,6 @@ class Waiter (pygame.sprite.Sprite):
 
     # procedure responsible of calculating all possible dfs paths
     def get_dfs_path(self):
-        # measure time
-        starttime = time.time()
-        print("Agent: Depth-First Search path calculation executed...")
         # for all permutations of goals list:
         for self.goals in copy.deepcopy(self.goalsPer):
             # clear dfs_path and run next permutation
@@ -280,8 +273,6 @@ class Waiter (pygame.sprite.Sprite):
             # add parsed dfs_path to solutions
             self.solutions.append(self.parse_dfs_list(self.path[:]))
         # now self.solutions contains all solutions of dfs
-        print("Agent: Depth-First Search path calculation execution complete "
-              "after {0:.2f} seconds.".format(time.time() - starttime))
     # //////////////////////////////////////////////////
 
     # Breadth-First Search
@@ -311,22 +302,17 @@ class Waiter (pygame.sprite.Sprite):
 
     # procedure responsible of calculating all possible dfs paths
     def get_bfs_path(self):
-        # measure time
-        starttime = time.time()
-        print("Agent: Breadth-First Search path calculation executed...")
         # for all permutations of goals list:
         for self.goals in copy.deepcopy(self.goalsPer):
-            # clear dfs_path and run next permutation
+            # clear bfs and run next permutation
             self.path = []
-            # calculate dfs
+            # calculate bfs
             start = str(self.x) + "," + str(self.y)
             goal = str(self.goals[0][0]) + "," + str(self.goals[0][1])
             self.calculate_bfs_path(self.graph, start, goal)
-            # add parsed dfs_path to solutions
+            # add parsed bfs_path to solutions
             self.solutions.append(self.parse_dfs_list(self.path))
-        # now self.solutions contains all solutions of dfs
-        print("Agent: Breadth-First Search path calculation execution complete "
-              "after {0:.2f} seconds.".format(time.time() - starttime))
+        # now self.solutions contains all solutions of bfs
     # //////////////////////////////////////////////////
 
     # Best-First Search
@@ -368,9 +354,6 @@ class Waiter (pygame.sprite.Sprite):
 
     # procedure responsible of calculating all possible bestfs paths
     def get_bestfs_path(self):
-        # measure time
-        starttime = time.time()
-        print("Agent: Best-First Search path calculation executed...")
         # for all permutations of goals list:
         for self.goals in copy.deepcopy(self.goalsPer):
             # clear bestfs_path and run next permutation
@@ -382,7 +365,5 @@ class Waiter (pygame.sprite.Sprite):
             # add parsed bestfs_path to solutions
             self.solutions.append(self.parse_dfs_list(self.path))
         # now self.solutions contains all solutions of bestfs
-        print("Agent: Best-First Search path calculation execution complete "
-              "after {0:.2f} seconds.".format(time.time() - starttime))
 
     # //////////////////////////////////////////////////////

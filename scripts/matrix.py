@@ -101,7 +101,7 @@ class Matrix:
 
     # parse matrix to graph understandable for DFS algorithm
     def to_graph(self):
-        print("Matrix: converting matrix to graph")
+        print("Matrix: converting matrix to graph...")
         graph = dict()
         # list of available connections
         connections = [[type(self.fill), type(self.fill)],
@@ -121,4 +121,8 @@ class Matrix:
                     except IndexError:
                         pass
                 graph[key] = set(value_list)
+        print("Matrix: converted matrix to graph.")
         return graph
+
+    def size(self):
+        return len(self.matrix)

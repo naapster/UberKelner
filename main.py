@@ -56,19 +56,25 @@ if __name__ == '__main__':
 
     # parse arguments
     print("Main: Parsing arguments")
-    parser = ArgumentParser(description='Uberkelner description here')
-
+    description = "Project UberKelner\n Project goal: to create a static discrete environment corresponding " \
+                  "to the real restaurant and the artificial intelligence agent serving as a waiter in the restaurant."
+    parser = ArgumentParser(description=description)
     # --size 10
     parser.add_argument("-n", "--size", help="set size of simulation", required=False, default=10)
     # --fps 30
     parser.add_argument("-f", "--fps", help="set frames per second of simulation", required=False, default=30)
+    # --control True
+    parser.add_argument("-c", "--control", help="choose whether to run simulation from log or random",
+                        required=False, default=True)
     # --random N num_tables num_furnaces num_walls
-    parser.add_argument("-r", "--random", help="create random simulation", required=False, default=False)
+    parser.add_argument("-r", "--random", help="create random simulation with parameters: "
+                                               "N num_tables num_furnaces num_walls", required=False, default=False)
     # --log -1
     parser.add_argument("-l", "--log", help="run simulation from log", required=False, default=-1)
-    # --solution depthfs
-    parser.add_argument("-s", "--solution", help="choose solving method. Deep-first search is the default choice.",
-                        required=False, default="depthfs")
+    # --solution depthfs/breathfs/bestfs/all
+    parser.add_argument("-s", "--solution",
+                        help="choose solving method.\nMethods available: depthfs, breathfs, bestfs, all. "
+                             "Deep-first search is the default choice.", required=False, default="depthfs")
     # --blocksize 60
     parser.add_argument("-b", "--blocksize", help="set size of sprites (in px)", required=False, default=60)
 
@@ -79,18 +85,20 @@ if __name__ == '__main__':
     # amount of blocks in row of simulation
     N = args['size']
     FPS = args['fps']
+    control = args['control']
+    # row in simulation log to load - coordinates like in list, negative numbers mean positipon from the back of list
+    run_simulation = args['log']
     solution = args['solution']
     blocksize = args['blocksize']
 
     print("Args: Set size to %s" % N)
     print("Args: Set FPS to %s" % FPS)
+    print("Args: Set control to %s" % control)
+    print("Args: Set simulation log to %s" % run_simulation)
     print("Args: Set solution to %s" % args['solution'])
     print("Args: Set blocksize to %s" % args['blocksize'])
 
     # default settings
-    control = True
-    # row in simulation log to load - coordinates like in list, negative numbers mean positipon from the back of list
-    run_simulation = -1
     # number of tables
     num_tables = 0
     # number of furnaces
@@ -100,14 +108,14 @@ if __name__ == '__main__':
 
     '''
     # choose whether to run simulation from log (True) or generate random (False)
-    if args.random:
+    if args['random']:
         print("Args: Generating random simulation")
         control = False
     else:
-        if args.log:
-            print("Args: Generating simulation from %s log" % args.log)
+        if args['log']:
+            print("Args: Generating simulation from %s log" % args['log'])
             control = True
-            run_simulation = args.log  # index of simulation to run in log list
+            run_simulation = args['log']  # index of simulation to run in log list
         else:
             print("Main: log loig")
     '''
@@ -145,7 +153,7 @@ if __name__ == '__main__':
 
     # waiters - agents of simulation, owning matrices of restaurants
     # one special playable waiter
-    Uber = Waiter(N, coordinates, num_tables, num_furnaces, num_walls)
+    Uber = Waiter(N, coordinates, num_tables, num_furnaces, num_walls, solution)
 
     # list of all sprites for graphics window to draw
     all_sprites = pygame.sprite.Group()
@@ -165,9 +173,6 @@ if __name__ == '__main__':
     DISPLAYSURF = pygame.display.set_mode((blocksize * N, blocksize * N), 0, 32)
     pygame.display.set_caption('UberKelner')
     WHITE = (255, 255, 255)
-
-    # run solution seeking
-    Uber.solve(solution)
 
     # clear event log of game
     pygame.event.clear()
