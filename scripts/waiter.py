@@ -8,7 +8,7 @@ import heapq
 
 from pygame.locals import *
 
-from main import init_graphics, blocksize
+from UberKelner import init_graphics, blocksize
 from scripts.matrix import *
 from scripts.wall import *
 

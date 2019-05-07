@@ -1,7 +1,7 @@
 # table object class:
 
 import pygame
-from main import init_graphics
+from UberKelner import init_graphics
 
 
 # init of object with sprite - pygames requirement
