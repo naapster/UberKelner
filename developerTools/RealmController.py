@@ -10,7 +10,7 @@ if __name__ == '__main__':
     # choose simulation log file
     simulation_log = "logs\simulation_log.txt"
     # row of simulation log to recreate (used only if control is false)
-    run_simulation = -1
+    run_simulation = 0
 
     # set dictionary with symbols - can be changed if you wish to use other symbols instead
     symbols = {
@@ -105,7 +105,7 @@ if __name__ == '__main__':
             matrix[coordinates[i][0]][coordinates[i][1]] = 'X'
 
         # save state of simulation to file
-        with open("developerTools\map_template.txt", "w") as myfile:
+        with open("developerTools\map_recreated.txt", "w") as myfile:
             for row in matrix:
                 myfile.write(''.join(row) + '\n')
 
