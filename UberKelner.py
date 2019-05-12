@@ -57,7 +57,7 @@ def create_random_coordinates():
 if __name__ == '__main__':
     print("Main: simulation controller executed...")
     # parse arguments
-    print("Main: Parsing arguments")
+    print("Main: Parsing arguments:")
     description = "Project UberKelner\n Project goal: to create a static discrete environment corresponding " \
                   "to the real restaurant and the artificial intelligence agent serving as a waiter in the restaurant."
     parser = ArgumentParser(description=description)
@@ -66,6 +66,8 @@ if __name__ == '__main__':
                         required=False, default=False)
     # --blocksize 60
     parser.add_argument("-b", "--blocksize", help="set size of sprites (in px)", required=False, default=60)
+    # --capture True
+    parser.add_argument("-c", "--capture", help="capture screenshot of simulation", required=False, default=False)
     # --fps 30
     parser.add_argument("-f", "--fps", help="set frames per second of simulation", required=False, default=30)
     # --graphics True
@@ -192,6 +194,10 @@ if __name__ == '__main__':
                 # get next length
                 uberpathlen = len(Uber.path)
             print("Main: autorun completed.")
+
+        # save screenshot
+        if args['capture']:
+            pygame.image.save(DISPLAYSURF, "documentation\screenshot.png")
 
         # run manual simulation
         control = True
