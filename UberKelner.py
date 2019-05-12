@@ -70,7 +70,7 @@ if __name__ == '__main__':
     parser.add_argument("-f", "--fps", help="set frames per second of simulation", required=False, default=30)
     # --graphics True
     parser.add_argument("-g", "--graphics", help="enable/disable use of graphics window and controls",
-                        required=False, default=True)
+                        required=False, default=False)
     # --log -1
     parser.add_argument("-l", "--log", help="run simulation from log", required=False, default=-6)
     # --size 10
@@ -109,11 +109,13 @@ if __name__ == '__main__':
     num_furnaces = 1
     # number of walls
     num_walls = 10
+    # choose simulation log file
+    simulation_log = "logs\simulation_log_4.txt"
 
     if not args['random']:
         # reload simulation state from log:
         # get last row in log
-        with open('logs\simulation_log_2.txt') as myfile:
+        with open(simulation_log) as myfile:
             log = list(myfile)[run_simulation].split('\t')
         # amount of blocks in row of simulation - not currently active, change init
         N = int(log[1])
@@ -134,7 +136,7 @@ if __name__ == '__main__':
         # rest of values are default
 
         # save state of simulation to file
-        with open("simulation_log.txt", "a") as myfile:
+        with open(simulation_log, "a") as myfile:
             myfile.write(str(datetime.datetime.now()) + '\t'
                          + str(N) + '\t' + str(num_tables) + '\t' + str(num_furnaces) + '\t' + str(num_walls) + '\t'
                          + str(coordinates[:(num_tables + num_furnaces + num_walls + 1)]) + '\n')
