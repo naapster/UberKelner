@@ -11,6 +11,7 @@ from argparse import ArgumentParser
 import pygame
 from pygame.locals import *
 from scripts.waiter import *
+import time
 
 # solve pygame audio driver error
 os.environ['SDL_AUDIODRIVER'] = 'dsp'
@@ -60,6 +61,9 @@ if __name__ == '__main__':
     description = "Project UberKelner\n Project goal: to create a static discrete environment corresponding " \
                   "to the real restaurant and the artificial intelligence agent serving as a waiter in the restaurant."
     parser = ArgumentParser(description=description)
+    # --autorun True
+    parser.add_argument("-a", "--autorun", help="run simulation steps automatically every one second",
+                        required=False, default=False)
     # --blocksize 60
     parser.add_argument("-b", "--blocksize", help="set size of sprites (in px)", required=False, default=60)
     # --fps 30
@@ -109,7 +113,7 @@ if __name__ == '__main__':
     if not args['random']:
         # reload simulation state from log:
         # get last row in log
-        with open("logs\simulation_log.txt") as myfile:
+        with open('logs\simulation_log.txt') as myfile:
             log = list(myfile)[run_simulation].split('\t')
         # amount of blocks in row of simulation - not currently active, change init
         N = int(log[1])
@@ -155,12 +159,39 @@ if __name__ == '__main__':
         fpsClock = pygame.time.Clock()
         # set up the window
         DISPLAYSURF = pygame.display.set_mode((blocksize * N, blocksize * N), 0, 32)
-        pygame.display.set_caption('UberKelner')
+        pygame.display.set_caption('UberKelner Realm')
         WHITE = (255, 255, 255)
 
         # clear event log of game
         pygame.event.clear()
-        # for eternity:
+
+        # run auto simulation
+        if args['autorun']:
+            uberpathlen = len(Uber.path)
+            print("Main: autorun started, estimated time of run: %s seconds" % uberpathlen)
+            # while there is movement available
+            while uberpathlen > 0:
+                # write comment
+                if not uberpathlen % 10:
+                    print("Autorun: %s steps remaining..." % uberpathlen)
+                # draw simulation
+                all_sprites.update()
+                # draw background
+                DISPLAYSURF.fill(WHITE)
+                # draw sprites
+                all_sprites.draw(DISPLAYSURF)
+                # refresh Screen
+                pygame.display.flip()
+                fpsClock.tick(FPS)
+                # move agent
+                Uber.next_round(K_SPACE)
+                # every one second
+                time.sleep(1 - time.time() % 1)
+                # get next length
+                uberpathlen = len(Uber.path)
+            print("Main: autorun completed.")
+
+        # run manual simulation
         control = True
         while control:
             # wait for key pressed:
