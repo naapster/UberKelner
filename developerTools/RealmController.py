@@ -6,9 +6,9 @@ import datetime
 if __name__ == '__main__':
 
     # controller of script: True - generate map, false - recreate map from log
-    control = False
+    control = True
     # choose simulation log file
-    simulation_log = "logs\simulation_log.txt"
+    simulation_log = "..\logs\simulation_log_4.txt"
     # row of simulation log to recreate (used only if control is false)
     run_simulation = 0
 
@@ -25,7 +25,7 @@ if __name__ == '__main__':
         print("Map generation executed...")
 
         # get map_template content
-        lines = [line.rstrip('\n') for line in open('developerTools\map_template.txt')]
+        lines = [line.rstrip('\n') for line in open('map_template.txt')]
 
         # the longest row will be map size
         N = len(max(lines, key=len))
@@ -105,7 +105,7 @@ if __name__ == '__main__':
             matrix[coordinates[i][0]][coordinates[i][1]] = 'X'
 
         # save state of simulation to file
-        with open("developerTools\map_recreated.txt", "w") as myfile:
+        with open("map_recreated.txt", "w") as myfile:
             for row in matrix:
                 myfile.write(''.join(row) + '\n')
 

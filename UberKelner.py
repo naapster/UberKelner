@@ -70,9 +70,9 @@ if __name__ == '__main__':
     parser.add_argument("-f", "--fps", help="set frames per second of simulation", required=False, default=30)
     # --graphics True
     parser.add_argument("-g", "--graphics", help="enable/disable use of graphics window and controls",
-                        required=False, default=False)
+                        required=False, default=True)
     # --log -1
-    parser.add_argument("-l", "--log", help="run simulation from log", required=False, default=-1)
+    parser.add_argument("-l", "--log", help="run simulation from log", required=False, default=-6)
     # --size 10
     parser.add_argument("-n", "--size", help="set size of simulation", required=False, default=10)
     # --random True
