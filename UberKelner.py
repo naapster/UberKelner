@@ -113,7 +113,7 @@ if __name__ == '__main__':
     if not args['random']:
         # reload simulation state from log:
         # get last row in log
-        with open('logs\simulation_log.txt') as myfile:
+        with open('logs\simulation_log_2.txt') as myfile:
             log = list(myfile)[run_simulation].split('\t')
         # amount of blocks in row of simulation - not currently active, change init
         N = int(log[1])
