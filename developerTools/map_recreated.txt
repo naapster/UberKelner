@@ -1,7 +1,9 @@
-XXXXXX_
-X____XX
-X_XX_X_
-X_XX___
-X__XX__
-XX_XX__
-XXXXX__
+XW______T
+XX_XTX_XX
+XX_XXX_XX
+T__XT___X
+XX_XXXX_X
+XT__XXT_X
+XX_XF_X_X
+XX_XX_X_X
+T__XX___X
