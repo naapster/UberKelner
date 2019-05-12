@@ -8,7 +8,7 @@ if __name__ == '__main__':
     # controller of script: True - generate map, false - recreate map from log
     control = False
     # choose simulation log file
-    simulation_log = "logs\simulation_log_4.txt"
+    simulation_log = "logs\simulation_log.txt"
     # row of simulation log to recreate (used only if control is false)
     run_simulation = 0
 

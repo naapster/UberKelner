@@ -68,13 +68,16 @@ if __name__ == '__main__':
     parser.add_argument("-b", "--blocksize", help="set size of sprites (in px)", required=False, default=60)
     # --capture True
     parser.add_argument("-c", "--capture", help="capture screenshot of simulation", required=False, default=False)
+    # --document "logs\simulation_log.txt"
+    parser.add_argument("-d", "--document", help="set filename to read and write simulation logs",
+                        required=False, default="logs\simulation_log.txt")
     # --fps 30
     parser.add_argument("-f", "--fps", help="set frames per second of simulation", required=False, default=30)
     # --graphics True
     parser.add_argument("-g", "--graphics", help="enable/disable use of graphics window and controls",
                         required=False, default=False)
     # --log -1
-    parser.add_argument("-l", "--log", help="run simulation from log", required=False, default=-6)
+    parser.add_argument("-l", "--log", help="choose row of document to read simulation", required=False, default=-1)
     # --size 10
     parser.add_argument("-n", "--size", help="set size of simulation", required=False, default=10)
     # --random True
@@ -88,21 +91,26 @@ if __name__ == '__main__':
     # args will be a dictionary containing the arguments
     args = vars(parser.parse_args())
     # init list of variables, common for all simulations:
-    # amount of blocks in row of simulation
-    N = args['size']
+    blocksize = args['blocksize']
+    # choose simulation log file
+    simulation_log = args['document']
     FPS = args['fps']
     # row in simulation log to load - coordinates like in list, negative numbers mean positipon from the back of list
     run_simulation = args['log']
+    # amount of blocks in row of simulation
+    N = args['size']
     solution = args['solution']
-    blocksize = args['blocksize']
-    graphics = args['graphics']
 
-    print("Args: Set size to %s" % N)
+    print("Args: Set autorun to %s" % args['autorun'])
+    print("Args: Set blocksize to %s" % blocksize)
+    print("Args: Set capture to %s" % args['capture'])
+    print("Args: Set document to %s" % simulation_log)
     print("Args: Set FPS to %s" % FPS)
-    print("Args: Set simulation log to %s" % run_simulation)
-    print("Args: Set solution to %s" % args['solution'])
-    print("Args: Set blocksize to %s" % args['blocksize'])
     print("Args: Set graphics to %s" % args['graphics'])
+    print("Args: Set simulation log to %s" % run_simulation)
+    print("Args: Set size to %s" % N)
+    # print("Args: Set random to %s" % args['random'])
+    print("Args: Set solution to %s" % solution)
 
     # default settings
     # number of tables
@@ -111,8 +119,6 @@ if __name__ == '__main__':
     num_furnaces = 1
     # number of walls
     num_walls = 10
-    # choose simulation log file
-    simulation_log = "logs\simulation_log_4.txt"
 
     if not args['random']:
         # reload simulation state from log:
@@ -149,7 +155,7 @@ if __name__ == '__main__':
 
     # main game loop:
     # check if graphics are enabled
-    if graphics:
+    if args['graphics']:
         # graphics init
         # list of all sprites for graphics window to draw
         all_sprites = pygame.sprite.Group()
