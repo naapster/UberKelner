@@ -63,30 +63,37 @@ if __name__ == '__main__':
     parser = ArgumentParser(description=description)
     # --autorun True
     parser.add_argument("-a", "--autorun", help="run simulation steps automatically every one second",
-                        required=False, default=False)
+                        required=False, default=False, type=bool)
     # --blocksize 60
-    parser.add_argument("-b", "--blocksize", help="set size of sprites (in px)", required=False, default=60)
+    parser.add_argument("-b", "--blocksize", help="set size of sprites (in px)",
+                        required=False, default=60, type=int)
     # --capture True
-    parser.add_argument("-c", "--capture", help="capture screenshot of simulation", required=False, default=False)
+    parser.add_argument("-c", "--capture", help="capture screenshot of simulation",
+                        required=False, default=False, type=bool)
     # --document "logs\simulation_log.txt"
     parser.add_argument("-d", "--document", help="set filename to read and write simulation logs",
-                        required=False, default="logs\simulation_log.txt")
+                        required=False, default="logs\simulation_log.txt", type=str)
     # --fps 30
-    parser.add_argument("-f", "--fps", help="set frames per second of simulation", required=False, default=30)
+    parser.add_argument("-f", "--fps", help="set frames per second of simulation",
+                        required=False, default=30, type=int)
     # --graphics True
     parser.add_argument("-g", "--graphics", help="enable/disable use of graphics window and controls",
-                        required=False, default=False)
+                        required=False, default=False, type=bool)
     # --log -1
-    parser.add_argument("-l", "--log", help="choose row of document to read simulation", required=False, default=-1)
+    parser.add_argument("-l", "--log", help="choose row of document to read simulation",
+                        required=False, default=-1, type=int)
     # --size 10
-    parser.add_argument("-n", "--size", help="set size of simulation", required=False, default=10)
+    parser.add_argument("-n", "--size", help="set size of simulation",
+                        required=False, default=10, type=int)
     # --random True
     parser.add_argument("-r", "--random", help="create random simulation with parameters: "
-                                               "N num_tables num_furnaces num_walls", required=False, default=False)
+                                               "N num_tables num_furnaces num_walls",
+                        required=False, default=False, type=bool)
     # --solution depthfs/breathfs/bestfs/all
     parser.add_argument("-s", "--solution",
                         help="choose solving method.\nMethods available: depthfs, breathfs, bestfs, all. "
-                             "Deep-first search is the default choice.", required=False, default="depthfs")
+                             "Deep-first search is the default choice.",
+                        required=False, default="depthfs", type=str)
 
     # args will be a dictionary containing the arguments
     args = vars(parser.parse_args())
