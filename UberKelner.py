@@ -11,6 +11,7 @@ from argparse import ArgumentParser
 import pygame
 from pygame.locals import *
 from scripts.waiter import *
+import time
 
 # solve pygame audio driver error
 os.environ['SDL_AUDIODRIVER'] = 'dsp'
@@ -56,47 +57,67 @@ def create_random_coordinates():
 if __name__ == '__main__':
     print("Main: simulation controller executed...")
     # parse arguments
-    print("Main: Parsing arguments")
+    print("Main: Parsing arguments:")
     description = "Project UberKelner\n Project goal: to create a static discrete environment corresponding " \
                   "to the real restaurant and the artificial intelligence agent serving as a waiter in the restaurant."
     parser = ArgumentParser(description=description)
+    # --autorun True
+    parser.add_argument("-a", "--autorun", help="run simulation steps automatically every one second",
+                        required=False, default=False, type=bool)
     # --blocksize 60
-    parser.add_argument("-b", "--blocksize", help="set size of sprites (in px)", required=False, default=60)
+    parser.add_argument("-b", "--blocksize", help="set size of sprites (in px)",
+                        required=False, default=60, type=int)
+    # --capture True
+    parser.add_argument("-c", "--capture", help="capture screenshot of simulation",
+                        required=False, default=False, type=bool)
+    # --document "logs\simulation_log.txt"
+    parser.add_argument("-d", "--document", help="set filename to read and write simulation logs",
+                        required=False, default="logs\simulation_log.txt", type=str)
     # --fps 30
-    parser.add_argument("-f", "--fps", help="set frames per second of simulation", required=False, default=30)
+    parser.add_argument("-f", "--fps", help="set frames per second of simulation",
+                        required=False, default=30, type=int)
     # --graphics True
     parser.add_argument("-g", "--graphics", help="enable/disable use of graphics window and controls",
-                        required=False, default=False)
+                        required=False, default=False, type=bool)
     # --log -1
-    parser.add_argument("-l", "--log", help="run simulation from log", required=False, default=-1)
+    parser.add_argument("-l", "--log", help="choose row of document to read simulation",
+                        required=False, default=-1, type=int)
     # --size 10
-    parser.add_argument("-n", "--size", help="set size of simulation", required=False, default=10)
+    parser.add_argument("-n", "--size", help="set size of simulation",
+                        required=False, default=10, type=int)
     # --random True
     parser.add_argument("-r", "--random", help="create random simulation with parameters: "
-                                               "N num_tables num_furnaces num_walls", required=False, default=False)
+                                               "N num_tables num_furnaces num_walls",
+                        required=False, default=False, type=bool)
     # --solution depthfs/breathfs/bestfs/all
     parser.add_argument("-s", "--solution",
                         help="choose solving method.\nMethods available: depthfs, breathfs, bestfs, all. "
-                             "Deep-first search is the default choice.", required=False, default="depthfs")
+                             "Deep-first search is the default choice.",
+                        required=False, default="depthfs", type=str)
 
     # args will be a dictionary containing the arguments
     args = vars(parser.parse_args())
     # init list of variables, common for all simulations:
-    # amount of blocks in row of simulation
-    N = args['size']
+    blocksize = args['blocksize']
+    # choose simulation log file
+    simulation_log = args['document']
     FPS = args['fps']
     # row in simulation log to load - coordinates like in list, negative numbers mean positipon from the back of list
     run_simulation = args['log']
+    # amount of blocks in row of simulation
+    N = args['size']
     solution = args['solution']
-    blocksize = args['blocksize']
-    graphics = args['graphics']
 
-    print("Args: Set size to %s" % N)
+    print("Args: Set autorun to %s" % args['autorun'])
+    print("Args: Set blocksize to %s" % blocksize)
+    print("Args: Set capture to %s" % args['capture'])
+    print("Args: Set document to %s" % simulation_log)
     print("Args: Set FPS to %s" % FPS)
-    print("Args: Set simulation log to %s" % run_simulation)
-    print("Args: Set solution to %s" % args['solution'])
-    print("Args: Set blocksize to %s" % args['blocksize'])
     print("Args: Set graphics to %s" % args['graphics'])
+    print("Args: Set simulation log to %s" % run_simulation)
+    print("Args: Set size to %s" % N)
+    # print("Args: Set random to %s" % args['random'])
+    print("Args: Set solution to %s" % solution)
 
     # default settings
     # number of tables
@@ -109,7 +130,7 @@ if __name__ == '__main__':
     if not args['random']:
         # reload simulation state from log:
         # get last row in log
-        with open("logs\simulation_log.txt") as myfile:
+        with open(simulation_log) as myfile:
             log = list(myfile)[run_simulation].split('\t')
         # amount of blocks in row of simulation - not currently active, change init
         N = int(log[1])
@@ -130,7 +151,7 @@ if __name__ == '__main__':
         # rest of values are default
 
         # save state of simulation to file
-        with open("simulation_log.txt", "a") as myfile:
+        with open(simulation_log, "a") as myfile:
             myfile.write(str(datetime.datetime.now()) + '\t'
                          + str(N) + '\t' + str(num_tables) + '\t' + str(num_furnaces) + '\t' + str(num_walls) + '\t'
                          + str(coordinates[:(num_tables + num_furnaces + num_walls + 1)]) + '\n')
@@ -141,7 +162,7 @@ if __name__ == '__main__':
 
     # main game loop:
     # check if graphics are enabled
-    if graphics:
+    if args['graphics']:
         # graphics init
         # list of all sprites for graphics window to draw
         all_sprites = pygame.sprite.Group()
@@ -155,12 +176,43 @@ if __name__ == '__main__':
         fpsClock = pygame.time.Clock()
         # set up the window
         DISPLAYSURF = pygame.display.set_mode((blocksize * N, blocksize * N), 0, 32)
-        pygame.display.set_caption('UberKelner')
+        pygame.display.set_caption('UberKelner Realm')
         WHITE = (255, 255, 255)
 
         # clear event log of game
         pygame.event.clear()
-        # for eternity:
+
+        # run auto simulation
+        if args['autorun']:
+            uberpathlen = len(Uber.path)
+            print("Main: autorun started, estimated time of run: %s seconds" % uberpathlen)
+            # while there is movement available
+            while uberpathlen > 0:
+                # write comment
+                if not uberpathlen % 10:
+                    print("Autorun: %s steps remaining..." % uberpathlen)
+                # draw simulation
+                all_sprites.update()
+                # draw background
+                DISPLAYSURF.fill(WHITE)
+                # draw sprites
+                all_sprites.draw(DISPLAYSURF)
+                # refresh Screen
+                pygame.display.flip()
+                fpsClock.tick(FPS)
+                # move agent
+                Uber.next_round(K_SPACE)
+                # every one second
+                time.sleep(1 - time.time() % 1)
+                # get next length
+                uberpathlen = len(Uber.path)
+            print("Main: autorun completed.")
+
+        # save screenshot
+        if args['capture']:
+            pygame.image.save(DISPLAYSURF, "documentation\screenshot.png")
+
+        # run manual simulation
         control = True
         while control:
             # wait for key pressed:
