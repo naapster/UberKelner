@@ -8,9 +8,9 @@ if __name__ == '__main__':
     # controller of script: True - generate map, false - recreate map from log
     control = False
     # choose simulation log file
-    simulation_log = "logs\simulation_log.txt"
+    simulation_log = "..\logs\simulation_log.txt"
     # row of simulation log to recreate (used only if control is false)
-    run_simulation = 1
+    run_simulation = 0
 
     # set dictionary with symbols - can be changed if you wish to use other symbols instead
     symbols = {
@@ -24,7 +24,7 @@ if __name__ == '__main__':
     if control:
         print("Map generation executed...")
         # get map_template content
-        lines = [line.rstrip('\n') for line in open('developerTools\map_template.txt')]
+        lines = [line.rstrip('\n') for line in open('map_template.txt')]
         # the longest row will be map size
         N = len(max(lines, key=len))
         waiter = []
@@ -87,7 +87,7 @@ if __name__ == '__main__':
         for i in range(num_walls):
             matrix[coordinates[i + counter][0]][coordinates[i + counter][1]] = 'X'
         # save state of simulation to file
-        with open("developerTools\map_recreated.txt", "w") as myfile:
+        with open("map_recreated.txt", "w") as myfile:
             for row in matrix:
                 myfile.write(''.join(row) + '\n')
         print("Map recreation complete.")
