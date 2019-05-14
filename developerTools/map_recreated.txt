@@ -1,9 +1,7 @@
-X___TXFX
-T_X_X__X
-X_X_X_XX
-T_X____T
-X_X_XXXX
-T_X____T
-X_X_XXXX
-XWX____T
-
+XXTWXXX
+X___XXX
+X_X___F
+X_XXXXX
+X__TXXX
+XT_X_TX
+XX___XX
