@@ -124,5 +124,28 @@ class Matrix:
         print("Matrix: converted matrix to graph.")
         return graph
 
+    def to_graph_visited_or_not(self):
+        print("Matrix: converting matrix to graph...")
+        graph = dict()
+        # list of available connections
+        connections = [[type(self.fill), type(self.fill)],
+                       [type(self.fill), type(Furnace(0, 0))], [type(self.fill), type(DinningTable(0, 0))]]
+        # parse matrix:
+        for i in range(len(self.matrix)):
+            for j in range(len(self.matrix)):
+                key = "{0},{1}".format(i, j)
+                value_list = list()
+                for vec in [[-1, 0], [1, 0], [0, -1], [0, 1]]:
+                    try:
+                        # add connection between blanks, blank and table, blank and kitchen
+                        if (([type(self.matrix[i][j]), type(self.matrix[i + vec[0]][j + vec[1]])] in connections
+                             or [type(self.matrix[i + vec[0]][j + vec[1]]), type(self.matrix[i][j])] in connections)
+                                and i + vec[0] >= 0 and j + vec[1] >= 0):
+                            value_list.append("unvisited")
+                    except IndexError:
+                        pass
+                graph[key] = set(value_list)
+        print("Matrix: converted matrix to graph.")
+        return graph
     def size(self):
         return len(self.matrix)

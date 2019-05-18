@@ -73,7 +73,7 @@ class Waiter (pygame.sprite.Sprite):
 
         # calculate graph
         self.graph = self.restaurant.to_graph()
-
+        self.graph2 = self.restaurant.to_graph_visited_or_not()
         # set list of objects
         self.objects_coordinates = matrix_fields[1:counter]
         # set list of goals
@@ -260,6 +260,29 @@ class Waiter (pygame.sprite.Sprite):
                 else:
                     stack.append((next_, path + [next_]))
 
+
+    def experimental_calculate_dfs_path(self, graph, start, goal):
+        stack = [(start, [start])]
+        stack_visited_or_not = [(start, [start])]
+        while stack:
+            (vertex, path) = stack.pop()
+            for next_ in graph[vertex] - set(path):
+                if next_ == goal and stack_visited_or_not is not "visited":
+                    # add path
+                    stack_visited_or_not = "visited"
+                    self.path.append(path)
+                    # remove goal and calculate next path
+                    temp = self.goals.pop(0)
+                    if self.goals:
+                        # call next goal
+                        self.calculate_dfs_path(self.graph, next_, str(self.goals[0][0]) + "," + str(self.goals[0][1]))
+                        # free memory
+                        del temp
+                    else:
+                        # add last goal to path
+                        self.path.append([str(temp[0]) + "," + str(temp[1])])
+                else:
+                    stack.append((next_, path + [next_]))
     # procedure responsible of calculating all possible dfs paths
     def get_dfs_path(self):
         # for all permutations of goals list:
