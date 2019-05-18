@@ -1,16 +1,53 @@
 # map generating script
 
 import datetime
+from argparse import ArgumentParser
 
 
 if __name__ == '__main__':
 
+    print("RC: Realm controller executed...")
+    # parse arguments
+    print("RC: Parsing arguments:")
+    description = "Realm Controller\n Project goal: to create a script to generate simulation logs from ASCII drawing" \
+                  ", recreate ASCII maps from simulation logs and load drawings into logs."
+    parser = ArgumentParser(description=description)
+    # --control True
+    parser.add_argument("-c", "--control",
+                        help="set control variable. True - execute generator, False - execute recreation",
+                        required=False, default=False, type=bool)
+    # --document logs\simulation_log.txt
+    parser.add_argument("-d", "--document", help="set filename to read and write simulation logs",
+                        required=False, default="logs\simulation_log.txt", type=str)
+    # --log -1
+    parser.add_argument("-l", "--log", help="choose row of document to read simulation",
+                        required=False, default=0, type=int)
+    # --recreated developerTools\map_recreated.txt
+    parser.add_argument("-r", "--recreated", help="choose document to save map template drawing",
+                        required=False, default="developerTools\map_recreated.txt", type=str)
+    # --template developerTools\map_template.txt
+    parser.add_argument("-t", "--template", help="choose document to read map template drawing",
+                        required=False, default="developerTools\map_template.txt", type=str)
+
+    # args will be a dictionary containing the arguments
+    args = vars(parser.parse_args())
+    # init list of variables:
     # controller of script: True - generate map, false - recreate map from log
-    control = False
+    control = args['control']
     # choose simulation log file
-    simulation_log = "logs\simulation_log.txt"
+    simulation_log = args['document']
     # row of simulation log to recreate (used only if control is false)
-    run_simulation = 1
+    run_simulation = args['log']
+    # file to save recreated map from simulation log
+    map_recreated = args['recreated']
+    # file to read map from drawing
+    map_template = args['template']
+
+    print("Args: Set control to %s" % args['control'])
+    print("Args: Set document to %s" % args['document'])
+    print("Args: Set log to %s" % args['log'])
+    print("Args: Set recreated to %s" % args['recreated'])
+    print("Args: Set template to %s" % args['template'])
 
     # set dictionary with symbols - can be changed if you wish to use other symbols instead
     symbols = {
@@ -20,11 +57,11 @@ if __name__ == '__main__':
         'X': 'Wall',
         '_': 'Blank'
     }
-    print("Executing RC for %s, row %d:" % (simulation_log, run_simulation))
+    print("RC: Executing Realm Controller for control %s, %s file, row %d:" % (control, simulation_log, run_simulation))
     if control:
-        print("Map generation executed...")
+        print("RC: Map generation executed...")
         # get map_template content
-        lines = [line.rstrip('\n') for line in open('developerTools\map_template.txt')]
+        lines = [line.rstrip('\n') for line in open(map_template)]
         # the longest row will be map size
         N = len(max(lines, key=len))
         waiter = []
@@ -49,9 +86,10 @@ if __name__ == '__main__':
         with open(simulation_log, "a") as myfile:
             myfile.write(str(datetime.datetime.now()) + '\t' + str(N) + '\t' + str(len(tables))
                          + '\t' + str(len(furnaces)) + '\t' + str(len(walls)) + '\t' + str(all_lists) + '\n')
-        print("Map generation complete.")
+        print("RC: Map recreated to file %s." % simulation_log)
+        print("RC: Map generation complete.")
     else:
-        print("Map recreation executed...")
+        print("RC: Map recreation executed...")
         # reload simulation state from log:
         # get last row in log
         with open(simulation_log) as myfile:
@@ -70,24 +108,25 @@ if __name__ == '__main__':
         # recreate simulation
         matrix = [['_' for _ in range(N)] for i in range(N)]
         # add agent
-        matrix[coordinates[0][0]][coordinates[0][1]] = 'W'
+        matrix[coordinates[0][1]][coordinates[0][0]] = 'W'
         # counter counts number of used coordinates, so no object will occupy the same space in simulation
         counter = 1
         # add tables
         for i in range(num_tables):
-            matrix[coordinates[i + counter][0]][coordinates[i + counter][1]] = 'T'
+            matrix[coordinates[i + counter][1]][coordinates[i + counter][0]] = 'T'
         # increase counter with number of used coordinates
         counter += num_tables
         # add furnaces
         for i in range(num_furnaces):
-            matrix[coordinates[i + counter][0]][coordinates[i + counter][1]] = 'F'
+            matrix[coordinates[i + counter][1]][coordinates[i + counter][0]] = 'F'
         # increase counter with number of used coordinates
         counter += num_furnaces
         # add walls
         for i in range(num_walls):
-            matrix[coordinates[i + counter][0]][coordinates[i + counter][1]] = 'X'
+            matrix[coordinates[i + counter][1]][coordinates[i + counter][0]] = 'X'
         # save state of simulation to file
-        with open("developerTools\map_recreated.txt", "w") as myfile:
+        with open(map_recreated, "w") as myfile:
             for row in matrix:
                 myfile.write(''.join(row) + '\n')
-        print("Map recreation complete.")
+        print("RC: Map recreated to file %s." % map_recreated)
+        print("RC: Map recreation complete.")
