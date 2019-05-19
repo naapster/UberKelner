@@ -66,13 +66,13 @@ if __name__ == '__main__':
                         required=False, default=False, type=bool)
     # --blocksize 60
     parser.add_argument("-b", "--blocksize", help="set size of sprites (in px)",
-                        required=False, default=60, type=int)
+                        required=False, default=30, type=int)
     # --capture True
     parser.add_argument("-c", "--capture", help="capture screenshot of simulation",
                         required=False, default=False, type=bool)
     # --document "logs\simulation_log.txt"
     parser.add_argument("-d", "--document", help="set filename to read and write simulation logs",
-                        required=False, default="logs\simulation_log.txt", type=str)
+                        required=False, default="data\simulation_log.txt", type=str)
     # --fps 30
     parser.add_argument("-f", "--fps", help="set frames per second of simulation",
                         required=False, default=30, type=int)
@@ -82,6 +82,9 @@ if __name__ == '__main__':
     # --log -1
     parser.add_argument("-l", "--log", help="choose row of document to read simulation",
                         required=False, default=-1, type=int)
+    # --model True
+    parser.add_argument("-m", "--model", help="create datamodel from simulation logs",
+                        required=False, default=False, type=bool)
     # --size 10
     parser.add_argument("-n", "--size", help="set size of simulation",
                         required=False, default=10, type=int)
@@ -104,6 +107,7 @@ if __name__ == '__main__':
     FPS = args['fps']
     # row in simulation log to load - coordinates like in list, negative numbers mean positipon from the back of list
     run_simulation = args['log']
+    model = args['model']
     # amount of blocks in row of simulation
     N = args['size']
     solution = args['solution']
@@ -114,6 +118,7 @@ if __name__ == '__main__':
     print("Args: Set document to %s" % simulation_log)
     print("Args: Set FPS to %s" % FPS)
     print("Args: Set graphics to %s" % args['graphics'])
+    print("Args: Set model to %s" % args['model'])
     print("Args: Set simulation log to %s" % run_simulation)
     print("Args: Set size to %s" % N)
     # print("Args: Set random to %s" % args['random'])
@@ -126,6 +131,56 @@ if __name__ == '__main__':
     num_furnaces = 1
     # number of walls
     num_walls = 10
+
+    # if script was run to create model:
+    if model:
+        print("Model: model creation executed...")
+        counter = 0
+        # for all files in logs:
+        for file in os.listdir("logs\\"):
+            print("Model: calculating %s..." % file)
+            # read file:
+            with open("logs\%s" % file) as f:
+                lines = f.readlines()
+                # for every log:
+                for log in lines:
+                    if len(log) > 1:
+                        print("\t for line %s..." % str(lines.index(log)+1))
+                        try:
+                            log = log.split('\t')
+                            # reload simulation state from log:
+                            # amount of blocks in row of simulation - not currently active, change init
+                            N = int(log[1])
+                            # number of tables
+                            num_tables = int(log[2])
+                            # number of furnaces
+                            num_furnaces = int(log[3])
+                            # number of walls
+                            num_walls = int(log[4])
+                            # coordinates
+                            _ = log[5].replace('[', '').split('],')
+                            coordinates = [list(map(int, s.replace(']', '').split(','))) for s in _]
+
+                            '''
+                            # calculate simulation solution
+                            Uber = Waiter(N, coordinates, num_tables, num_furnaces, num_walls, solution)
+                            # save solution to data model
+                            with open("data\datamodel.txt", "a") as myfile:
+                                myfile.write(str(N) + '\t' + str(num_tables) + '\t' + str(num_furnaces) + '\t' + 
+                                            str(num_walls) + '\t' + 
+                                            str(coordinates[:(num_tables + num_furnaces + num_walls + 1)]) + 
+                                             str(Uber.path) + '\n')
+                            '''
+                            counter = counter + 1
+                        except Exception as e:
+                            # error occures when there are no elements of one kind (for example, map with no furnaces)
+                            # therefore leaving empty list in log
+                            print(e)
+                    else:
+                        print("\t encountered empty line (%s)" % str(lines.index(log)+1))
+            print("Model: calculation of %s file completed." % file)
+        print("Model: datamodel controller execution complete.")
+        exit(0)
 
     if not args['random']:
         # reload simulation state from log:
