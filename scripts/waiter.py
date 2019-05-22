@@ -90,6 +90,7 @@ class Waiter (pygame.sprite.Sprite):
 
         # set all available solving methods names
         self.available_methods = ['depthfs', 'breadthfs', 'bestfs']
+        self.unsupervised_learning = ['rabbit', 'svm', 'dtree', 'lreg']
 
         # set solving method
         self.solving_method = solving_method
@@ -97,6 +98,10 @@ class Waiter (pygame.sprite.Sprite):
         # run solution seeking
         self.solve(self.solving_method)
         self.control = True
+
+    # function returning list of coordinates of agent
+    def get_coordinates(self):
+        return [self.x, self.y]
 
     # movement procedure - change position of agent on defined difference of coordinates
     def move(self, delta_x, delta_y):
@@ -153,8 +158,8 @@ class Waiter (pygame.sprite.Sprite):
             if not self.control:
 
                 # run solution seeking
-                self.solve(self.solving_method)
                 self.control = True
+                self.solve(self.solving_method)
 
             # move agent on path
             if self.path:
@@ -219,12 +224,25 @@ class Waiter (pygame.sprite.Sprite):
             else:
                 print("Agent: no %s path found!" % self.solving_method)
 
+        elif method in self.unsupervised_learning:
+            # set solving method
+            self.solving_method = method
+            if self.solving_method == "rabbit":
+                self.get_rabbit_path()
+            if self.solving_method == "svm":
+                self.get_svm_path()
+            if self.solving_method == "lreg":
+                self.get_logistic_regression_path()
+            if self.solving_method == "dtree":
+                self.get_decision_tree_path()
+
         elif method == "all":
             for method in self.available_methods:
                 self.solve(method)
         else:
             print("Agent: Unknown method of solving (%s)" % method)
 
+    # //////////////////////////////////////////////////
     #           S E A R C H E S
 
     # Depth-First Search
@@ -260,7 +278,6 @@ class Waiter (pygame.sprite.Sprite):
                 else:
                     stack.append((next_, path + [next_]))
 
-
     def experimental_calculate_dfs_path(self, graph, start, goal):
         stack = [(start, [start])]
         stack_visited_or_not = [(start, [start])]
@@ -283,6 +300,7 @@ class Waiter (pygame.sprite.Sprite):
                         self.path.append([str(temp[0]) + "," + str(temp[1])])
                 else:
                     stack.append((next_, path + [next_]))
+
     # procedure responsible of calculating all possible dfs paths
     def get_dfs_path(self):
         # for all permutations of goals list:
@@ -388,5 +406,80 @@ class Waiter (pygame.sprite.Sprite):
             # add parsed bestfs_path to solutions
             self.solutions.append(self.parse_dfs_list(self.path))
         # now self.solutions contains all solutions of bestfs
+
+    # //////////////////////////////////////////////////
+
+    # U N S U P E R V I S E D   L E A R N I N G
+
+    # //////////////////////////////////////////////////
+
+    # datamodel parser
+
+    @staticmethod
+    def save(filename, log):
+        with open(filename, "a") as myfile:
+            myfile.write(log + '\n')
+
+    def get_neighbourhood(self):
+        # get neighbourhood from matrix and get_coordinates of waiter
+        print("script saver")
+
+    # method used only in model generation, called in UberKelner.py ONLY
+    def parse(self, matrix, agent_coordinates, path):
+        # calculate neighbourhood from matrix and coordinates of agent
+
+        # save neighbourhood and solution to data model for rabbit
+        self.save("data\datamodel_rabbit.txt", "rabitoszki " + str(path))
+
+        # save neighbourhood and solution to data model for scikit
+        self.save("data\datamodel_scikit.txt", "scikitoszki " + str(path))
+
+    # //////////////////////////////////////////////////
+
+    # Rabbit Search - Adam Lewicki & Julia Maria May
+
+    def get_rabbit_path(self):
+        # get proposed solution of current state
+
+        # set response to path
+        self.path = [0, 0]
+        # because this method calculates only one step (not the whole path), it should be called again for next move
+        self.control = False
+
+    # //////////////////////////////////////////////////////
+
+    # SciKit Support Vector Machines Search - Marcin Drzewiczak
+
+    def get_svm_path(self):
+        # get proposed solution of current state
+
+        # set response to path
+        self.path = [0, 0]
+        # because this method calculates only one step (not the whole path), it should be called again for next move
+        self.control = False
+
+    # //////////////////////////////////////////////////////
+
+    # SciKit Logistic Regression Search - Michał Kubiak
+
+    def get_logistic_regression_path(self):
+        # get proposed solution of current state
+
+        # set response to path
+        self.path = [0, 0]
+        # because this method calculates only one step (not the whole path), it should be called again for next move
+        self.control = False
+
+    # //////////////////////////////////////////////////////
+
+    # SciKit Decision-Tree Search - Przemysław Owczar XD
+
+    def get_decision_tree_path(self):
+        # get proposed solution of current state
+
+        # set response to path
+        self.path = [0, 0]
+        # because this method calculates only one step (not the whole path), it should be called again for next move
+        self.control = False
 
     # //////////////////////////////////////////////////////

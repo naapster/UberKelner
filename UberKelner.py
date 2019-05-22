@@ -8,8 +8,6 @@ import os
 from os import path
 from random import shuffle
 from argparse import ArgumentParser
-import pygame
-from pygame.locals import *
 from scripts.waiter import *
 import time
 
@@ -161,25 +159,16 @@ if __name__ == '__main__':
                             _ = log[5].replace('[', '').split('],')
                             coordinates = [list(map(int, s.replace(']', '').split(','))) for s in _]
 
-                            '''
                             # calculate simulation solution
                             Uber = Waiter(N, coordinates, num_tables, num_furnaces, num_walls, solution)
                             
-                            # run simulation and parse neighbourhood with movement
-                            
-                                # save solution to data model
-                                with open("data\datamodel.txt", "a") as myfile:
-                                    myfile.write(str(N) + '\t' + str(num_tables) + '\t' + str(num_furnaces) + '\t' + 
-                                                str(num_walls) + '\t' + 
-                                                str(coordinates[:(num_tables + num_furnaces + num_walls + 1)]) + 
-                                                 str(Uber.path) + '\n')
-                                                 
-                                with open("data\datamodel.txt", "a") as myfile:
-                                    myfile.write(str(N) + '\t' + str(num_tables) + '\t' + str(num_furnaces) + '\t' + 
-                                                str(num_walls) + '\t' + 
-                                                str(coordinates[:(num_tables + num_furnaces + num_walls + 1)]) + 
-                                                 str(Uber.path) + '\n')
-                            '''
+                            # run simulation:
+                            while Uber.path:
+                                # parse neighbourhood with movement and save to datamodel
+                                Uber.parse(Uber.restaurant, Uber.get_coordinates, Uber.path[0])
+                                # move agent on path
+                                Uber.next_round(K_SPACE)
+
                             counter = counter + 1
                         except Exception as e:
                             # error occures when there are no elements of one kind (for example, map with no furnaces)

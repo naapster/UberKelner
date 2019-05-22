@@ -1,10 +1,7 @@
-'''
-vowpal wabbit
-adam & julia
-
 model verbal vomit:
 
-#ruchu w rozwiązaniu (1- prawo, 2-lewo, 3-góra, 4-dół) | stan otoczenia (0-blank, 1-wall, 20 - furnace inactive,  21-furnace active, 30-table inactive, 31-table active)
+#ruchu w rozwiązaniu (1- prawo, 2-lewo, 3-góra, 4-dół) | stan otoczenia (0-blank, 1-wall, 20 - furnace inactive,
+    21-furnace active, 30-table inactive, 31-table active)
 
 przykład:
 
@@ -26,6 +23,3 @@ XXW__
 XXFXX
 XXXXX
 
-'''
-
-# pvomit parser

@@ -1,3 +1,0 @@
-# logistic regression learning
-
-# przemek
