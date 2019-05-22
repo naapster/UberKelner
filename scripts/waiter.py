@@ -229,12 +229,15 @@ class Waiter (pygame.sprite.Sprite):
             self.solving_method = method
             if self.solving_method == "rabbit":
                 self.get_rabbit_path()
-            if self.solving_method == "svm":
+            elif self.solving_method == "svm":
                 self.get_svm_path()
-            if self.solving_method == "lreg":
+            elif self.solving_method == "lreg":
                 self.get_logistic_regression_path()
-            if self.solving_method == "dtree":
+            elif self.solving_method == "dtree":
                 self.get_decision_tree_path()
+            # because these methods calculate only one step (not the whole path),
+            # they should be called again for next move
+            self.control = False
 
         elif method == "all":
             for method in self.available_methods:
@@ -422,17 +425,20 @@ class Waiter (pygame.sprite.Sprite):
 
     def get_neighbourhood(self):
         # get neighbourhood from matrix and get_coordinates of waiter
-        print("script saver")
+        # use: self.get_coordinates() & self.restaurant.get_matrix() to get data required to find neighbourhood
+
+        print("script saver " + str(self.get_coordinates()))
 
     # method used only in model generation, called in UberKelner.py ONLY
-    def parse(self, matrix, agent_coordinates, path):
+    def parse_neighbourhood(self):
         # calculate neighbourhood from matrix and coordinates of agent
 
-        # save neighbourhood and solution to data model for rabbit
-        self.save("data\datamodel_rabbit.txt", "rabitoszki " + str(path))
+        # save neighbourhood AND movement solution to data model for rabbit
+        # according to the standard set in documentation/unsupervised_learning.txt
+        self.save("data\datamodel_rabbit.txt", "rabitoszki")
 
         # save neighbourhood and solution to data model for scikit
-        self.save("data\datamodel_scikit.txt", "scikitoszki " + str(path))
+        self.save("data\datamodel_scikit.txt", "scikitoszki")
 
     # //////////////////////////////////////////////////
 
@@ -443,8 +449,6 @@ class Waiter (pygame.sprite.Sprite):
 
         # set response to path
         self.path = [0, 0]
-        # because this method calculates only one step (not the whole path), it should be called again for next move
-        self.control = False
 
     # //////////////////////////////////////////////////////
 
@@ -455,8 +459,6 @@ class Waiter (pygame.sprite.Sprite):
 
         # set response to path
         self.path = [0, 0]
-        # because this method calculates only one step (not the whole path), it should be called again for next move
-        self.control = False
 
     # //////////////////////////////////////////////////////
 
@@ -467,8 +469,6 @@ class Waiter (pygame.sprite.Sprite):
 
         # set response to path
         self.path = [0, 0]
-        # because this method calculates only one step (not the whole path), it should be called again for next move
-        self.control = False
 
     # //////////////////////////////////////////////////////
 
@@ -479,7 +479,5 @@ class Waiter (pygame.sprite.Sprite):
 
         # set response to path
         self.path = [0, 0]
-        # because this method calculates only one step (not the whole path), it should be called again for next move
-        self.control = False
 
     # //////////////////////////////////////////////////////

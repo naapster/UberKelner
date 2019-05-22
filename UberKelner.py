@@ -165,7 +165,7 @@ if __name__ == '__main__':
                             # run simulation:
                             while Uber.path:
                                 # parse neighbourhood with movement and save to datamodel
-                                Uber.parse(Uber.restaurant, Uber.get_coordinates, Uber.path[0])
+                                Uber.parse_neighbourhood()
                                 # move agent on path
                                 Uber.next_round(K_SPACE)
 
