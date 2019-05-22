@@ -164,12 +164,21 @@ if __name__ == '__main__':
                             '''
                             # calculate simulation solution
                             Uber = Waiter(N, coordinates, num_tables, num_furnaces, num_walls, solution)
-                            # save solution to data model
-                            with open("data\datamodel.txt", "a") as myfile:
-                                myfile.write(str(N) + '\t' + str(num_tables) + '\t' + str(num_furnaces) + '\t' + 
-                                            str(num_walls) + '\t' + 
-                                            str(coordinates[:(num_tables + num_furnaces + num_walls + 1)]) + 
-                                             str(Uber.path) + '\n')
+                            
+                            # run simulation and parse neighbourhood with movement
+                            
+                                # save solution to data model
+                                with open("data\datamodel.txt", "a") as myfile:
+                                    myfile.write(str(N) + '\t' + str(num_tables) + '\t' + str(num_furnaces) + '\t' + 
+                                                str(num_walls) + '\t' + 
+                                                str(coordinates[:(num_tables + num_furnaces + num_walls + 1)]) + 
+                                                 str(Uber.path) + '\n')
+                                                 
+                                with open("data\datamodel.txt", "a") as myfile:
+                                    myfile.write(str(N) + '\t' + str(num_tables) + '\t' + str(num_furnaces) + '\t' + 
+                                                str(num_walls) + '\t' + 
+                                                str(coordinates[:(num_tables + num_furnaces + num_walls + 1)]) + 
+                                                 str(Uber.path) + '\n')
                             '''
                             counter = counter + 1
                         except Exception as e:
