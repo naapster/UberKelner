@@ -1,6 +1,6 @@
 model verbal vomit:
 
-#ruchu w rozwiązaniu (1- prawo, 2-lewo, 3-góra, 4-dół) | stan otoczenia (0-blank, 1-wall, 20 - furnace inactive,
+#ruchu w rozwiązaniu (D- prawo, A-lewo, W-góra, S-dół) | stan otoczenia (0-blank, 1-wall, 20 - furnace inactive,
     21-furnace active, 30-table inactive, 31-table active)
 
 przykład:
@@ -10,11 +10,17 @@ XXX
 XW_
 XFX
 
+koordynaty w datamodel:
+
+0x0 1x0 2x0
+1x0 1x1 2x1
+2x0 2x1 2x2
+
 datalog:
 
-2 | cellleft: 1 celldown: 20 cellup: 1 cellright: 0
+D | 1x0: 1 2x1: 20 1x0: 1 2x1: 0
 lub jeśli kuchnia jest aktywna
-4 | cellleft: 1 celldown: 21 cellup: 1 cellright: 0
+4 | 1x0: 1 2x1: 21 1x0: 1 2x1: 0
 
 można zwiększyć skanowany obszar o dodatkowy kwadrat, np:
 XXXXX
@@ -22,4 +28,9 @@ XXXXX
 XXW__
 XXFXX
 XXXXX
+
+wtedy koordynaty:
+
+0x0 1x0 2x0 3x0 4x0
+1x0 1x1 ...
 

@@ -35,6 +35,8 @@ class Waiter (pygame.sprite.Sprite):
             print("Agent: Not enough space in restaurant for objects!")
             sys.exit("N-space overflow")
 
+        self.n = n
+
         # init restaurant - matrix of objects
         self.restaurant = Matrix(n, n)
 
@@ -91,6 +93,9 @@ class Waiter (pygame.sprite.Sprite):
         # set all available solving methods names
         self.available_methods = ['depthfs', 'breadthfs', 'bestfs']
         self.unsupervised_learning = ['rabbit', 'svm', 'dtree', 'lreg']
+
+        # set neighbourhood
+        self.neighbourhood = []
 
         # set solving method
         self.solving_method = solving_method
@@ -228,7 +233,7 @@ class Waiter (pygame.sprite.Sprite):
             # set solving method
             self.solving_method = method
             if self.solving_method == "rabbit":
-                self.get_rabbit_path()
+                self.get_rabbit_path(5)  # set desired neighbourhood size
             elif self.solving_method == "svm":
                 self.get_svm_path()
             elif self.solving_method == "lreg":
@@ -423,29 +428,52 @@ class Waiter (pygame.sprite.Sprite):
         with open(filename, "a") as myfile:
             myfile.write(log + '\n')
 
-    def get_neighbourhood(self):
-        # get neighbourhood from matrix and get_coordinates of waiter
-        # use: self.get_coordinates() & self.restaurant.get_matrix() to get data required to find neighbourhood
+    # calculate neighbourhood from matrix and coordinates of agent
+    def get_neighbourhood(self, n):
+        # get neighbourhood from matrix and get_coordinates of waiter:
+        shift = int((n - 1)/2)  # coefficient of shift
 
-        print("script saver " + str(self.get_coordinates()))
+        # use self.get_coordinates() & self.restaurant.get_matrix() to get data required to find neighbourhood
+        # matrix = self.restaurant.get_matrix()
+        matrix = self.restaurant
+        [agent_x, agent_y] = self.get_coordinates()
+
+        # set matrix of neighbourhood - walls by default
+        self.neighbourhood = [['Wall' for _ in range(n)] for _ in range(n)]
+        self.neighbourhood[shift][shift] = 'Waiter'
+
+        # fill neighbourhood
+        for x in range(n):
+            for y in range(n):
+                # fill matrix of neighbourhood - NOT OPTIMAL, REPAIR: has to run through whole matrix
+                # instead of only common part of neighbourhood range and matrix
+                if agent_x + x - shift in range(0, self.n) and agent_y + y - shift in range(0, self.n):
+                    self.neighbourhood[y][x] = matrix.matrix[agent_x + x - shift][agent_y + y - shift]
 
     # method used only in model generation, called in UberKelner.py ONLY
-    def parse_neighbourhood(self):
-        # calculate neighbourhood from matrix and coordinates of agent
+    def parse_neighbourhood(self, n):
+        # get nieghbourhood of agent and save it to self.neighbourhood
+        self.get_neighbourhood(n)
+        # parse neighbourhood to data model standard:
+        # rabbit:
+        # rabbit_standard = ""
 
         # save neighbourhood AND movement solution to data model for rabbit
         # according to the standard set in documentation/unsupervised_learning.txt
-        self.save("data\datamodel_rabbit.txt", "rabitoszki")
+        # self.save("data\datamodel_rabbit.txt", rabbit_standard)
 
         # save neighbourhood and solution to data model for scikit
-        self.save("data\datamodel_scikit.txt", "scikitoszki")
+        # self.save("data\datamodel_scikit.txt", "scikitoszki")
 
     # //////////////////////////////////////////////////
 
     # Rabbit Search - Adam Lewicki & Julia Maria May
 
-    def get_rabbit_path(self):
-        # get proposed solution of current state
+    def get_rabbit_path(self, n):
+        # get neighbourhood
+        self.get_neighbourhood(n)
+        # get proposed solution of current state from model
+
 
         # set response to path
         self.path = [0, 0]
@@ -455,6 +483,8 @@ class Waiter (pygame.sprite.Sprite):
     # SciKit Support Vector Machines Search - Marcin Drzewiczak
 
     def get_svm_path(self):
+        # get neighbourhood
+        self.get_neighbourhood(n)
         # get proposed solution of current state
 
         # set response to path
@@ -465,6 +495,8 @@ class Waiter (pygame.sprite.Sprite):
     # SciKit Logistic Regression Search - Michał Kubiak
 
     def get_logistic_regression_path(self):
+        # get neighbourhood
+        self.get_neighbourhood(n)
         # get proposed solution of current state
 
         # set response to path
@@ -475,6 +507,8 @@ class Waiter (pygame.sprite.Sprite):
     # SciKit Decision-Tree Search - Przemysław Owczar XD
 
     def get_decision_tree_path(self):
+        # get neighbourhood
+        self.get_neighbourhood(n)
         # get proposed solution of current state
 
         # set response to path

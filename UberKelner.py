@@ -9,6 +9,8 @@ from os import path
 from random import shuffle
 from argparse import ArgumentParser
 from scripts.waiter import *
+import pygame
+from pygame.locals import *
 import time
 
 # solve pygame audio driver error
@@ -62,9 +64,10 @@ if __name__ == '__main__':
     # --autorun True
     parser.add_argument("-a", "--autorun", help="run simulation steps automatically every one second",
                         required=False, default=False, type=bool)
+    # REPAIR - blocksize changes for graphics window only, sprites still scale to original value (60 px)
     # --blocksize 60
     parser.add_argument("-b", "--blocksize", help="set size of sprites (in px)",
-                        required=False, default=30, type=int)
+                        required=False, default=60, type=int)
     # --capture True
     parser.add_argument("-c", "--capture", help="capture screenshot of simulation",
                         required=False, default=False, type=bool)
@@ -165,7 +168,7 @@ if __name__ == '__main__':
                             # run simulation:
                             while Uber.path:
                                 # parse neighbourhood with movement and save to datamodel
-                                Uber.parse_neighbourhood()
+                                Uber.parse_neighbourhood(5)
                                 # move agent on path
                                 Uber.next_round(K_SPACE)
 

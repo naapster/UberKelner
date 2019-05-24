@@ -147,5 +147,6 @@ class Matrix:
                 graph[key] = set(value_list)
         print("Matrix: converted matrix to graph.")
         return graph
+
     def size(self):
         return len(self.matrix)
