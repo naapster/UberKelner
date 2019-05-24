@@ -22,7 +22,7 @@ class Waiter (pygame.sprite.Sprite):
 
     # procedure of printing object properties when called by matrix
     def __repr__(self):
-        return "Waiter"
+        return "W"
 
     # initialize agent with list of coordinates for tables and furnaces and their number
     def __init__(self, n, matrix_fields, num_tables, num_furnaces, num_walls, solving_method):
@@ -50,7 +50,7 @@ class Waiter (pygame.sprite.Sprite):
         # objects have coordinates like in matrix (0..n, 0..n):
 
         # add ghostwaiter to restaurant to mark waiters position
-        self.restaurant.insert('Waiter', self.x, self.y)
+        self.restaurant.insert('W', self.x, self.y)
 
         # counter counts number of used coordinates, so no object will occupy the same space in simulation
         counter = 1
@@ -96,6 +96,7 @@ class Waiter (pygame.sprite.Sprite):
 
         # set neighbourhood
         self.neighbourhood = []
+        self.neighbourhood_size = 5
 
         # set solving method
         self.solving_method = solving_method
@@ -233,7 +234,7 @@ class Waiter (pygame.sprite.Sprite):
             # set solving method
             self.solving_method = method
             if self.solving_method == "rabbit":
-                self.get_rabbit_path(5)  # set desired neighbourhood size
+                self.get_rabbit_path()
             elif self.solving_method == "svm":
                 self.get_svm_path()
             elif self.solving_method == "lreg":
@@ -429,9 +430,9 @@ class Waiter (pygame.sprite.Sprite):
             myfile.write(log + '\n')
 
     # calculate neighbourhood from matrix and coordinates of agent
-    def get_neighbourhood(self, n):
+    def get_neighbourhood(self):
         # get neighbourhood from matrix and get_coordinates of waiter:
-        shift = int((n - 1)/2)  # coefficient of shift
+        shift = int((self.neighbourhood_size - 1)/2)  # coefficient of shift
 
         # use self.get_coordinates() & self.restaurant.get_matrix() to get data required to find neighbourhood
         # matrix = self.restaurant.get_matrix()
@@ -439,21 +440,23 @@ class Waiter (pygame.sprite.Sprite):
         [agent_x, agent_y] = self.get_coordinates()
 
         # set matrix of neighbourhood - walls by default
-        self.neighbourhood = [['Wall' for _ in range(n)] for _ in range(n)]
-        self.neighbourhood[shift][shift] = 'Waiter'
+        self.neighbourhood = [["X" for _ in range(self.neighbourhood_size)] for _ in range(self.neighbourhood_size)]
+        self.neighbourhood[shift][shift] = "W"
 
         # fill neighbourhood
-        for x in range(n):
-            for y in range(n):
+        for x in range(self.neighbourhood_size):
+            for y in range(self.neighbourhood_size):
                 # fill matrix of neighbourhood - NOT OPTIMAL, REPAIR: has to run through whole matrix
                 # instead of only common part of neighbourhood range and matrix
                 if agent_x + x - shift in range(0, self.n) and agent_y + y - shift in range(0, self.n):
                     self.neighbourhood[y][x] = matrix.matrix[agent_x + x - shift][agent_y + y - shift]
+        # test print of neighbourhood
+        # print(self.neighbourhood)
 
     # method used only in model generation, called in UberKelner.py ONLY
-    def parse_neighbourhood(self, n):
-        # get nieghbourhood of agent and save it to self.neighbourhood
-        self.get_neighbourhood(n)
+    def parse_neighbourhood(self):
+        # get neighbourhood of agent and save it to self.neighbourhood
+        self.get_neighbourhood()
         # parse neighbourhood to data model standard:
         # rabbit:
         # rabbit_standard = ""
@@ -469,14 +472,13 @@ class Waiter (pygame.sprite.Sprite):
 
     # Rabbit Search - Adam Lewicki & Julia Maria May
 
-    def get_rabbit_path(self, n):
+    def get_rabbit_path(self):
         # get neighbourhood
-        self.get_neighbourhood(n)
+        self.get_neighbourhood()
         # get proposed solution of current state from model
 
-
         # set response to path
-        self.path = [0, 0]
+        self.path = [[0, 0]]  # this has to be double list!
 
     # //////////////////////////////////////////////////////
 
@@ -484,11 +486,11 @@ class Waiter (pygame.sprite.Sprite):
 
     def get_svm_path(self):
         # get neighbourhood
-        self.get_neighbourhood(n)
+        self.get_neighbourhood()
         # get proposed solution of current state
 
         # set response to path
-        self.path = [0, 0]
+        self.path = [[0, 0]]  # this has to be double list!
 
     # //////////////////////////////////////////////////////
 
@@ -496,11 +498,11 @@ class Waiter (pygame.sprite.Sprite):
 
     def get_logistic_regression_path(self):
         # get neighbourhood
-        self.get_neighbourhood(n)
+        self.get_neighbourhood()
         # get proposed solution of current state
 
         # set response to path
-        self.path = [0, 0]
+        self.path = [[0, 0]]  # this has to be double list!
 
     # //////////////////////////////////////////////////////
 
@@ -508,10 +510,10 @@ class Waiter (pygame.sprite.Sprite):
 
     def get_decision_tree_path(self):
         # get neighbourhood
-        self.get_neighbourhood(n)
+        self.get_neighbourhood()
         # get proposed solution of current state
 
         # set response to path
-        self.path = [0, 0]
+        self.path = [[0, 0]]  # this has to be double list!
 
     # //////////////////////////////////////////////////////

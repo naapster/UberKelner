@@ -9,7 +9,7 @@ class Wall(pygame.sprite.Sprite):
 
     # procedure of printing object properties when called by matrix
     def __repr__(self):
-        return "Wall"
+        return "X"
 
     # init of object with coordinates in simulation
     def __init__(self, x, y):

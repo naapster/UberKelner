@@ -8,7 +8,7 @@ from scripts.furnace import *
 
 class Matrix:
     # matrix init, set rows and columns, fill is optional - 0 by default
-    def __init__(self, rows, columns, fill="0"):
+    def __init__(self, rows, columns, fill="_"):
         self.fill = fill
         self.matrix = [[self.fill for _ in range(columns)] for _ in range(rows)]
 
