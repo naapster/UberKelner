@@ -74,7 +74,6 @@ if __name__ == '__main__':
     # --document "logs\simulation_log.txt"
     parser.add_argument("-d", "--document", help="set filename to read and write simulation logs",
                         required=False, default="data\simulation_log.txt", type=str)
-    # --fps 30
     parser.add_argument("-f", "--fps", help="set frames per second of simulation",
                         required=False, default=30, type=int)
     # --graphics True
@@ -97,7 +96,7 @@ if __name__ == '__main__':
     parser.add_argument("-s", "--solution",
                         help="choose solving method.\nMethods available: depthfs, breathfs, bestfs, all. "
                              "Deep-first search is the default choice.",
-                        required=False, default="depthfs", type=str)
+                        required=False, default="dfs", type=str)
 
     # args will be a dictionary containing the arguments
     args = vars(parser.parse_args())
@@ -168,7 +167,8 @@ if __name__ == '__main__':
                             # run simulation:
                             while Uber.path:
                                 # parse neighbourhood with movement and save to datamodel
-                                Uber.parse_neighbourhood(5)
+                                Uber.neighbourhood_size = 5
+                                Uber.parse_neighbourhood()
                                 # move agent on path
                                 Uber.next_round(K_SPACE)
 
@@ -267,7 +267,6 @@ if __name__ == '__main__':
         # save screenshot
         if args['capture']:
             pygame.image.save(DISPLAYSURF, "documentation\screenshot.png")
-
         # run manual simulation
         control = True
         while control:

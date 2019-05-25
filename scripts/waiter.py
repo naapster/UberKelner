@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # agent object class:
 
 import itertools
@@ -459,7 +460,21 @@ class Waiter (pygame.sprite.Sprite):
         self.get_neighbourhood()
         # parse neighbourhood to data model standard:
         # rabbit:
-        # rabbit_standard = ""
+
+        convert = {
+            "_": 0,
+            "X": 1,
+            "F": 2,
+            "T": 3,
+            "W": 4
+        }
+        predicted_move = "" # need to get predicted move from dfs
+        rabbit_standard = "{} |".format(predicted_move)
+        for x in range(self.neighbourhood_size):
+            for y in range(self.neighbourhood_size):
+                print(self.neighbourhood[x][y])
+                rabbit_standard += " {}:{}".format(str(x)+"x"+str(y), convert.get(self.neighbourhood[x][y]))
+        # print(rabbit_standard)
 
         # save neighbourhood AND movement solution to data model for rabbit
         # according to the standard set in documentation/unsupervised_learning.txt
