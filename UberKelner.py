@@ -96,7 +96,7 @@ if __name__ == '__main__':
     parser.add_argument("-s", "--solution",
                         help="choose solving method.\nMethods available: depthfs, breathfs, bestfs, all. "
                              "Deep-first search is the default choice.",
-                        required=False, default="dfs", type=str)
+                        required=False, default="depthfs", type=str)
 
     # args will be a dictionary containing the arguments
     args = vars(parser.parse_args())
