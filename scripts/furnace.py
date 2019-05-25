@@ -9,7 +9,9 @@ class Furnace(pygame.sprite.Sprite):
 
     # procedure of printing object properties when called by matrix
     def __repr__(self):
-        return "F"
+        if self.state == 0:
+            return "F"
+        return "E"
 
     # init of object with coordinates in simulation
     def __init__(self, x, y):
@@ -30,7 +32,7 @@ class Furnace(pygame.sprite.Sprite):
 
         # how long does this furnace cook?
         # for ai learning purpose - waiter has to minimize time in restaurant
-        self.time = 5
+        self.state = 1
 
     def next_round(self):
         # change the environment:
@@ -40,3 +42,4 @@ class Furnace(pygame.sprite.Sprite):
         # serve object:
         # init graphics with object's sprite - do not touch!
         init_graphics(self, self.x, self.y, "furnace")
+        self.state = 0

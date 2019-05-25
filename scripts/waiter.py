@@ -27,6 +27,7 @@ class Waiter (pygame.sprite.Sprite):
 
     # initialize agent with list of coordinates for tables and furnaces and their number
     def __init__(self, n, matrix_fields, num_tables, num_furnaces, num_walls, solving_method):
+        print("Agent: initializing object...")
 
         # call init of parent class
         pygame.sprite.Sprite.__init__(self)
@@ -105,6 +106,8 @@ class Waiter (pygame.sprite.Sprite):
         # run solution seeking
         self.solve(self.solving_method)
         self.control = True
+
+        print("Agent: initialization completed.")
 
     # function returning list of coordinates of agent
     def get_coordinates(self):
@@ -228,6 +231,7 @@ class Waiter (pygame.sprite.Sprite):
             if len(self.path) > 0:
                 # parse list to get coordinates of next moves
                 self.path = self.calculate_vector_movement(self.path)
+                print("Agent: path contains %s steps. " % len(self.path))
             else:
                 print("Agent: no %s path found!" % self.solving_method)
 
@@ -451,37 +455,50 @@ class Waiter (pygame.sprite.Sprite):
                 # instead of only common part of neighbourhood range and matrix
                 if agent_x + x - shift in range(0, self.n) and agent_y + y - shift in range(0, self.n):
                     self.neighbourhood[y][x] = matrix.matrix[agent_x + x - shift][agent_y + y - shift]
-        # test print of neighbourhood
-        # print(self.neighbourhood)
 
     # method used only in model generation, called in UberKelner.py ONLY
     def parse_neighbourhood(self):
         # get neighbourhood of agent and save it to self.neighbourhood
         self.get_neighbourhood()
+
         # parse neighbourhood to data model standard:
         # rabbit:
-
         convert = {
             "_": 0,
             "X": 1,
-            "F": 2,
-            "T": 3,
+            "F": 20,
+            "E": 21,
+            "T": 30,
+            "Y": 31,
             "W": 4
         }
-        predicted_move = "" # need to get predicted move from dfs
+        moves = {
+            "[0, -1]": "W",
+            "[0, 1]": "S",
+            "[-1, 0]": "A",
+            "[1, 0]": "D",
+        }
+        # there has to be run self.solve("depthfs") before this part, otherwise self.path will be empty
+        predicted_move = moves.get(str([self.path[0][0], self.path[0][1]]))  # returns value from "moves"
+
         rabbit_standard = "{} |".format(predicted_move)
         for x in range(self.neighbourhood_size):
             for y in range(self.neighbourhood_size):
-                print(self.neighbourhood[x][y])
-                rabbit_standard += " {}:{}".format(str(x)+"x"+str(y), convert.get(self.neighbourhood[x][y]))
-        # print(rabbit_standard)
+                rabbit_standard += " {}:{}".format(str(x)+"x"+str(y), convert.get(str(self.neighbourhood[x][y])))
 
         # save neighbourhood AND movement solution to data model for rabbit
         # according to the standard set in documentation/unsupervised_learning.txt
-        # self.save("data\datamodel_rabbit.txt", rabbit_standard)
+        self.save("data\datamodel_rabbit.txt", rabbit_standard)
+
+        '''
+        scikitstandard = "{} |".format(predicted_move)
+        for x in range(self.neighbourhood_size):
+            for y in range(self.neighbourhood_size):
+                scikitstandard += " {}:{}".format(str(x)+"x"+str(y), convert.get(str(self.neighbourhood[x][y])))
 
         # save neighbourhood and solution to data model for scikit
-        # self.save("data\datamodel_scikit.txt", "scikitoszki")
+        # self.save("data\datamodel_scikit.txt", scikitstandard)
+        '''
 
     # //////////////////////////////////////////////////
 

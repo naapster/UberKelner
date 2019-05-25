@@ -9,7 +9,9 @@ class DinningTable(pygame.sprite.Sprite):
 
     # procedure of printing object properties when called by matrix
     def __repr__(self):
-        return "T"
+        if self.state == 0:
+            return "T"
+        return "Y"
 
     # init of object with coordinates in simulation
     def __init__(self, x, y):
@@ -25,7 +27,7 @@ class DinningTable(pygame.sprite.Sprite):
         self.y = y
 
         # states of table
-        self.state = 0
+        self.state = 1
 
     def next_round(self):
         # change the environment:
@@ -34,4 +36,5 @@ class DinningTable(pygame.sprite.Sprite):
     def activated(self):
         # serve object:
         # init graphics with object's sprite - do not touch!
-        init_graphics(self, self.x, self.y, "dining_table")
+        init_graphics(self, self.x, self.y, "dinner_table")
+        self.state = 0

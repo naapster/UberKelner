@@ -3,6 +3,23 @@ model verbal vomit:
 #ruchu w rozwiązaniu (D- prawo, A-lewo, W-góra, S-dół) | stan otoczenia (0-blank, 1-wall, 20 - furnace inactive,
     21-furnace active, 30-table inactive, 31-table active)
 
+
+convert = {
+    "_": 0,
+    "X": 1,
+    "F": 20,
+    "E": 21,
+    "T": 30,
+    "Y": 31,
+    "W": 4
+}
+moves = {
+    "[0, 1]": "W",
+    "[0, -1]": "S",
+    "[-1, 0]": "A",
+    "[1, 0]": "D",
+}
+
 przykład:
 
 dla otoczenia
@@ -20,7 +37,7 @@ datalog:
 
 D | 1x0: 1 2x1: 20 1x0: 1 2x1: 0
 lub jeśli kuchnia jest aktywna
-4 | 1x0: 1 2x1: 21 1x0: 1 2x1: 0
+D | 1x0: 1 2x1: 21 1x0: 1 2x1: 0
 
 można zwiększyć skanowany obszar o dodatkowy kwadrat, np:
 XXXXX

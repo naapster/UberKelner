@@ -78,7 +78,7 @@ if __name__ == '__main__':
                         required=False, default=30, type=int)
     # --graphics True
     parser.add_argument("-g", "--graphics", help="enable/disable use of graphics window and controls",
-                        required=False, default=False, type=bool)
+                        required=False, default=True, type=bool)
     # --log -1
     parser.add_argument("-l", "--log", help="choose row of document to read simulation",
                         required=False, default=-1, type=int)
@@ -137,7 +137,7 @@ if __name__ == '__main__':
         print("Model: model creation executed...")
         counter = 0
         # for all files in logs:
-        for file in os.listdir("logs\\"):
+        for file in os.listdir("logs\\temp\\"):
             print("Model: calculating %s..." % file)
             # read file:
             with open("logs\%s" % file) as f:
@@ -167,7 +167,6 @@ if __name__ == '__main__':
                             # run simulation:
                             while Uber.path:
                                 # parse neighbourhood with movement and save to datamodel
-                                Uber.neighbourhood_size = 5
                                 Uber.parse_neighbourhood()
                                 # move agent on path
                                 Uber.next_round(K_SPACE)
