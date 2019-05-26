@@ -280,38 +280,19 @@ class Waiter (pygame.sprite.Sprite):
                     # add path
                     self.path.append(path)
                     # remove goal and calculate next path
-                    temp = self.goals.pop(0)
-                    if self.goals:
-                        # call next goal
-                        self.calculate_dfs_path(self.graph, next_, str(self.goals[0][0]) + "," + str(self.goals[0][1]))
-                        # free memory
-                        del temp
-                    else:
-                        # add last goal to path
-                        self.path.append([str(temp[0]) + "," + str(temp[1])])
-                else:
-                    stack.append((next_, path + [next_]))
-
-    def experimental_calculate_dfs_path(self, graph, start, goal):
-        stack = [(start, [start])]
-        stack_visited_or_not = [(start, [start])]
-        while stack:
-            (vertex, path) = stack.pop()
-            for next_ in graph[vertex] - set(path):
-                if next_ == goal and stack_visited_or_not is not "visited":
-                    # add path
-                    stack_visited_or_not = "visited"
-                    self.path.append(path)
-                    # remove goal and calculate next path
-                    temp = self.goals.pop(0)
-                    if self.goals:
-                        # call next goal
-                        self.calculate_dfs_path(self.graph, next_, str(self.goals[0][0]) + "," + str(self.goals[0][1]))
-                        # free memory
-                        del temp
-                    else:
-                        # add last goal to path
-                        self.path.append([str(temp[0]) + "," + str(temp[1])])
+                    try:
+                        temp = self.goals.pop(0)
+                        if self.goals:
+                            # call next goal
+                            self.calculate_dfs_path(self.graph, next_, str(self.goals[0][0]) + "," + str(self.goals[0][1]))
+                            # free memory
+                            del temp
+                        else:
+                            # add last goal to path
+                            self.path.append([str(temp[0]) + "," + str(temp[1])])
+                    except IndexError:
+                        print("Agent: map processing error - loop detected")
+                        exit(1)
                 else:
                     stack.append((next_, path + [next_]))
 
@@ -456,11 +437,9 @@ class Waiter (pygame.sprite.Sprite):
                 if agent_x + x - shift in range(0, self.n) and agent_y + y - shift in range(0, self.n):
                     self.neighbourhood[y][x] = matrix.matrix[agent_x + x - shift][agent_y + y - shift]
 
-    # method used only in model generation, called in UberKelner.py ONLY
-    def parse_neighbourhood(self):
+    def parse_neighbourhood_to_rabbit(self):
         # get neighbourhood of agent and save it to self.neighbourhood
         self.get_neighbourhood()
-
         # parse neighbourhood to data model standard:
         # rabbit:
         convert = {
@@ -472,6 +451,15 @@ class Waiter (pygame.sprite.Sprite):
             "Y": 31,
             "W": 4
         }
+        rabbit_standard = ""
+        for x in range(self.neighbourhood_size):
+            for y in range(self.neighbourhood_size):
+                rabbit_standard += " {}:{}".format(str(x)+"x"+str(y), convert.get(str(self.neighbourhood[x][y])))
+        return rabbit_standard
+
+    # method used only in model generation, called in UberKelner.py ONLY
+    def parse_neighbourhood_to_model(self):
+        # parse neighbourhood to rabbit string
         moves = {
             "[0, -1]": "W",
             "[0, 1]": "S",
@@ -481,10 +469,8 @@ class Waiter (pygame.sprite.Sprite):
         # there has to be run self.solve("depthfs") before this part, otherwise self.path will be empty
         predicted_move = moves.get(str([self.path[0][0], self.path[0][1]]))  # returns value from "moves"
 
-        rabbit_standard = "{} |".format(predicted_move)
-        for x in range(self.neighbourhood_size):
-            for y in range(self.neighbourhood_size):
-                rabbit_standard += " {}:{}".format(str(x)+"x"+str(y), convert.get(str(self.neighbourhood[x][y])))
+        rabbit_standard = "{} | ".format(predicted_move)
+        rabbit_standard = rabbit_standard + self.parse_neighbourhood_to_rabbit()
 
         # save neighbourhood AND movement solution to data model for rabbit
         # according to the standard set in documentation/unsupervised_learning.txt
@@ -505,8 +491,8 @@ class Waiter (pygame.sprite.Sprite):
     # Rabbit Search - Adam Lewicki & Julia Maria May
 
     def get_rabbit_path(self):
-        # get neighbourhood
-        self.get_neighbourhood()
+        # get neighbourhood in rabbit
+        rabbit_standard = self.parse_neighbourhood_to_rabbit()
         # get proposed solution of current state from model
 
         # set response to path
