@@ -457,6 +457,26 @@ class Waiter (pygame.sprite.Sprite):
                 rabbit_standard += " {}:{}".format(str(x)+"x"+str(y), convert.get(str(self.neighbourhood[x][y])))
         return rabbit_standard
 
+    def parse_neighbourhood_to_scikit(self):
+        # get neighbourhood of agent and save it to self.neighbourhood
+        self.get_neighbourhood()
+        # parse neighbourhood to data model standard:
+        # rabbit:
+        convert = {
+            "_": 0,
+            "X": 1,
+            "F": 20,
+            "E": 21,
+            "T": 30,
+            "Y": 31,
+            "W": 4
+        }
+        scikit_standard = ""
+        for x in range(self.neighbourhood_size):
+            for y in range(self.neighbourhood_size):
+                scikit_standard += " {}:{}".format(str(x)+"x"+str(y), convert.get(str(self.neighbourhood[x][y])))
+        return scikit_standard
+
     # method used only in model generation, called in UberKelner.py ONLY
     def parse_neighbourhood_to_model(self):
         # parse neighbourhood to rabbit string
@@ -478,9 +498,7 @@ class Waiter (pygame.sprite.Sprite):
 
         '''
         scikitstandard = "{} |".format(predicted_move)
-        for x in range(self.neighbourhood_size):
-            for y in range(self.neighbourhood_size):
-                scikitstandard += " {}:{}".format(str(x)+"x"+str(y), convert.get(str(self.neighbourhood[x][y])))
+        scikitstandard = scikitstandard + self.parse_neighbourhood_to_scikit()
 
         # save neighbourhood and solution to data model for scikit
         # self.save("data\datamodel_scikit.txt", scikitstandard)
@@ -503,9 +521,9 @@ class Waiter (pygame.sprite.Sprite):
     # SciKit Support Vector Machines Search - Marcin Drzewiczak
 
     def get_svm_path(self):
-        # get neighbourhood
-        self.get_neighbourhood()
-        # get proposed solution of current state
+        # get neighbourhood in scikit
+        scikit_standard = self.parse_neighbourhood_to_scikit()
+        # get proposed solution of current state from model
 
         # set response to path
         self.path = [[0, 0]]  # this has to be double list!
@@ -515,9 +533,9 @@ class Waiter (pygame.sprite.Sprite):
     # SciKit Logistic Regression Search - Michał Kubiak
 
     def get_logistic_regression_path(self):
-        # get neighbourhood
-        self.get_neighbourhood()
-        # get proposed solution of current state
+        # get neighbourhood in scikit
+        scikit_standard = self.parse_neighbourhood_to_scikit()
+        # get proposed solution of current state from model
 
         # set response to path
         self.path = [[0, 0]]  # this has to be double list!
@@ -527,9 +545,9 @@ class Waiter (pygame.sprite.Sprite):
     # SciKit Decision-Tree Search - Przemysław Owczar XD
 
     def get_decision_tree_path(self):
-        # get neighbourhood
-        self.get_neighbourhood()
-        # get proposed solution of current state
+        # get neighbourhood in scikit
+        scikit_standard = self.parse_neighbourhood_to_scikit()
+        # get proposed solution of current state from model
 
         # set response to path
         self.path = [[0, 0]]  # this has to be double list!
