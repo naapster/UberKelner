@@ -284,7 +284,8 @@ class Waiter (pygame.sprite.Sprite):
                         temp = self.goals.pop(0)
                         if self.goals:
                             # call next goal
-                            self.calculate_dfs_path(self.graph, next_, str(self.goals[0][0]) + "," + str(self.goals[0][1]))
+                            self.calculate_dfs_path(self.graph, next_,
+                                                    str(self.goals[0][0]) + "," + str(self.goals[0][1]))
                             # free memory
                             del temp
                         else:
