@@ -141,8 +141,7 @@ if __name__ == '__main__':
         header = ""
         for x in range(5):
             for y in range(5):
-                header += "{} ".format(str(x)+"x"+str(y))
-        print(header)
+                header += "{}, ".format(str(x)+"x"+str(y))
         with open("data\\datamodel_scikit.txt", "w") as myfile:
             myfile.write(header + '\n')
 
@@ -180,6 +179,8 @@ if __name__ == '__main__':
                                 Uber.parse_neighbourhood_to_model()
                                 # move agent on path
                                 Uber.next_round(K_SPACE)
+
+                            del Uber
 
                             counter = counter + 1
                         except Exception as e:

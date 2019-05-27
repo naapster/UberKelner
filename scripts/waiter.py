@@ -293,7 +293,7 @@ class Waiter (pygame.sprite.Sprite):
                             self.path.append([str(temp[0]) + "," + str(temp[1])])
                     except IndexError:
                         print("Agent: map processing error - loop detected")
-                        exit(1)
+                        self.path = [[]]
                 else:
                     stack.append((next_, path + [next_]))
 
@@ -475,7 +475,7 @@ class Waiter (pygame.sprite.Sprite):
         scikit_standard = ""
         for x in range(self.neighbourhood_size):
             for y in range(self.neighbourhood_size):
-                scikit_standard += convert.get(str(self.neighbourhood[x][y])) + " "
+                scikit_standard += "{}, ".format(convert.get(str(self.neighbourhood[x][y])))
         return scikit_standard
 
     # method used only in model generation, called in UberKelner.py ONLY
