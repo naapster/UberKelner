@@ -498,7 +498,8 @@ class Waiter (pygame.sprite.Sprite):
         self.save("data\datamodel_rabbit.txt", rabbit_standard)
 
         # save neighbourhood to data model for scikit
-        scikit_standard = self.parse_neighbourhood_to_scikit()
+        scikit_standard = "{}, ".format(predicted_move)
+        scikit_standard = scikit_standard + self.parse_neighbourhood_to_scikit()
         self.save("data\datamodel_scikit.txt", scikit_standard)
 
 

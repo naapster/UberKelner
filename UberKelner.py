@@ -138,7 +138,7 @@ if __name__ == '__main__':
         counter = 0
 
         # add header for scikit model
-        header = ""
+        header = "move, "
         for x in range(5):
             for y in range(5):
                 header += "{}, ".format(str(x)+"x"+str(y))
