@@ -136,6 +136,16 @@ if __name__ == '__main__':
     if model:
         print("Model: model creation executed...")
         counter = 0
+
+        # add header for scikit model
+        header = ""
+        for x in range(5):
+            for y in range(5):
+                header += "{} ".format(str(x)+"x"+str(y))
+        print(header)
+        with open("data\\datamodel_scikit.txt", "w") as myfile:
+            myfile.write(header + '\n')
+
         # for all files in logs:
         for file in os.listdir("logs\\temp\\"):
             print("Model: calculating %s..." % file)

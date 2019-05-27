@@ -473,13 +473,10 @@ class Waiter (pygame.sprite.Sprite):
             "W": 4
         }
         scikit_standard = ""
-        result = []
         for x in range(self.neighbourhood_size):
             for y in range(self.neighbourhood_size):
-                scikit_standard += str(x)+"x"+str(y)+" "
-        result.append(scikit_standard)
-        print(result)
-        return result
+                scikit_standard += convert.get(str(self.neighbourhood[x][y])) + " "
+        return scikit_standard
 
     # method used only in model generation, called in UberKelner.py ONLY
     def parse_neighbourhood_to_model(self):
@@ -495,12 +492,14 @@ class Waiter (pygame.sprite.Sprite):
 
         rabbit_standard = "{} | ".format(predicted_move)
         rabbit_standard = rabbit_standard + self.parse_neighbourhood_to_rabbit()
+
         # save neighbourhood AND movement solution to data model for rabbit
         # according to the standard set in documentation/unsupervised_learning.txt
         self.save("data\datamodel_rabbit.txt", rabbit_standard)
 
-        parse_neigh = self.parse_neighbourhood_to_scikit()
-        self.save("data\datamodel_scikit.txt", parse_neigh[0])
+        # save neighbourhood to data model for scikit
+        scikit_standard = self.parse_neighbourhood_to_scikit()
+        self.save("data\datamodel_scikit.txt", scikit_standard)
 
 
     # //////////////////////////////////////////////////
