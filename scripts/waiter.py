@@ -6,7 +6,7 @@ import sys
 import time
 import math
 import heapq
-
+from numpy import ndarray
 from pygame.locals import *
 
 from UberKelner import init_graphics, blocksize
@@ -477,6 +477,27 @@ class Waiter (pygame.sprite.Sprite):
             for y in range(self.neighbourhood_size):
                 scikit_standard += "{}, ".format(convert.get(str(self.neighbourhood[x][y])))
         return scikit_standard
+
+    def parse_neighbourhood_to_scikit_SVM(self):
+        # get neighbourhood of agent and save it to self.neighbourhood
+        self.get_neighbourhood()
+        # parse neighbourhood to data model standard:
+        # rabbit:
+        convert = {
+            "_": 0,
+            "X": 0.1,
+            "F": 0.20,
+            "E": 0.21,
+            "T": 0.30,
+            "Y": 0.31,
+            "W": 0.4
+        }
+
+        svm_standard = ndarray(shape=(self.neighbourhood_size, self.neighbourhood_size), dtype=float)
+        for index_x, x in enumerate(self.neighbourhood_size):
+            for index_y, y in enumerate(self.neighbourhood_size):
+                svm_standard[index_x][index_y] = convert.get(str(self.neighbourhood[index_x][index_y]))
+        return svm_standard
 
     # method used only in model generation, called in UberKelner.py ONLY
     def parse_neighbourhood_to_model(self):
