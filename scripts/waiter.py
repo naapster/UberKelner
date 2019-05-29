@@ -104,6 +104,10 @@ class Waiter (pygame.sprite.Sprite):
         # set solving method
         self.solving_method = solving_method
 
+        # svm model variable
+        self.svm_data = []
+        self.svm_target = []
+
         # run solution seeking
         self.solve(self.solving_method)
         self.control = True
@@ -539,10 +543,23 @@ class Waiter (pygame.sprite.Sprite):
     # //////////////////////////////////////////////////////
 
     # SciKit Support Vector Machines Search - Marcin Drzewiczak
+    def scikit_standard_to_svm_standard(self, scikit_standard):
+        scikit_standard = scikit_standard.split(', ')
+        scikit_standard = list(map(int, scikit_standard))
+        scikit_standard = list(map(lambda x: x/100, scikit_standard))
+
+        iter = 0
+        svm_standard = ndarray(shape=(self.neighbourhood_size, self.neighbourhood_size), dtype=float)
+        for x in range(self.neighbourhood_size):
+            for y in range(self.neighbourhood_size):
+                svm_standard[x][y] = scikit_standard[iter]
+                iter += 1
+        return svm_standard
 
     def get_svm_path(self):
         # get neighbourhood in scikit
         scikit_standard = self.parse_neighbourhood_to_scikit()
+        svm_standard = self.scikit_standard_to_svm_standard(scikit_standard)
         # get proposed solution of current state from model
 
         # set response to path
