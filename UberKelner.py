@@ -5,7 +5,6 @@
 
 import datetime
 import os
-from os import path
 from random import shuffle
 from argparse import ArgumentParser
 from scripts.waiter import *
@@ -28,7 +27,7 @@ SPRITE_EXTENSION = '.png'
 
 
 # init sprite sprite_name on coordinate x, y
-def init_graphics(self, x, y, sprite_name):
+def init_graphics(self, a, b, sprite_name):
     # \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     # init graphics - do not touch!
     pygame.sprite.Sprite.__init__(self)
@@ -38,8 +37,8 @@ def init_graphics(self, x, y, sprite_name):
     self.image = pygame.transform.scale(self.image, (blocksize, blocksize))
     # set coordinates
     self.rect = self.image.get_rect()
-    self.rect.x = x * blocksize
-    self.rect.y = y * blocksize
+    self.rect.x = a * blocksize
+    self.rect.y = b * blocksize
     # //////////////////////////////////////////////////
 
 

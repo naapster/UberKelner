@@ -6,6 +6,7 @@ import sys
 import time
 import math
 import heapq
+from os import path
 from numpy import ndarray
 from pygame.locals import *
 
@@ -516,13 +517,12 @@ class Waiter (pygame.sprite.Sprite):
 
         # save neighbourhood AND movement solution to data model for rabbit
         # according to the standard set in documentation/unsupervised_learning.txt
-        self.save("data\datamodel_rabbit.txt", rabbit_standard)
+        self.save(path.join('data', 'datamodel_rabbit.txt'), rabbit_standard)
 
         # save neighbourhood to data model for scikit
         scikit_standard = "{}, ".format(predicted_move)
         scikit_standard = scikit_standard + self.parse_neighbourhood_to_scikit()
-        self.save("data\datamodel_scikit.txt", scikit_standard)
-
+        self.save(path.join('data', 'datamodel_scikit.txt'), scikit_standard)
 
     # //////////////////////////////////////////////////
 
