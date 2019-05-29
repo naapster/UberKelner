@@ -8,6 +8,7 @@ import math
 import heapq
 from os import path
 from numpy import ndarray
+from sklearn import svm
 from pygame.locals import *
 
 from UberKelner import init_graphics, blocksize
@@ -542,9 +543,13 @@ class Waiter (pygame.sprite.Sprite):
 
     # //////////////////////////////////////////////////////
 
+
     # SciKit Support Vector Machines Search - Marcin Drzewiczak
     def scikit_standard_to_svm_standard(self, scikit_standard):
-        scikit_standard = scikit_standard.split(', ')
+        try:
+            scikit_standard = scikit_standard.split(', ')
+        except:
+            pass
         scikit_standard = list(map(int, scikit_standard))
         scikit_standard = list(map(lambda x: x/100, scikit_standard))
 
@@ -556,12 +561,24 @@ class Waiter (pygame.sprite.Sprite):
                 iter += 1
         return svm_standard
 
+    def load_data(self):
+        with open(path.join('data', 'datamodel_scikit.txt'), 'r') as file:
+            for index, line in enumerate(file):
+                if index == 0:
+                    continue
+                line = line.split(', ')
+                self.svm_target.append(line.pop(0))
+                self.svm_data.append(self.scikit_standard_to_svm_standard(line))
+
+
     def get_svm_path(self):
         # get neighbourhood in scikit
         scikit_standard = self.parse_neighbourhood_to_scikit()
         svm_standard = self.scikit_standard_to_svm_standard(scikit_standard)
         # get proposed solution of current state from model
-
+        clf = svm.SVC()
+        clf.fit(self.svm_data, self.svm_target)
+        prediction = clf.predict(svm_standard)
         # set response to path
         self.path = [[0, 0]]  # this has to be double list!
 
