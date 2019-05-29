@@ -108,6 +108,8 @@ class Waiter (pygame.sprite.Sprite):
         # svm model variable
         self.svm_data = []
         self.svm_target = []
+        if self.solving_method == 'svm':
+            self.load_data_to_svm()
 
         # run solution seeking
         self.solve(self.solving_method)
@@ -561,7 +563,7 @@ class Waiter (pygame.sprite.Sprite):
                 iter += 1
         return svm_standard
 
-    def load_data(self):
+    def load_data_to_svm(self):
         with open(path.join('data', 'datamodel_scikit.txt'), 'r') as file:
             for index, line in enumerate(file):
                 if index == 0:
@@ -569,7 +571,6 @@ class Waiter (pygame.sprite.Sprite):
                 line = line.split(', ')
                 self.svm_target.append(line.pop(0))
                 self.svm_data.append(self.scikit_standard_to_svm_standard(line))
-
 
     def get_svm_path(self):
         # get neighbourhood in scikit
