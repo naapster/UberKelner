@@ -142,14 +142,14 @@ if __name__ == '__main__':
         for x in range(5):
             for y in range(5):
                 header += "{}, ".format(str(x)+"x"+str(y))
-        with open("data\\datamodel_scikit.txt", "w") as myfile:
+        with open(path.join('data', 'datamodel_scikit.txt'), "w") as myfile:
             myfile.write(header + '\n')
 
         # for all files in logs:
         for file in os.listdir(path.join('logs', 'temp')):
             print("Model: calculating %s..." % file)
             # read file:
-            with open("logs\%s" % file) as f:
+            with open(path.join('logs', file)) as f:
                 lines = f.readlines()
                 # for every log:
                 for log in lines:
@@ -277,7 +277,7 @@ if __name__ == '__main__':
 
         # save screenshot
         if args['capture']:
-            pygame.image.save(DISPLAYSURF, "documentation\screenshot.png")
+            pygame.image.save(DISPLAYSURF, path.join('documentation', 'screenshot.png'))
         # run manual simulation
         control = True
         while control:
