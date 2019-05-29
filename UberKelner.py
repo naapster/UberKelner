@@ -146,7 +146,7 @@ if __name__ == '__main__':
             myfile.write(header + '\n')
 
         # for all files in logs:
-        for file in os.listdir("logs\\temp\\"):
+        for file in os.listdir(path.join('logs', 'temp')):
             print("Model: calculating %s..." % file)
             # read file:
             with open("logs\%s" % file) as f:
@@ -189,6 +189,7 @@ if __name__ == '__main__':
                             print(e)
                     else:
                         print("\t encountered empty line (%s)" % str(lines.index(log)+1))
+            f.close()
             print("Model: calculation of %s file completed." % file)
         print("Model: datamodel controller execution complete.")
         exit(0)
