@@ -115,7 +115,7 @@ class Waiter (pygame.sprite.Sprite):
             self.svm_data = numpy.load(path.join('data', 'svm_data.npy'))
             nsamples, nx, ny = self.svm_data.shape
             self.svm_data = self.svm_data.reshape((nsamples, nx*ny))
-            self.svm_data = list(self.svm_data)
+            #self.svm_data = list(self.svm_data)
 
 
         # run solution seeking
@@ -178,7 +178,6 @@ class Waiter (pygame.sprite.Sprite):
 
         # activate AI agent on key SPACE:
         if key == K_SPACE:
-
             # check if agent left his path:
             if not self.control:
 
@@ -510,9 +509,9 @@ class Waiter (pygame.sprite.Sprite):
             "_": 0,
             "X": 0.1,
             "F": 0.20,
-            "E": 0.21,
+            "E": 0.1,
             "T": 0.30,
-            "Y": 0.31,
+            "Y": 0.1,
             "W": 0.4
         }
 
@@ -579,17 +578,21 @@ class Waiter (pygame.sprite.Sprite):
             for y in range(self.neighbourhood_size):
                 svm_standard[x][y] = scikit_standard[iter]
                 iter += 1
-        return svm_standard
-
+        to_return = ndarray(shape=(1, 25), dtype=ndarray)
+        to_return[0] = svm_standard.flatten()
+        return to_return
 
     def get_svm_path(self):
         # get neighbourhood in scikit
         scikit_standard = self.parse_neighbourhood_to_scikit()
         svm_standard = self.scikit_standard_to_svm_standard(scikit_standard)
         # get proposed solution of current state from model
-        clf = svm.SVC()
+        clf = svm.SVC(gamma='scale', C=100)
+        #print(self.svm_data.ndim)
+        #print(self.svm_data.shape)
+        #print(svm_standard.shape)
         clf.fit(self.svm_data, self.svm_target)
-        svm_standard.reshape(1, -1)
+
         prediction = clf.predict(svm_standard)
         moves = {
             'W': [0, -1],
@@ -597,9 +600,11 @@ class Waiter (pygame.sprite.Sprite):
             'A': [-1, 0],
             'D': [1, 0],
         }
-        move_to_append = moves.get(prediction)
+        print(prediction)
+        move_to_append = moves.get(prediction[0])
         # set response to path
-        self.path = [[0, 0]]  # this has to be double list!
+        # this has to be double list!
+        self.path.clear()
         self.path.append(move_to_append)
 
     # //////////////////////////////////////////////////////
