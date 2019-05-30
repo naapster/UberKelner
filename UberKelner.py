@@ -21,9 +21,6 @@ os.environ['SDL_AUDIODRIVER'] = 'dsp'
 blocksize = 60
 # graphics control
 graphics = False
-# sprite constants
-SPRITE_FOLDER = 'images'
-SPRITE_EXTENSION = '.png'
 
 
 # init sprite sprite_name on coordinate x, y
@@ -32,7 +29,7 @@ def init_graphics(self, a, b, sprite_name):
     # init graphics - do not touch!
     pygame.sprite.Sprite.__init__(self)
     # set image
-    self.image = pygame.image.load(path.join(SPRITE_FOLDER, sprite_name + SPRITE_EXTENSION))
+    self.image = pygame.image.load(path.join('images', sprite_name + '.png'))
     # resize image to blocksize
     self.image = pygame.transform.scale(self.image, (blocksize, blocksize))
     # set coordinates
@@ -145,51 +142,53 @@ if __name__ == '__main__':
             myfile.write(header + '\n')
 
         # for all files in logs:
-        for file in os.listdir(path.join('logs', 'temp')):
+        # for file in os.listdir(path.join('logs', 'temp')):
+        for file in os.listdir(path.join('logs')):
             print("Model: calculating %s..." % file)
             # read file:
-            with open(path.join('logs', file)) as f:
-                lines = f.readlines()
-                # for every log:
-                for log in lines:
-                    if len(log) > 1:
-                        print("\t for line %s..." % str(lines.index(log)+1))
-                        try:
-                            log = log.split('\t')
-                            # reload simulation state from log:
-                            # amount of blocks in row of simulation - not currently active, change init
-                            N = int(log[1])
-                            # number of tables
-                            num_tables = int(log[2])
-                            # number of furnaces
-                            num_furnaces = int(log[3])
-                            # number of walls
-                            num_walls = int(log[4])
-                            # coordinates
-                            _ = log[5].replace('[', '').split('],')
-                            coordinates = [list(map(int, s.replace(']', '').split(','))) for s in _]
+            if file.endswith(".txt"):
+                with open(path.join('logs', file)) as f:
+                    lines = f.readlines()
+                    # for every log:
+                    for log in lines:
+                        if len(log) > 1:
+                            print("\t for line %s..." % str(lines.index(log)+1))
+                            try:
+                                log = log.split('\t')
+                                # reload simulation state from log:
+                                # amount of blocks in row of simulation - not currently active, change init
+                                N = int(log[1])
+                                # number of tables
+                                num_tables = int(log[2])
+                                # number of furnaces
+                                num_furnaces = int(log[3])
+                                # number of walls
+                                num_walls = int(log[4])
+                                # coordinates
+                                _ = log[5].replace('[', '').split('],')
+                                coordinates = [list(map(int, s.replace(']', '').split(','))) for s in _]
 
-                            # calculate simulation solution
-                            Uber = Waiter(N, coordinates, num_tables, num_furnaces, num_walls, solution)
-                            
-                            # run simulation:
-                            while Uber.path:
-                                # parse neighbourhood with movement and save to datamodel
-                                Uber.parse_neighbourhood_to_model()
-                                # move agent on path
-                                Uber.next_round(K_SPACE)
+                                # calculate simulation solution
+                                Uber = Waiter(N, coordinates, num_tables, num_furnaces, num_walls, solution)
 
-                            del Uber
+                                # run simulation:
+                                while Uber.path:
+                                    # parse neighbourhood with movement and save to datamodel
+                                    Uber.parse_neighbourhood_to_model()
+                                    # move agent on path
+                                    Uber.next_round(K_SPACE)
 
-                            counter = counter + 1
-                        except Exception as e:
-                            # error occures when there are no elements of one kind (for example, map with no furnaces)
-                            # therefore leaving empty list in log
-                            print(e)
-                    else:
-                        print("\t encountered empty line (%s)" % str(lines.index(log)+1))
-            f.close()
-            print("Model: calculation of %s file completed." % file)
+                                del Uber
+
+                                counter = counter + 1
+                            except Exception as e:
+                                # error occures when there are no elements of one kind
+                                # (for example, map with no furnaces) therefore leaving empty list in log
+                                print(e)
+                        else:
+                            print("\t encountered empty line (%s)" % str(lines.index(log)+1))
+                f.close()
+                print("Model: calculation of %s file completed." % file)
         print("Model: datamodel controller execution complete.")
         exit(0)
 

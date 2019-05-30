@@ -282,11 +282,11 @@ class Waiter (pygame.sprite.Sprite):
     def calculate_dfs_path(self, graph, start, goal):
         stack = [(start, [start])]
         while stack:
-            (vertex, path) = stack.pop()
-            for next_ in graph[vertex] - set(path):
+            (vertex, tpath) = stack.pop()
+            for next_ in graph[vertex] - set(tpath):
                 if next_ == goal:
                     # add path
-                    self.path.append(path)
+                    self.path.append(tpath)
                     # remove goal and calculate next path
                     try:
                         temp = self.goals.pop(0)
@@ -303,7 +303,7 @@ class Waiter (pygame.sprite.Sprite):
                         print("Agent: map processing error - loop detected")
                         self.path = [[]]
                 else:
-                    stack.append((next_, path + [next_]))
+                    stack.append((next_, tpath + [next_]))
 
     # procedure responsible of calculating all possible dfs paths
     def get_dfs_path(self):
@@ -326,24 +326,28 @@ class Waiter (pygame.sprite.Sprite):
     def calculate_bfs_path(self, graph, start, goal):
         queue = [(start, [start])]
         while queue:
-            (vertex, path) = queue.pop()
-            for next_ in graph[vertex] - set(path):
+            (vertex, tpath) = queue.pop()
+            for next_ in graph[vertex] - set(tpath):
                 if next_ == goal:
                     # add path
-                    self.path.append(path)
+                    self.path.append(tpath)
                     # remove goal and calculate next path
-                    temp = self.goals.pop(0)
-                    if self.goals:
-                        # call next goal
-                        self.calculate_bfs_path(self.graph, next_,
-                                                str(self.goals[0][0]) + "," + str(self.goals[0][1]))
-                        # free memory
-                        del temp
-                    else:
-                        # add last goal to path
-                        self.path.append([str(temp[0]) + "," + str(temp[1])])
+                    try:
+                        temp = self.goals.pop(0)
+                        if self.goals:
+                            # call next goal
+                            self.calculate_bfs_path(self.graph, next_,
+                                                    str(self.goals[0][0]) + "," + str(self.goals[0][1]))
+                            # free memory
+                            del temp
+                        else:
+                            # add last goal to path
+                            self.path.append([str(temp[0]) + "," + str(temp[1])])
+                    except IndexError:
+                        print("Agent: map processing error - loop detected")
+                        self.path = [[]]
                 else:
-                    queue.append((next_, path + [next_]))
+                    queue.append((next_, tpath + [next_]))
 
     # procedure responsible of calculating all possible dfs paths
     def get_bfs_path(self):
@@ -376,25 +380,29 @@ class Waiter (pygame.sprite.Sprite):
         queue = [(self.calculate_bestfs_distance(start, goal), start, [start])]
         heapq.heapify(queue)
         while queue:
-            (cost, vertex, path) = heapq.heappop(queue)
+            (cost, vertex, tpath) = heapq.heappop(queue)
             heapq.heapify(queue)
-            for next_ in graph[vertex] - set(path):
+            for next_ in graph[vertex] - set(tpath):
                 if next_ == goal:
                     # add path
-                    self.path.append(path)
+                    self.path.append(tpath)
                     # remove goal and calculate next path
-                    temp = self.goals.pop(0)
-                    if self.goals:
-                        # call next goal
-                        self.calculate_bestfs_path(self.graph, next_,
-                                                   str(self.goals[0][0]) + "," + str(self.goals[0][1]))
-                        # free memory
-                        del temp
-                    else:
-                        # add last goal to path
-                        self.path.append([str(temp[0]) + "," + str(temp[1])])
+                    try:
+                        temp = self.goals.pop(0)
+                        if self.goals:
+                            # call next goal
+                            self.calculate_bestfs_path(self.graph, next_,
+                                                       str(self.goals[0][0]) + "," + str(self.goals[0][1]))
+                            # free memory
+                            del temp
+                        else:
+                            # add last goal to path
+                            self.path.append([str(temp[0]) + "," + str(temp[1])])
+                    except IndexError:
+                        print("Agent: map processing error - loop detected")
+                        self.path = [[]]
                 else:
-                    heapq.heappush(queue, (self.calculate_bestfs_distance(next_, goal), next_, path + [next_]))
+                    heapq.heappush(queue, (self.calculate_bestfs_distance(next_, goal), next_, tpath + [next_]))
                     heapq.heapify(queue)
 
     # procedure responsible of calculating all possible bestfs paths
@@ -545,8 +553,8 @@ class Waiter (pygame.sprite.Sprite):
 
     # //////////////////////////////////////////////////////
 
-
     # SciKit Support Vector Machines Search - Marcin Drzewiczak
+
     def scikit_standard_to_svm_standard(self, scikit_standard):
         try:
             scikit_standard = scikit_standard.split(', ')
