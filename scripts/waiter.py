@@ -8,6 +8,8 @@ import math
 import heapq
 from os import path
 from numpy import ndarray
+import numpy
+import os
 from sklearn import svm
 from pygame.locals import *
 
@@ -109,7 +111,12 @@ class Waiter (pygame.sprite.Sprite):
         self.svm_data = []
         self.svm_target = []
         if self.solving_method == 'svm':
-            self.load_data_to_svm()
+            self.svm_target = numpy.load(path.join('data', 'svm_target.npy'))
+            self.svm_data = numpy.load(path.join('data', 'svm_data.npy'))
+            nsamples, nx, ny = self.svm_data.shape
+            self.svm_data = self.svm_data.reshape((nsamples, nx*ny))
+            self.svm_data = list(self.svm_data)
+
 
         # run solution seeking
         self.solve(self.solving_method)
@@ -509,10 +516,12 @@ class Waiter (pygame.sprite.Sprite):
             "W": 0.4
         }
 
-        svm_standard = ndarray(shape=(self.neighbourhood_size, self.neighbourhood_size), dtype=float)
+        svm_standard = ndarray(shape=(1, self.neighbourhood_size, self.neighbourhood_size), dtype=float)
         for index_x, x in enumerate(self.neighbourhood_size):
             for index_y, y in enumerate(self.neighbourhood_size):
-                svm_standard[index_x][index_y] = convert.get(str(self.neighbourhood[index_x][index_y]))
+                svm_standard[0][index_x][index_y] = convert.get(str(self.neighbourhood[index_x][index_y]))
+        nsamples, nx, ny = svm_standard
+        svm_standard = svm_standard.reshape((nsamples, nx * ny))
         return svm_standard
 
     # method used only in model generation, called in UberKelner.py ONLY
@@ -558,6 +567,7 @@ class Waiter (pygame.sprite.Sprite):
     def scikit_standard_to_svm_standard(self, scikit_standard):
         try:
             scikit_standard = scikit_standard.split(', ')
+            scikit_standard.pop()
         except:
             pass
         scikit_standard = list(map(int, scikit_standard))
@@ -571,14 +581,6 @@ class Waiter (pygame.sprite.Sprite):
                 iter += 1
         return svm_standard
 
-    def load_data_to_svm(self):
-        with open(path.join('data', 'datamodel_scikit.txt'), 'r') as file:
-            for index, line in enumerate(file):
-                if index == 0:
-                    continue
-                line = line.split(', ')
-                self.svm_target.append(line.pop(0))
-                self.svm_data.append(self.scikit_standard_to_svm_standard(line))
 
     def get_svm_path(self):
         # get neighbourhood in scikit
@@ -587,9 +589,18 @@ class Waiter (pygame.sprite.Sprite):
         # get proposed solution of current state from model
         clf = svm.SVC()
         clf.fit(self.svm_data, self.svm_target)
+        svm_standard.reshape(1, -1)
         prediction = clf.predict(svm_standard)
+        moves = {
+            'W': [0, -1],
+            'S': [0, 1],
+            'A': [-1, 0],
+            'D': [1, 0],
+        }
+        move_to_append = moves.get(prediction)
         # set response to path
         self.path = [[0, 0]]  # this has to be double list!
+        self.path.append(move_to_append)
 
     # //////////////////////////////////////////////////////
 
