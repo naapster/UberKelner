@@ -90,8 +90,8 @@ if __name__ == '__main__':
                         required=False, default=False, type=bool)
     # --solution depthfs/breathfs/bestfs/all
     parser.add_argument("-s", "--solution",
-                        help="choose solving method.\nMethods available: depthfs, breathfs, bestfs, all. "
-                             "Deep-first search is the default choice.",
+                        help="choose solving method.\nMethods available: depthfs, breathfs, bestfs, all. \n"
+                             "rabbit, svm, dtree.\nDeep-first search is the default choice.",
                         required=False, default="depthfs", type=str)
 
     # args will be a dictionary containing the arguments
@@ -255,7 +255,7 @@ if __name__ == '__main__':
             # set maximum number of steps
             upper_limit = Uber.n ** 2 * 2
             # while there is movement available
-            while (uberpathlen > 0 or len(Uber.goals) > 0) and Uber.steps_count < upper_limit:
+            while (uberpathlen > 0 or Uber.goals) and Uber.steps_count < upper_limit:
                 # write comment
                 if not uberpathlen % 10 and uberpathlen > 0:
                     print("Autorun: %s steps remaining..." % uberpathlen)

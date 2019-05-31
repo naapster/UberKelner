@@ -13,6 +13,7 @@ import random
 from sklearn import svm
 from sklearn import tree
 from pygame.locals import *
+from operator import add
 
 from UberKelner import init_graphics, blocksize
 from scripts.matrix import *
@@ -116,7 +117,7 @@ class Waiter (pygame.sprite.Sprite):
         self.svm_target = []
         if self.solving_method == 'svm':
             self.init_svm()
-        elif self.solving_method =="dtree":
+        elif self.solving_method == "dtree":
             self.init_dtree()
 
         # run solution seeking
@@ -259,20 +260,28 @@ class Waiter (pygame.sprite.Sprite):
         elif method in self.unsupervised_learning:
             # set solving method
             self.solving_method = method
-            if self.solving_method == "rabbit":
-                self.get_rabbit_path()
-            elif self.solving_method == "svm":
-                self.get_svm_path()
-            elif self.solving_method == "lreg":
-                self.get_logistic_regression_path()
-            elif self.solving_method == "dtree":
-                self.get_decision_tree_path()
-            # because these methods calculate only one step (not the whole path),
-            # they should be called again for next move
-            self.control = False
+            if self.goals:
+                if self.solving_method == "rabbit":
+                    self.get_rabbit_path()
+                elif self.solving_method == "svm":
+                    self.get_svm_path()
+                elif self.solving_method == "lreg":
+                    self.get_logistic_regression_path()
+                elif self.solving_method == "dtree":
+                    self.get_decision_tree_path()
+                # because these methods calculate only one step (not the whole path),
+                # they should be called again for next move
+                self.control = False
 
-            # check if agent is not moving in circles
-            self.next_switch()
+                real_coordinates = list(map(add, self.get_coordinates(), self.path[0]))
+                # remove goal if reached
+                if real_coordinates in self.goals:
+                    self.goals.remove(real_coordinates)
+
+                # check if agent is not moving in circles
+                self.next_switch()
+            else:
+                print("Agent: No goals left!")
 
         elif method == "all":
             for method in self.available_methods:
@@ -603,7 +612,6 @@ class Waiter (pygame.sprite.Sprite):
         # self.svm_data = list(self.svm_data)
         self.clf = tree.DecisionTreeClassifier()
         self.clf.fit(self.svm_data, self.svm_target)
-
 
     def scikit_standard_to_svm_standard(self, scikit_standard):
         try:
