@@ -11,6 +11,7 @@ from numpy import ndarray
 import numpy
 import random
 from sklearn import svm
+from sklearn import tree
 from pygame.locals import *
 
 from UberKelner import init_graphics, blocksize
@@ -115,6 +116,8 @@ class Waiter (pygame.sprite.Sprite):
         self.svm_target = []
         if self.solving_method == 'svm':
             self.init_svm()
+        elif self.solving_method =="dtree":
+            self.init_dtree()
 
         # run solution seeking
         self.solve(self.solving_method)
@@ -586,6 +589,16 @@ class Waiter (pygame.sprite.Sprite):
         self.clf = svm.SVC(gamma='scale', C=100)
         self.clf.fit(self.svm_data, self.svm_target)
 
+    def init_dtree(self):
+        self.svm_target = numpy.load(path.join('data', 'svm_target.npy'))
+        self.svm_data = numpy.load(path.join('data', 'svm_data.npy'))
+        nsamples, nx, ny = self.svm_data.shape
+        self.svm_data = self.svm_data.reshape((nsamples, nx * ny))
+        # self.svm_data = list(self.svm_data)
+        self.clf = tree.DecisionTreeClassifier()
+        self.clf.fit(self.svm_data, self.svm_target)
+
+
     def scikit_standard_to_svm_standard(self, scikit_standard):
         try:
             scikit_standard = scikit_standard.split(', ')
@@ -648,9 +661,25 @@ class Waiter (pygame.sprite.Sprite):
     def get_decision_tree_path(self):
         # get neighbourhood in scikit
         scikit_standard = self.parse_neighbourhood_to_scikit()
+        svm_standard = self.scikit_standard_to_svm_standard(scikit_standard)
         # get proposed solution of current state from model
 
+        # print(self.svm_data.ndim)
+        # print(self.svm_data.shape)
+        # print(svm_standard.shape)
+
+        prediction = self.clf.predict(svm_standard)
+        moves = {
+            'W': [0, -1],
+            'S': [0, 1],
+            'A': [-1, 0],
+            'D': [1, 0],
+        }
+        # print(prediction)
+        move_to_append = moves.get(prediction[0])
         # set response to path
-        self.path = [[0, 0]]  # this has to be double list!
+        # this has to be double list!
+        self.path.clear()
+        self.path.append(move_to_append)
 
     # //////////////////////////////////////////////////////
