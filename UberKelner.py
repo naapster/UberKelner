@@ -250,11 +250,14 @@ if __name__ == '__main__':
         # run auto simulation
         if args['autorun']:
             uberpathlen = len(Uber.path)
-            print("Main: autorun started, estimated time of run: %s seconds" % uberpathlen)
+            if uberpathlen > 1:
+                print("Main: autorun started, estimated time of run: %s seconds" % uberpathlen)
+            # set maximum number of steps
+            upper_limit = Uber.n ** 2 * 2
             # while there is movement available
-            while uberpathlen > 0:
+            while (uberpathlen > 0 or len(Uber.goals) > 0) and Uber.steps_count < upper_limit:
                 # write comment
-                if not uberpathlen % 10:
+                if not uberpathlen % 10 and uberpathlen > 0:
                     print("Autorun: %s steps remaining..." % uberpathlen)
                 # draw simulation
                 all_sprites.update()
