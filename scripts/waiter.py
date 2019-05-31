@@ -120,6 +120,9 @@ class Waiter (pygame.sprite.Sprite):
         self.solve(self.solving_method)
         self.control = True
 
+        # add steps counter
+        self.steps_count = 0
+
         print("Agent: initialization completed.")
 
     # function returning list of coordinates of agent
@@ -156,6 +159,9 @@ class Waiter (pygame.sprite.Sprite):
         # remove used move
         if self.path:
             self.path.pop(0)
+
+        # add step to counter
+        self.steps_count = self.steps_count + 1
 
     # noinspection PyTypeChecker
     def next_round(self, key):
