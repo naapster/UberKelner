@@ -9,7 +9,7 @@ import heapq
 from os import path
 from numpy import ndarray
 import numpy
-import os
+import random
 from sklearn import svm
 from pygame.locals import *
 
@@ -100,6 +100,9 @@ class Waiter (pygame.sprite.Sprite):
         self.available_methods = ['depthfs', 'breadthfs', 'bestfs']
         self.unsupervised_learning = ['rabbit', 'svm', 'dtree', 'lreg']
 
+        # set unsupervised learning safety switch
+        self.moves_queue = [[0, 0], [0, 0], [0, 0], [0, 0]]
+
         # set neighbourhood
         self.neighbourhood = []
         self.neighbourhood_size = 5
@@ -111,12 +114,7 @@ class Waiter (pygame.sprite.Sprite):
         self.svm_data = []
         self.svm_target = []
         if self.solving_method == 'svm':
-            self.svm_target = numpy.load(path.join('data', 'svm_target.npy'))
-            self.svm_data = numpy.load(path.join('data', 'svm_data.npy'))
-            nsamples, nx, ny = self.svm_data.shape
-            self.svm_data = self.svm_data.reshape((nsamples, nx*ny))
-            #self.svm_data = list(self.svm_data)
-
+            self.init_svm()
 
         # run solution seeking
         self.solve(self.solving_method)
@@ -178,9 +176,9 @@ class Waiter (pygame.sprite.Sprite):
 
         # activate AI agent on key SPACE:
         if key == K_SPACE:
+            self.get_svm_path()
             # check if agent left his path:
             if not self.control:
-
                 # run solution seeking
                 self.control = True
                 self.solve(self.solving_method)
@@ -263,6 +261,9 @@ class Waiter (pygame.sprite.Sprite):
             # because these methods calculate only one step (not the whole path),
             # they should be called again for next move
             self.control = False
+
+            # check if agent is not moving in circles
+            self.next_switch()
 
         elif method == "all":
             for method in self.available_methods:
@@ -431,6 +432,18 @@ class Waiter (pygame.sprite.Sprite):
 
     # //////////////////////////////////////////////////
 
+    # safety switch controller
+    def next_switch(self):
+        # append last move and remove first
+        if self.path[0]:
+            self.moves_queue = self.moves_queue[1:]
+            self.moves_queue.append(self.path[0])
+        # check safety
+        if self.moves_queue in [[[-1, 0], [1, 0], [-1, 0], [1, 0]], [[1, 0], [-1, 0], [1, 0], [-1, 0]],
+                                [[0, 1], [0, -1], [0, 1], [0, -1]], [[0, -1], [0, 1], [0, -1], [0, 1]]]:
+            # if agent is stuck, generate random move
+            self.path = [random.choice([[0, -1], [0, 1], [-1, 0], [1, 0]])]
+
     # datamodel parser
 
     @staticmethod
@@ -507,11 +520,11 @@ class Waiter (pygame.sprite.Sprite):
         # rabbit:
         convert = {
             "_": 0,
-            "X": 0.1,
+            "X": 0.9,
             "F": 0.20,
-            "E": 0.1,
+            "E": 0.9,
             "T": 0.30,
-            "Y": 0.1,
+            "Y": 0.9,
             "W": 0.4
         }
 
@@ -563,6 +576,16 @@ class Waiter (pygame.sprite.Sprite):
 
     # SciKit Support Vector Machines Search - Marcin Drzewiczak
 
+    # procedure running in init of agent, loading data to model once
+    def init_svm(self):
+        self.svm_target = numpy.load(path.join('data', 'svm_target.npy'))
+        self.svm_data = numpy.load(path.join('data', 'svm_data.npy'))
+        nsamples, nx, ny = self.svm_data.shape
+        self.svm_data = self.svm_data.reshape((nsamples, nx * ny))
+        # self.svm_data = list(self.svm_data)
+        self.clf = svm.SVC(gamma='scale', C=100)
+        self.clf.fit(self.svm_data, self.svm_target)
+
     def scikit_standard_to_svm_standard(self, scikit_standard):
         try:
             scikit_standard = scikit_standard.split(', ')
@@ -570,7 +593,7 @@ class Waiter (pygame.sprite.Sprite):
         except:
             pass
         scikit_standard = list(map(int, scikit_standard))
-        scikit_standard = list(map(lambda x: x/100, scikit_standard))
+        scikit_standard = list(map(lambda a: a/100, scikit_standard))
 
         iter = 0
         svm_standard = ndarray(shape=(self.neighbourhood_size, self.neighbourhood_size), dtype=float)
@@ -587,20 +610,19 @@ class Waiter (pygame.sprite.Sprite):
         scikit_standard = self.parse_neighbourhood_to_scikit()
         svm_standard = self.scikit_standard_to_svm_standard(scikit_standard)
         # get proposed solution of current state from model
-        clf = svm.SVC(gamma='scale', C=100)
-        #print(self.svm_data.ndim)
-        #print(self.svm_data.shape)
-        #print(svm_standard.shape)
-        clf.fit(self.svm_data, self.svm_target)
 
-        prediction = clf.predict(svm_standard)
+        # print(self.svm_data.ndim)
+        # print(self.svm_data.shape)
+        # print(svm_standard.shape)
+
+        prediction = self.clf.predict(svm_standard)
         moves = {
             'W': [0, -1],
             'S': [0, 1],
             'A': [-1, 0],
             'D': [1, 0],
         }
-        print(prediction)
+        # print(prediction)
         move_to_append = moves.get(prediction[0])
         # set response to path
         # this has to be double list!
