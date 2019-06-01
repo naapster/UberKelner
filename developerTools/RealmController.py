@@ -94,6 +94,7 @@ if __name__ == '__main__':
         # get last row in log
         with open(simulation_log) as myfile:
             log = list(myfile)[run_simulation].split('\t')
+        myfile.close()
         # amount of blocks in row of simulation - not currently active, change init
         N = int(log[1])
         # number of tables
@@ -128,5 +129,6 @@ if __name__ == '__main__':
         with open(map_recreated, "w") as myfile:
             for row in matrix:
                 myfile.write(''.join(row) + '\n')
+        myfile.close()
         print("RC: Map recreated to file %s." % map_recreated)
         print("RC: Map recreation complete.")
