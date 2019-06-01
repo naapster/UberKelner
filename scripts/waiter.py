@@ -12,6 +12,8 @@ import numpy
 import random
 from sklearn import svm
 from sklearn import tree
+# from vowpalwabbit import pyvw
+
 from pygame.locals import *
 from operator import add
 
@@ -19,7 +21,6 @@ from UberKelner import init_graphics, blocksize
 from scripts.matrix import *
 from scripts.wall import *
 
-from vowpalwabbit import pyvw
 
 # set recursion limit:
 sys.setrecursionlimit(1500)
@@ -595,14 +596,14 @@ class Waiter (pygame.sprite.Sprite):
             '3': 'A',
             '4': 'D'
         }
-
+        '''
         model = '../data/rabbit.model'
         vw = pyvw.vw(i=model)
         ex = vw.example(rabbit_standard)
         result = round(vw.predict(ex))
         print(result)
         final_result = moves.get(result)
-
+        '''
         # set response to path
         self.path = [[0, 0]]  # this has to be double list!
 
