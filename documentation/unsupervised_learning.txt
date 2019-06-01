@@ -1,3 +1,9 @@
+///////////////////////////////////////////////////////////////
+Trenowanie Wabbita:
+vw datamodel_rabbit_repaired.txt -c --passes 25 -f rabbit.model
+//////////////////////////////////////////////////////////////
+
+
 model verbal vomit:
 
 #ruchu w rozwiązaniu (D- prawo, A-lewo, W-góra, S-dół) | stan otoczenia (0-blank, 1-wall, 20 - furnace inactive,
