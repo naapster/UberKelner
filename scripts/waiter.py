@@ -12,7 +12,7 @@ import numpy
 import random
 from sklearn import svm
 from sklearn import tree
-# from vowpalwabbit import pyvw
+from vowpalwabbit import pyvw
 
 from pygame.locals import *
 from operator import add
@@ -122,6 +122,8 @@ class Waiter (pygame.sprite.Sprite):
             self.init_svm()
         elif self.solving_method == "dtree":
             self.init_dtree()
+        elif self.solving_method == "rabbit":
+            self.init_rabbit()
 
         # run solution seeking
         self.solve(self.solving_method)
@@ -330,6 +332,7 @@ class Waiter (pygame.sprite.Sprite):
                     except IndexError:
                         print("Agent: map processing error - loop detected")
                         self.path = [[]]
+                        quit()
                 else:
                     stack.append((next_, tpath + [next_]))
 
@@ -374,6 +377,7 @@ class Waiter (pygame.sprite.Sprite):
                     except IndexError:
                         print("Agent: map processing error - loop detected")
                         self.path = [[]]
+                        quit()
                 else:
                     queue.append((next_, tpath + [next_]))
 
@@ -429,6 +433,7 @@ class Waiter (pygame.sprite.Sprite):
                     except IndexError:
                         print("Agent: map processing error - loop detected")
                         self.path = [[]]
+                        quit()
                 else:
                     heapq.heappush(queue, (self.calculate_bestfs_distance(next_, goal), next_, tpath + [next_]))
                     heapq.heapify(queue)
@@ -585,6 +590,19 @@ class Waiter (pygame.sprite.Sprite):
 
     # Rabbit Search - Adam Lewicki & Julia Maria May
 
+    def init_rabbit(self):
+        try:
+            self.model = '../data/rabbit.model'
+            self.vw = pyvw.vw(i=self.model)
+        except AttributeError as e:
+            print("Agent: rabbit init error - wrong configuration")
+            print(e)
+            quit()
+        except RuntimeError as e:
+            print("Agent: rabbit init error - can't open path")
+            print(e)
+            quit()
+
     def get_rabbit_path(self):
         # get neighbourhood in rabbit
         rabbit_standard = self.parse_neighbourhood_to_rabbit()
@@ -596,14 +614,14 @@ class Waiter (pygame.sprite.Sprite):
             '3': 'A',
             '4': 'D'
         }
-        '''
-        model = '../data/rabbit.model'
-        vw = pyvw.vw(i=model)
-        ex = vw.example(rabbit_standard)
-        result = round(vw.predict(ex))
+
+        ex = self.vw.example(rabbit_standard)
+        result = round(self.vw.predict(ex))
         print(result)
         final_result = moves.get(result)
-        '''
+
+        print(final_result)
+
         # set response to path
         self.path = [[0, 0]]  # this has to be double list!
 
@@ -639,12 +657,12 @@ class Waiter (pygame.sprite.Sprite):
         scikit_standard = list(map(int, scikit_standard))
         scikit_standard = list(map(lambda a: a/100, scikit_standard))
 
-        iter = 0
+        counter = 0
         svm_standard = ndarray(shape=(self.neighbourhood_size, self.neighbourhood_size), dtype=float)
         for x in range(self.neighbourhood_size):
             for y in range(self.neighbourhood_size):
-                svm_standard[x][y] = scikit_standard[iter]
-                iter += 1
+                svm_standard[x][y] = scikit_standard[counter]
+                counter += 1
         to_return = ndarray(shape=(1, 25), dtype=ndarray)
         to_return[0] = svm_standard.flatten()
         return to_return
