@@ -599,13 +599,16 @@ class Waiter (pygame.sprite.Sprite):
 
     def rabbit_training(self):
         # wabbit model training console script - run after installing vabbit
-        system('vw ./data/datamodel_rabbit_repaired.txt - c - -passes 25 - f ./data/rabbit.model --quiet')
+        system('vw {} -c --passes 25 -f {}'.format(path.join('.', 'data', 'datamodel_rabbit_repaired.txt'),
+                                                   path.join('.', 'data', 'rabbit.model')))
 
+    # get proposed path from wabbit model and save it to self.path
     def get_rabbit_path(self):
+
         # get neighbourhood in rabbit
         rabbit_standard = self.parse_neighbourhood_to_rabbit()
-        # get proposed solution of current state from model
 
+        # init vars
         moves = {
             0: [0, -1],
             1: [0, 1],
@@ -614,12 +617,12 @@ class Waiter (pygame.sprite.Sprite):
         }
 
         rabbit_standard = "|{}".format(rabbit_standard)
-        print(rabbit_standard)
 
         with open(self.input, 'w') as myfile:
             myfile.write(rabbit_standard)
         myfile.close()
 
+        # get proposed solution of current state from model
         system('vw -i {} -t {} -p {} --quiet'.format(self.model, self.input, self.output))
 
         with open(self.output, 'r') as myfile:
