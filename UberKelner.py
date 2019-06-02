@@ -189,6 +189,7 @@ if __name__ == '__main__':
                             print("\t encountered empty line (%s)" % str(lines.index(log)+1))
                 f.close()
                 print("Model: calculation of %s file completed." % file)
+
         print("Model: datamodel controller execution complete.")
         exit(0)
 

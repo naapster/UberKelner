@@ -6,13 +6,12 @@ import sys
 import time
 import math
 import heapq
-from os import path
+from os import path, system
 from numpy import ndarray
 import numpy
 import random
 from sklearn import svm
 from sklearn import tree
-from vowpalwabbit import pyvw
 
 from pygame.locals import *
 from operator import add
@@ -191,9 +190,8 @@ class Waiter (pygame.sprite.Sprite):
 
         # activate AI agent on key SPACE:
         if key == K_SPACE:
-            self.get_svm_path()
-            # check if agent left his path:
-            if not self.control:
+            # check if agent left his path or is independent:
+            if not self.control or self.solving_method in self.unsupervised_learning:
                 # run solution seeking
                 self.control = True
                 self.solve(self.solving_method)
@@ -591,17 +589,17 @@ class Waiter (pygame.sprite.Sprite):
     # Rabbit Search - Adam Lewicki & Julia Maria May
 
     def init_rabbit(self):
-        try:
-            self.model = '../data/rabbit.model'
-            self.vw = pyvw.vw(i=self.model)
-        except AttributeError as e:
-            print("Agent: rabbit init error - wrong configuration")
-            print(e)
-            quit()
-        except RuntimeError as e:
-            print("Agent: rabbit init error - can't open path")
-            print(e)
-            quit()
+        # init rabbit variables
+        self.model = path.join('.', 'data', 'rabbit.model')
+        self.input = path.join('.', 'data', 'rabbit_input.txt')
+        self.output = path.join('.', 'data', 'rabbit_result.txt')
+
+        # train model
+        # self.rabbit_training()
+
+    def rabbit_training(self):
+        # wabbit model training console script - run after installing vabbit
+        system('vw ./data/datamodel_rabbit_repaired.txt - c - -passes 25 - f ./data/rabbit.model --quiet')
 
     def get_rabbit_path(self):
         # get neighbourhood in rabbit
@@ -609,21 +607,28 @@ class Waiter (pygame.sprite.Sprite):
         # get proposed solution of current state from model
 
         moves = {
-            '1': 'W',
-            '2': 'S',
-            '3': 'A',
-            '4': 'D'
+            0: [0, -1],
+            1: [0, 1],
+            2: [-1, 0],
+            3: [1, 0],
         }
 
-        ex = self.vw.example(rabbit_standard)
-        result = round(self.vw.predict(ex))
-        print(result)
-        final_result = moves.get(result)
+        rabbit_standard = "|{}".format(rabbit_standard)
+        print(rabbit_standard)
 
-        print(final_result)
+        with open(self.input, 'w') as myfile:
+            myfile.write(rabbit_standard)
+        myfile.close()
+
+        system('vw -i {} -t {} -p {} --quiet'.format(self.model, self.input, self.output))
+
+        with open(self.output, 'r') as myfile:
+            result = int(str(myfile.readline())[0])
+        result = moves.get(result)
 
         # set response to path
-        self.path = [[0, 0]]  # this has to be double list!
+        self.path.clear()
+        self.path.append(result)
 
     # //////////////////////////////////////////////////////
 
