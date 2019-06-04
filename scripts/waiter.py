@@ -12,7 +12,7 @@ import numpy
 import random
 from sklearn import svm
 from sklearn import tree
-
+from sklearn.linear_model import LogisticRegression
 from pygame.locals import *
 from operator import add
 
@@ -44,7 +44,7 @@ class Waiter (pygame.sprite.Sprite):
         if num_tables + num_furnaces + num_walls + 1 > n*n:
             print("Agent: Not enough space in restaurant for objects!")
             sys.exit("N-space overflow")
-
+        self.test = "["
         self.n = n
 
         # init restaurant - matrix of objects
@@ -123,6 +123,9 @@ class Waiter (pygame.sprite.Sprite):
             self.init_dtree()
         elif self.solving_method == "rabbit":
             self.init_rabbit()
+        elif self.solving_method == "lreg":
+            self.init_lreg()
+
 
         # run solution seeking
         self.solve(self.solving_method)
@@ -132,7 +135,8 @@ class Waiter (pygame.sprite.Sprite):
         self.steps_count = 0
 
         print("Agent: initialization completed.")
-
+    def get_test(self):
+        return self.test
     # function returning list of coordinates of agent
     def get_coordinates(self):
         return [self.x, self.y]
@@ -198,6 +202,7 @@ class Waiter (pygame.sprite.Sprite):
 
             # move agent on path
             if self.path:
+                self.test += "[" + str(self.path[0][0]) + "," + str(self.path[0][1]) + "],"
                 self.move(self.path[0][0], self.path[0][1])
             else:
                 print("Agent: No moves left!")
@@ -656,6 +661,15 @@ class Waiter (pygame.sprite.Sprite):
         self.clf = tree.DecisionTreeClassifier()
         self.clf.fit(self.svm_data, self.svm_target)
 
+    def init_lreg(self):
+        self.svm_target = numpy.load(path.join('data', 'svm_target.npy'))
+        self.svm_data = numpy.load(path.join('data', 'svm_data.npy'))
+        nsamples, nx, ny = self.svm_data.shape
+        self.svm_data = self.svm_data.reshape((nsamples, nx * ny))
+        # self.svm_data = list(self.svm_data)
+        self.clf = LogisticRegression(solver='lbfgs', multi_class='multinomial', C=100).fit(self.svm_data, self.svm_target)
+
+
     def scikit_standard_to_svm_standard(self, scikit_standard):
         try:
             scikit_standard = scikit_standard.split(', ')
@@ -704,14 +718,18 @@ class Waiter (pygame.sprite.Sprite):
     # SciKit Logistic Regression Search - Michał Kubiak
 
     def get_logistic_regression_path(self):
-        # get neighbourhood in scikit
+        moves = {
+            'W': [0, -1],
+            'S': [0, 1],
+            'A': [-1, 0],
+            'D': [1, 0],
+        }
         scikit_standard = self.parse_neighbourhood_to_scikit()
-        # get proposed solution of current state from model
-
-        # set response to path
-        self.path = [[0, 0]]  # this has to be double list!
-
-    # //////////////////////////////////////////////////////
+        lreg = self.scikit_standard_to_svm_standard(scikit_standard)
+        prediction = self.clf.predict(lreg)
+        move_to_append = moves.get(prediction[0])
+        self.path.clear()
+        self.path.append(move_to_append)
 
     # SciKit Decision-Tree Search - Przemysław Owczar XD
 

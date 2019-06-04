@@ -21,7 +21,7 @@ os.environ['SDL_AUDIODRIVER'] = 'dsp'
 blocksize = 60
 # graphics control
 graphics = False
-
+tests = ''
 
 # init sprite sprite_name on coordinate x, y
 def init_graphics(self, a, b, sprite_name):
@@ -295,6 +295,9 @@ if __name__ == '__main__':
                         control = False
                     # or run new round for environment
                     Uber.next_round(event.key)
+                    # For generate moves to test
+                    tests = Uber.get_test()
+
 
             # simulation sprites control
             all_sprites.update()
@@ -305,7 +308,9 @@ if __name__ == '__main__':
             # refresh Screen
             pygame.display.flip()
             fpsClock.tick(FPS)
-
+        # For save generated moves
+        # with open('logs/test.txt', "a") as datatest:
+        #   datatest.write('\n'+ str(tests))
         print("Main: simulation controller execution complete.")
         pygame.quit()
         sys.exit()
