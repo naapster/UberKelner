@@ -644,8 +644,8 @@ class Waiter (pygame.sprite.Sprite):
 
     # procedure running in init of agent, loading data to model once
     def init_svm(self):
-        self.svm_target = numpy.load(path.join('data', 'svm_target.npy'))
-        self.svm_data = numpy.load(path.join('data', 'svm_data.npy'))
+        self.svm_target = numpy.load(path.join('data', 'target.npy'))
+        self.svm_data = numpy.load(path.join('data', 'data.npy'))
         nsamples, nx, ny = self.svm_data.shape
         self.svm_data = self.svm_data.reshape((nsamples, nx * ny))
         # self.svm_data = list(self.svm_data)
@@ -653,8 +653,8 @@ class Waiter (pygame.sprite.Sprite):
         self.clf.fit(self.svm_data, self.svm_target)
 
     def init_dtree(self):
-        self.svm_target = numpy.load(path.join('data', 'svm_target.npy'))
-        self.svm_data = numpy.load(path.join('data', 'svm_data.npy'))
+        self.svm_target = numpy.load(path.join('data', 'target.npy'))
+        self.svm_data = numpy.load(path.join('data', 'data.npy'))
         nsamples, nx, ny = self.svm_data.shape
         self.svm_data = self.svm_data.reshape((nsamples, nx * ny))
         # self.svm_data = list(self.svm_data)
@@ -662,15 +662,15 @@ class Waiter (pygame.sprite.Sprite):
         self.clf.fit(self.svm_data, self.svm_target)
 
     def init_lreg(self):
-        self.svm_target = numpy.load(path.join('data', 'svm_target.npy'))
-        self.svm_data = numpy.load(path.join('data', 'svm_data.npy'))
+        self.svm_target = numpy.load(path.join('data', 'target.npy'))
+        self.svm_data = numpy.load(path.join('data', 'data.npy'))
         nsamples, nx, ny = self.svm_data.shape
         self.svm_data = self.svm_data.reshape((nsamples, nx * ny))
         # self.svm_data = list(self.svm_data)
         self.clf = LogisticRegression(solver='lbfgs', multi_class='multinomial', C=100).fit(self.svm_data, self.svm_target)
 
 
-    def scikit_standard_to_svm_standard(self, scikit_standard):
+    def scikit_standard_to_scikit_numpy_standard(self, scikit_standard):
         try:
             scikit_standard = scikit_standard.split(', ')
             scikit_standard.pop()
@@ -692,7 +692,7 @@ class Waiter (pygame.sprite.Sprite):
     def get_svm_path(self):
         # get neighbourhood in scikit
         scikit_standard = self.parse_neighbourhood_to_scikit()
-        svm_standard = self.scikit_standard_to_svm_standard(scikit_standard)
+        svm_standard = self.scikit_standard_to_scikit_numpy_standard(scikit_standard)
         # get proposed solution of current state from model
 
         # print(self.svm_data.ndim)
@@ -725,7 +725,7 @@ class Waiter (pygame.sprite.Sprite):
             'D': [1, 0],
         }
         scikit_standard = self.parse_neighbourhood_to_scikit()
-        lreg = self.scikit_standard_to_svm_standard(scikit_standard)
+        lreg = self.scikit_standard_to_scikit_numpy_standard(scikit_standard)
         prediction = self.clf.predict(lreg)
         move_to_append = moves.get(prediction[0])
         self.path.clear()
@@ -736,14 +736,14 @@ class Waiter (pygame.sprite.Sprite):
     def get_decision_tree_path(self):
         # get neighbourhood in scikit
         scikit_standard = self.parse_neighbourhood_to_scikit()
-        svm_standard = self.scikit_standard_to_svm_standard(scikit_standard)
+        tree_standard = self.scikit_standard_to_scikit_numpy_standard(scikit_standard)
         # get proposed solution of current state from model
 
         # print(self.svm_data.ndim)
         # print(self.svm_data.shape)
         # print(svm_standard.shape)
 
-        prediction = self.clf.predict(svm_standard)
+        prediction = self.clf.predict(tree_standard)
         moves = {
             'W': [0, -1],
             'S': [0, 1],
