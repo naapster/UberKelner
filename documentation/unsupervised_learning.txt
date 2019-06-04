@@ -1,6 +1,8 @@
 ///////////////////////////////////////////////////////////////
 Trenowanie Wabbita:
 vw datamodel_rabbit_repaired.txt -c --passes 25 -f rabbit.model
+Response to file:
+vw -i ./data/rabbit.model -t ./data/rabbit_input.txt -p ./data/rabbit_result.txt --quiet
 //////////////////////////////////////////////////////////////
 
 

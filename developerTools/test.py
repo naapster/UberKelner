@@ -10,7 +10,7 @@ solution_for_2 = [[1, 0], [1, 0], [0, 1], [1, 0], [1, 0], [1, 0], [0, -1], [0, 1
 solution_for_3 = [[0, -1], [0, -1], [0, 1], [1, 0], [1, 0], [1, 0], [0, -1], [0, -1], [1, 0], [0, 1], [0, 1], [0, 1], [0, 1], [1, 0], [0, 1], [0, 1], [0, 1], [-1, 0], [-1, 0], [0, -1], [-1, 0], [0, -1], [-1, 0], [-1, 0], [-1, 0], [0, -1], [0, -1], [1, 0], [0, -1], [-1, 0], [0, -1], [0, -1], [1, 0], [0, -1], [0, -1]]
 
 # For last 2 from  /data/simulation_log.txt
-with open('../logs/test.txt') as f:
+with open('../documentation/test.txt') as f:
     lines = f.readlines()
     data3 = lines[0].replace('[', '').split('],')
     data2 = lines[1].replace('[', '').split('],')

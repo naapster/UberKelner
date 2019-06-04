@@ -126,7 +126,6 @@ class Waiter (pygame.sprite.Sprite):
         elif self.solving_method == "lreg":
             self.init_lreg()
 
-
         # run solution seeking
         self.solve(self.solving_method)
         self.control = True
@@ -135,8 +134,10 @@ class Waiter (pygame.sprite.Sprite):
         self.steps_count = 0
 
         print("Agent: initialization completed.")
+
     def get_test(self):
         return self.test
+
     # function returning list of coordinates of agent
     def get_coordinates(self):
         return [self.x, self.y]
@@ -602,7 +603,8 @@ class Waiter (pygame.sprite.Sprite):
         # train model
         # self.rabbit_training()
 
-    def rabbit_training(self):
+    @staticmethod
+    def rabbit_training():
         # wabbit model training console script - run after installing vabbit
         system('vw {} -c --passes 25 -f {}'.format(path.join('.', 'data', 'datamodel_rabbit_repaired.txt'),
                                                    path.join('.', 'data', 'rabbit.model')))
@@ -669,7 +671,6 @@ class Waiter (pygame.sprite.Sprite):
         # self.svm_data = list(self.svm_data)
         self.clf = LogisticRegression(solver='lbfgs', multi_class='multinomial', C=100).fit(self.svm_data, self.svm_target)
 
-
     def scikit_standard_to_scikit_numpy_standard(self, scikit_standard):
         try:
             scikit_standard = scikit_standard.split(', ')
@@ -715,7 +716,7 @@ class Waiter (pygame.sprite.Sprite):
 
     # //////////////////////////////////////////////////////
 
-    # SciKit Logistic Regression Search - Michał Kubiak
+    # SciKit Logistic Regression Search - Przemysław Owczarczyk
 
     def get_logistic_regression_path(self):
         moves = {
@@ -731,7 +732,7 @@ class Waiter (pygame.sprite.Sprite):
         self.path.clear()
         self.path.append(move_to_append)
 
-    # SciKit Decision-Tree Search - Przemysław Owczar XD
+    # SciKit Decision-Tree Search - Michał Kubiak
 
     def get_decision_tree_path(self):
         # get neighbourhood in scikit
